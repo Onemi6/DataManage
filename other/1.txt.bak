@@ -1,0 +1,375 @@
+
+Thread thread = new Thread(new Runnable() {
+						@Override
+						public void run() {
+							try{
+							String path = "http://www.3tpi.com:8016/api/Emp";
+							String result = HttpUtils.getJsonString(path);
+								LinkedList<User> users = GsonTools
+										.getUsers(result);
+								if (users.size() != 0) {
+									for (Iterator iterator = users.iterator(); iterator
+											.hasNext();) {
+										User user = (User) iterator.next();
+
+										if (dbmanage.finduser(user
+												.getLOGIN_NAME()) != null) {
+											if (dbmanage.finduser(
+													user.getLOGIN_NAME())
+													.getTIME_STAMP() == user
+													.getTIME_STAMP()) {
+											} else {
+												dbmanage.updateuser(user);
+											}
+										} else {
+											dbmanage.adduser(user);
+										}
+										Log.d("NO", user.getNO());
+									}
+									Toast.makeText(LoginActivity.this, "同步成功",
+											Toast.LENGTH_SHORT).show();
+								}
+						} catch (MalformedURLException e) {  
+		                    e.printStackTrace();  
+		                } catch (IOException e) {  
+		                    e.printStackTrace();  
+		                }  
+						}
+					});
+					thread.start();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+public static void getJsonString(final String path,
+			final HttpCallbackListener listener) {
+		//int code;
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				HttpURLConnection conn = null;
+				try {
+					URL url = new URL(path);
+					/**
+					 * 这里网络请求使用的是类HttpURLConnection，另外一种可以选择使用类HttpClient。
+					 */
+					conn = (HttpURLConnection) url.openConnection();
+					conn.setRequestMethod("GET");// 使用GET方法获取
+					conn.setConnectTimeout(3000);
+					int code = conn.getResponseCode();
+					if (code == 200) {
+						/**
+						 * 如果获取的code为200，则证明数据获取是正确的。
+						 */
+						String result = readMyInputStream(conn.getInputStream());
+						Log.d("data", result);
+						// return result;
+					}
+					if (listener != null) {
+						listener.onFinish(readMyInputStream(conn
+								.getInputStream()));
+					}
+				} catch (Exception e) {
+					if (listener != null) {
+						listener.onError(e);
+					}
+					// e.printStackTrace();
+				} finally {
+					if (conn != null) {
+						conn.disconnect();
+					}
+				}
+			}
+
+		}).start();
+		// return "";
+	}
+
+
+
+
+
+
+
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    tools:context="com.example.datamanage.DetailsActivity" >
+
+    <include
+        android:id="@+id/details_top"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        layout="@layout/details_top" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" >
+    </ListView>
+
+</LinearLayout>
+
+
+
+
+
+<ListView
+        android:id="@+id/list_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" >
+    </ListView>
+
+
+
+
+
+    // 插入add1信息
+	public void addInfo1(Info_add1 info_add1) {
+		db = dbHelper.getWritableDatabase();
+		db.execSQL(
+				"insert into Base_Unit(choujiandanweibianhao,renwulaiyuan,renwuleibie,danweimingcheng,"
+						+ "danweidizhi,lianxiren,dianhau,chuanzhen,youbian)values (?,?,?,?,?,?,?,?,?)",
+				new Object[] { info_add1.getValue1(), info_add1.getValue2(),
+						info_add1.getValue3(), info_add1.getValue4(),
+						info_add1.getValue5(), info_add1.getValue6(),
+						info_add1.getValue7(), info_add1.getValue8(),
+						info_add1.getValue9() });
+	}
+
+	// 插入add2信息15
+	public void addInfo2(Info_add2 info_add2) { // db =
+		dbHelper.getReadableDatabase();
+		db = dbHelper.getWritableDatabase();
+		db.execSQL(
+				"insert into Place(suozaidi,chouyangdidian,quyuleixing,chouyanghuanjie,danweimingcheng,"
+						+ "danweidizhi,yingyezhizhao,xukezhengleixing,xukezhenghao,danweifaren,nianxiaoshoue,"
+						+ "lianxiren,dianhua,chuanzhen,youbian)values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+				new Object[] { info_add2.getValue1(), info_add2.getValue2(),
+						info_add2.getValue3(), info_add2.getValue4(),
+						info_add2.getValue5(), info_add2.getValue6(),
+						info_add2.getValue7(), info_add2.getValue8(),
+						info_add2.getValue9(), info_add2.getValue10(),
+						info_add2.getValue11(), info_add2.getValue12(),
+						info_add2.getValue13(), info_add2.getValue14(),
+						info_add2.getValue15() });
+	}
+
+	// 插入add3信息27
+	public void addInfo3(Info_add3 info_add3) {
+		db = dbHelper.getWritableDatabase();
+		db.execSQL(
+				"insert into Sample (yangpinmingcheng,yangpinleixing,yangpinlaiyuan,yangpinshuxing,"
+						+ "yangpinshangbiao,baozhuangfenlei,guigexinghao,zhiliangdengji,yangpintiaoma,shengchanriqi,"
+						+ "baozhiqi,chanpinpihao,yangpindanjia,jinkou,yuanchandi,chouyangriqi,chouyangfangshi,"
+						+ "chouyangxingtai,yangpinbaozhuang,chucuntiaojian,chouyanggongju,zhixingbiaozhun,"
+						+ "chouyangshuliangdanwei,chouyangjishu,beiyangshuliang,chouyangshuliang,beizhu)"
+						+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+				new Object[] { info_add3.getValue1(), info_add3.getValue2(),
+						info_add3.getValue3(), info_add3.getValue4(),
+						info_add3.getValue5(), info_add3.getValue6(),
+						info_add3.getValue7(), info_add3.getValue8(),
+						info_add3.getValue9(), info_add3.getValue10(),
+						info_add3.getValue11(), info_add3.getValue12(),
+						info_add3.getValue13(), info_add3.getValue14(),
+						info_add3.getValue15(), info_add3.getValue16(),
+						info_add3.getValue17(), info_add3.getValue18(),
+						info_add3.getValue19(), info_add3.getValue20(),
+						info_add3.getValue21(), info_add3.getValue22(),
+						info_add3.getValue23(), info_add3.getValue24(),
+						info_add3.getValue25(), info_add3.getValue26(),
+						info_add3.getValue27() });
+	}
+
+
+
+
+
+
+
+
+	// 查询add1信息
+	public Cursor findInfo_add1() {
+		db = dbHelper.getWritableDatabase();
+		Cursor cursor = db.rawQuery("select * from BASE_UNIT", null);
+		return cursor;
+	}
+
+	public List<Info_add1> findList_Info_add1() {
+		ArrayList<Info_add1> list_info_add1 = new ArrayList<Info_add1>();
+		Cursor cursor = findInfo_add1();
+		while (cursor.moveToNext()) {
+			Info_add1 info_add1 = new Info_add1();
+
+			info_add1.setValue1(cursor.getString(cursor
+					.getColumnIndex("choujiandanweibianhao")));
+			info_add1.setValue2(cursor.getString(cursor
+					.getColumnIndex("renwulaiyuan")));
+			info_add1.setValue3(cursor.getString(cursor
+					.getColumnIndex("renwuleibie")));
+			info_add1.setValue4(cursor.getString(cursor
+					.getColumnIndex("danweimingcheng")));
+			info_add1.setValue5(cursor.getString(cursor
+					.getColumnIndex("danweidizhi")));
+			info_add1.setValue6(cursor.getString(cursor
+					.getColumnIndex("lianxiren")));
+			info_add1.setValue7(cursor.getString(cursor
+					.getColumnIndex("dianhau")));
+			info_add1.setValue8(cursor.getString(cursor
+					.getColumnIndex("chuanzhen")));
+			info_add1.setValue9(cursor.getString(cursor
+					.getColumnIndex("youbian")));
+
+			list_info_add1.add(info_add1);
+		}
+		cursor.close();
+		return list_info_add1;
+	}
+
+
+
+
+
+
+
+
+
+
+
+	// 创建抽样基础信息 和 单位信息 表
+	public static final String CREATE_INFO_BASE_UNIT = "create table Base_Unit("
+			+ "id integer primary key autoincrement,"
+			+ "choujiandanbianhao text not null,"
+			+ "renwulaiyuan text not null,"
+			+ "renwuleibie text not null,"
+			+ "danweimingcheng text not null,"
+			+ "danweidizhi text not null,"
+			+ "lianxiren text ,"
+			+ "dianhau text ,"
+			+ "chuanzhen text ,"
+			+ "youbian text)";
+
+	// 创建抽样场所信息表
+	public static final String CREATE_INFO_PLACE = "create table Place("
+			+ "id integer primary key autoincrement,"
+			+ "suozaidi text not null," + "chouyangdidian text not null,"
+			+ "quyuleixing text not null ," + "chouyanghuanjie text not null,"
+			+ "danweimingcheng text not null," + "danweidizhi text not null,"
+			+ "yingyezhizhao text not null,"
+			+ "xukezhengleixing text not null," + "xukezhenghao text not null,"
+			+ "danweifaren text not null," + "nianxiaoshoue text,"
+			+ "lianxiren text not null," + "dianhua text not null,"
+			+ "chuanzhen text ," + "youbian text)";
+
+	// 创建抽样样品信息表
+	public static final String CREATE_INFO_SAMPLE = "create table Sample("
+			+ "id integer primary key autoincrement,"
+			+ "yangpinmingcheng text not null ,"
+			+ "yangpinleixing text not null," + "yangpinlaiyuan text not null,"
+			+ "yangpinshuxing text not null,"
+			+ "yangpinshangbiao text not null,"
+			+ "baozhuangfenlei text not null," + "guigexinghao text not null,"
+			+ "zhiliangdengji text not null," + "yangpintiaoma text not null,"
+			+ "shengchanriqi text not null," + "baozhiqi text not null,"
+			+ "chanpinpihao text not null ," + "yangpindanjia text not null,"
+			+ "jinkou text not null," + "yuanchandi text not null,"
+			+ "chouyangriqi text not null," + "chouyangfangshi text not null,"
+			+ "chouyangxingtai text," + "yangpinbaozhuang text not null,"
+			+ "chucuntiaojian text not null," + "chouyanggongju text ,"
+			+ "zhixingbiaozhun text not null," + "chouyangshuliangdanwei text,"
+			+ "chouyangjishu text not null," + "beiyangshuliang text not null,"
+			+ "chouyangshuliang text ," + "beizhu text)";
+
+
+
+
+
+
+
+			
+	public static final String DROP_INFO_BASE_UNIT = "drop table if exists Base_Unit";
+	public static final String DROP_INFO_PLACE = "drop table if exists Place";
+	public static final String DROP_INFO_SAMPLE = "drop table if exists Sample";
+
+
+	android:visibility="invisible"
+
+
+
+
+	<android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_topbar"
+        android:layout_gravity="center" />
+
+
+	viewpager = (ViewPager) findViewById(R.id.viewpager);
+		// 设置限制页面数
+		viewpager.setOffscreenPageLimit(3);
+
+		fmList = new ArrayList<Fragment>();
+		fm_add1 = new fragment_add1();
+		fm_add2 = new fragment_add2();
+		fm_add3 = new fragment_add3();
+
+		fmList.add(fm_add1);
+		fmList.add(fm_add2);
+		fmList.add(fm_add3);
+
+		viewpager.setAdapter(new MyFrageStatePagerAdapter(
+				getSupportFragmentManager()));
+
+
+
+
+
+				/**
+	 * 定义自己的ViewPager适配器。 也可以使用FragmentPagerAdapter。关于这两者之间的区别，可以自己去搜一下。
+	 */
+	class MyFrageStatePagerAdapter extends FragmentStatePagerAdapter {
+		Fragment currentFragment;
+
+		public MyFrageStatePagerAdapter(FragmentManager fm) {
+			super(fm);
+		}
+
+		@Override
+		public Fragment getItem(int position) {
+			return fmList.get(position);
+		}
+
+		@Override
+		public int getCount() {
+			return fmList.size();
+		}
+	}
