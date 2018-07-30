@@ -56,6 +56,7 @@ public class ApplyNumberActivity extends Activity {
 				adapter.notifyDataSetChanged();
 				Toast.makeText(ApplyNumberActivity.this, "…Í«Î±‡∫≈≥…π¶",
 						Toast.LENGTH_SHORT).show();
+				input_number.getText().clear();
 				break;
 			case APPLY_FLASE:
 				Toast.makeText(ApplyNumberActivity.this, (String) msg.obj,

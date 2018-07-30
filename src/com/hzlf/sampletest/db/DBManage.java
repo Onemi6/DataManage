@@ -23,7 +23,7 @@ public class DBManage {
 	public DBManage(Context context) {
 		// TODO 自动生成的构造函数存根
 		dbHelper = new MyDatabaseHelper(context, "DataManage.db", null, 4);
-		// db = dbHelper.getWritableDatabase();
+		//db = dbHelper.getWritableDatabase();
 		_context = context;
 	}
 
@@ -44,11 +44,9 @@ public class DBManage {
 		db.execSQL(
 				"insert into Details_Info(no,chouyangdanbianhao,renwulaiyuan,renwuleibie,danweimingcheng1,"
 						+ "danweidizhi1,lianxiren1,dianhau1,chuanzhen1,youbian1,"
-
 						+ "suozaidi,chouyangdidian,quyuleixing,chouyanghuanjie,danweimingcheng2,"
 						+ "danweidizhi2,yingyezhizhao,xukezhengleixing,xukezhenghao,danweifaren,nianxiaoshoue,"
 						+ "lianxiren2,dianhua2,chuanzhen2,youbian2,shengchanzhemingcheng,shengchanzhedizhi,dianhua3,"
-
 						+ "yangpinmingcheng,yangpinleixing,yangpinlaiyuan,yangpinshuxing,"
 						+ "yangpinshangbiao,baozhuangfenlei,guigexinghao,zhiliangdengji,yangpintiaoma,riqileixing,riqi,"
 						+ "baozhiqi,chanpinpihao,yangpindanjia,chukou,yuanchandi,chouyangriqi,chouyangfangshi,"
@@ -60,7 +58,6 @@ public class DBManage {
 						info_add1.getValue4(), info_add1.getValue5(),
 						info_add1.getValue6(), info_add1.getValue7(),
 						info_add1.getValue8(), info_add1.getValue9(),
-
 						info_add2.getValue1(), info_add2.getValue2(),
 						info_add2.getValue3(), info_add2.getValue4(),
 						info_add2.getValue5(), info_add2.getValue6(),
@@ -70,7 +67,6 @@ public class DBManage {
 						info_add2.getValue13(), info_add2.getValue14(),
 						info_add2.getValue15(), info_add2.getValue16(),
 						info_add2.getValue17(), info_add2.getValue18(),
-
 						info_add3.getValue1(), info_add3.getValue2(),
 						info_add3.getValue3(), info_add3.getValue4(),
 						info_add3.getValue5(), info_add3.getValue6(),

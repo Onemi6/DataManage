@@ -66,7 +66,7 @@ public class DetailsActivity extends Activity {
 			btn_update3, btn_sign, btn_upload_data, btn_uploadimg;
 	private Context _context;
 	private Info_add info_add, info_add_new;
-	private String number, str_dayinriqi, str_filename;
+	private String number, str_dayinriqi, str_filename, str_picpath;
 	private EditText textview0, textview1_1, textview1_2, textview1_3,
 			textview1_4, textview1_5, textview1_6, textview1_7, textview1_8,
 			textview1_9, textview2_1, textview2_2, textview2_3, textview2_4,
@@ -93,8 +93,8 @@ public class DetailsActivity extends Activity {
 	private static final int UPLOAD_FLASE = 0;
 	private static final int UPLOAD_NO = 2;
 	private Map<String, String> body = new HashMap<String, String>();
-	
-	private int sign=0;
+
+	private int sign = 0;
 
 	private Handler handler = new Handler() {
 		@Override
@@ -755,16 +755,15 @@ public class DetailsActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
-				if( sign==0 ){
-				Intent intent_sign = new Intent();
-				intent_sign.setClass(DetailsActivity.this, SignActivity.class);
-				intent_sign.putExtra("sign_number", number);
-				// finish();// 结束当前活动
-				startActivity(intent_sign);
-				}
-				else{
-					Toast.makeText(_context, "已经签名", Toast.LENGTH_SHORT)
-					.show();
+				if (sign == 0) {
+					Intent intent_sign = new Intent();
+					intent_sign.setClass(DetailsActivity.this,
+							SignActivity.class);
+					intent_sign.putExtra("sign_number", number);
+					// finish();// 结束当前活动
+					startActivity(intent_sign);
+				} else {
+					Toast.makeText(_context, "已经签名", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
@@ -792,21 +791,21 @@ public class DetailsActivity extends Activity {
 						public void run() {
 							Info_add info_add_upload = dbmanage
 									.findInfo_details(number);
-							body.put("GOODS_NAME", info_add_upload.getInfo_add3()
-									.getValue1());
-							body.put("BUSINESS_SOURCE", info_add_upload.getInfo_add1()
-									.getValue2());
-							body.put("SAMPLE_SOURCE", info_add_upload.getInfo_add3()
-									.getValue3());
+							body.put("GOODS_NAME", info_add_upload
+									.getInfo_add3().getValue1());
+							body.put("BUSINESS_SOURCE", info_add_upload
+									.getInfo_add1().getValue2());
+							body.put("SAMPLE_SOURCE", info_add_upload
+									.getInfo_add3().getValue3());
 							body.put("I_AND_O", info_add_upload.getInfo_add3()
 									.getValue14());
-							body.put("DOMESTIC_AREA", info_add_upload.getInfo_add2()
-									.getValue3());
-							body.put("SAMPLE_STATUS", info_add_upload.getInfo_add3()
-									.getValue18());
+							body.put("DOMESTIC_AREA", info_add_upload
+									.getInfo_add2().getValue3());
+							body.put("SAMPLE_STATUS", info_add_upload
+									.getInfo_add3().getValue18());
 
-							body.put("MANU_COMPANY", info_add_upload.getInfo_add2()
-									.getValue16());
+							body.put("MANU_COMPANY", info_add_upload
+									.getInfo_add2().getValue16());
 							body.put("MANU_COMPANY_ADDR", info_add_upload
 									.getInfo_add2().getValue17());
 							body.put("MANU_COMPANY_PHONE", info_add_upload
@@ -814,95 +813,98 @@ public class DetailsActivity extends Activity {
 
 							body.put("DRAW_MAN", info_add_upload.getInfo_add3()
 									.getValue21());
-							body.put("DRAW_DATE", info_add_upload.getInfo_add3()
-									.getValue16());
+							body.put("DRAW_DATE", info_add_upload
+									.getInfo_add3().getValue16());
 
 							body.put("REMARK", info_add_upload.getInfo_add3()
 									.getValue27());
 							body.put("RECORDER",
 									((MyApplication) getApplication())
 											.getName());
-							body.put("TRADEMARK", info_add_upload.getInfo_add3()
-									.getValue5());
+							body.put("TRADEMARK", info_add_upload
+									.getInfo_add3().getValue5());
 							body.put("PACK", info_add_upload.getInfo_add3()
 									.getValue19());
-							body.put("SAMPLE_CLASS", info_add_upload.getInfo_add3()
-									.getValue8());
-							body.put("SAMPLE_MODEL", info_add_upload.getInfo_add3()
-									.getValue7());
+							body.put("SAMPLE_CLASS", info_add_upload
+									.getInfo_add3().getValue8());
+							body.put("SAMPLE_MODEL", info_add_upload
+									.getInfo_add3().getValue7());
 							body.put("DRAW_ORG", info_add_upload.getInfo_add1()
 									.getValue4());
 							body.put("DRAW_NUM", info_add_upload.getInfo_add3()
 									.getValue24()
-									+ info_add_upload.getInfo_add3().getValue23());
-							body.put("DRAW_ADDR", info_add_upload.getInfo_add2()
-									.getValue2());
-							body.put("DATE_PRODUCT", info_add_upload.getInfo_add3()
-									.getValue10());
+									+ info_add_upload.getInfo_add3()
+											.getValue23());
+							body.put("DRAW_ADDR", info_add_upload
+									.getInfo_add2().getValue2());
+							body.put("DATE_PRODUCT", info_add_upload
+									.getInfo_add3().getValue10());
 							body.put("SUPPLIER", info_add_upload.getInfo_add2()
 									.getValue5());
-							body.put("SAMPLING_NO", info_add_upload.getInfo_add1()
-									.getValue1());
-							body.put("EXPIRATIONDATE", info_add_upload.getInfo_add3()
-									.getValue11());
-							body.put("SUPPLIER_PHONE", info_add_upload.getInfo_add2()
-									.getValue13());
-							body.put("SAVE_MODE", info_add_upload.getInfo_add3()
-									.getValue20());
-							body.put("STORAGESITE", info_add_upload.getInfo_add3()
-									.getValue25()
-									+ info_add_upload.getInfo_add3().getValue23());
-							body.put("SUPPLIER_PERSON", info_add_upload.getInfo_add2()
-									.getValue12());
-							body.put("SUPPLIER_ADDR", info_add_upload.getInfo_add2()
-									.getValue6());
-							body.put("SUPPLIER_LEGAL", info_add_upload.getInfo_add2()
-									.getValue10());
-							body.put("SUPPLIER_FAX", info_add_upload.getInfo_add2()
-									.getValue14());
-							body.put("SAMPLE_TYPE", info_add_upload.getInfo_add1()
-									.getValue3());
-							body.put("ANNUAL_SALES", info_add_upload.getInfo_add2()
-									.getValue11());
+							body.put("SAMPLING_NO", info_add_upload
+									.getInfo_add1().getValue1());
+							body.put("EXPIRATIONDATE", info_add_upload
+									.getInfo_add3().getValue11());
+							body.put("SUPPLIER_PHONE", info_add_upload
+									.getInfo_add2().getValue13());
+							body.put("SAVE_MODE", info_add_upload
+									.getInfo_add3().getValue20());
+							body.put("STORAGESITE", info_add_upload
+									.getInfo_add3().getValue25()
+									+ info_add_upload.getInfo_add3()
+											.getValue23());
+							body.put("SUPPLIER_PERSON", info_add_upload
+									.getInfo_add2().getValue12());
+							body.put("SUPPLIER_ADDR", info_add_upload
+									.getInfo_add2().getValue6());
+							body.put("SUPPLIER_LEGAL", info_add_upload
+									.getInfo_add2().getValue10());
+							body.put("SUPPLIER_FAX", info_add_upload
+									.getInfo_add2().getValue14());
+							body.put("SAMPLE_TYPE", info_add_upload
+									.getInfo_add1().getValue3());
+							body.put("ANNUAL_SALES", info_add_upload
+									.getInfo_add2().getValue11());
 							body.put("BUSINESS_LICENCE", info_add_upload
 									.getInfo_add2().getValue7());
-							body.put("PERMIT_TYPE", info_add_upload.getInfo_add2()
-									.getValue8());
-							body.put("PERMIT_NUM", info_add_upload.getInfo_add2()
-									.getValue9());
+							body.put("PERMIT_TYPE", info_add_upload
+									.getInfo_add2().getValue8());
+							body.put("PERMIT_NUM", info_add_upload
+									.getInfo_add2().getValue9());
 							body.put("SUPPLIER_ZIPCODE", info_add_upload
 									.getInfo_add2().getValue15());
-							body.put("SAMPLE_PROPERTY", info_add_upload.getInfo_add3()
-									.getValue4());
-							body.put("SAMPLE_STYLE", info_add_upload.getInfo_add3()
-									.getValue2());
-							body.put("SAMPLE_NUMBER", info_add_upload.getInfo_add3()
-									.getValue12());
+							body.put("SAMPLE_PROPERTY", info_add_upload
+									.getInfo_add3().getValue4());
+							body.put("SAMPLE_STYLE", info_add_upload
+									.getInfo_add3().getValue2());
+							body.put("SAMPLE_NUMBER", info_add_upload
+									.getInfo_add3().getValue12());
 							body.put("PRODUCTION_CERTIFICATE", info_add_upload
 									.getInfo_add2().getValue9());
-							body.put("UNIVALENT", info_add_upload.getInfo_add3()
-									.getValue13());
-							body.put("PACK_TYPE", info_add_upload.getInfo_add3()
-									.getValue6());
-							body.put("DRAW_METHOD", info_add_upload.getInfo_add3()
-									.getValue17());
-							body.put("DRAW_METHOD", info_add_upload.getInfo_add3()
-									.getValue17());
-							body.put("DRAW_PERSON", info_add_upload.getInfo_add1()
-									.getValue6());
-							body.put("DRAW_PHONE", info_add_upload.getInfo_add1()
-									.getValue7());
+							body.put("UNIVALENT", info_add_upload
+									.getInfo_add3().getValue13());
+							body.put("PACK_TYPE", info_add_upload
+									.getInfo_add3().getValue6());
+							body.put("DRAW_METHOD", info_add_upload
+									.getInfo_add3().getValue17());
+							body.put("DRAW_METHOD", info_add_upload
+									.getInfo_add3().getValue17());
+							body.put("DRAW_PERSON", info_add_upload
+									.getInfo_add1().getValue6());
+							body.put("DRAW_PHONE", info_add_upload
+									.getInfo_add1().getValue7());
 							body.put("DRAW_FAX", info_add_upload.getInfo_add1()
 									.getValue8());
-							body.put("DRAW_ZIPCODE", info_add_upload.getInfo_add1()
-									.getValue9());
-							body.put("DRAW_ORG_ADDR", info_add_upload.getInfo_add1()
-									.getValue5());
-							body.put("DRAW_AMOUNT", info_add_upload.getInfo_add3()
-									.getValue26()
-									+ info_add_upload.getInfo_add3().getValue23());
-							body.put("TEST_FILE_NO", info_add_upload.getInfo_add3()
-									.getValue22());
+							body.put("DRAW_ZIPCODE", info_add_upload
+									.getInfo_add1().getValue9());
+							body.put("DRAW_ORG_ADDR", info_add_upload
+									.getInfo_add1().getValue5());
+							body.put("DRAW_AMOUNT", info_add_upload
+									.getInfo_add3().getValue26()
+									+ info_add_upload.getInfo_add3()
+											.getValue23());
+							body.put("TEST_FILE_NO", info_add_upload
+									.getInfo_add3().getValue22());
 							body.put("DATE_PRODUCT_TYPE", info_add_upload
 									.getInfo_add3().getValue28());
 							String result = HttpUtils.LoginCheck(
@@ -983,7 +985,7 @@ public class DetailsActivity extends Activity {
 		String targetPath = Environment.getExternalStorageDirectory() + "/doc/"
 				+ str_filename;
 
-		Map<String, String> map = new HashMap<String, String>();
+		Map<String, Object> map = new HashMap<String, Object>();
 
 		map.put("$CJDBH$", info_add_new.getInfo_add1().getValue1());
 		map.put("$RWLY$", info_add_new.getInfo_add1().getValue2());
@@ -1042,11 +1044,10 @@ public class DetailsActivity extends Activity {
 		map.put("$CYSL$", info_add_new.getInfo_add3().getValue26()
 				+ info_add_new.getInfo_add3().getValue23());
 		map.put("$BZ$", info_add_new.getInfo_add3().getValue27());
-
 		map.put("$RQLX$", info_add_new.getInfo_add3().getValue28());
-
 		map.put("$DYRQ$", str_dayinriqi);
 
+		//android无法插入图片
 		writeDoc("yuan.doc", targetPath, map);
 		// 查看
 		// doOpenWord();
@@ -1078,15 +1079,19 @@ public class DetailsActivity extends Activity {
 	 * demoFile 模板文件 newFile 生成文件 map 要填充的数据
 	 * */
 	public void writeDoc(String demopath, String targetPath,
-			Map<String, String> map) {
+			Map<String, Object> map) {
 		try {
 			InputStream in = getClass().getResourceAsStream(
 					"/assets/" + demopath);
 			HWPFDocument hdt = new HWPFDocument(in);
 			Range range = hdt.getRange();
 			// 替换文本内容
-			for (Map.Entry<String, String> entry : map.entrySet()) {
-				range.replaceText(entry.getKey(), entry.getValue());
+			for (Map.Entry<String, Object> entry : map.entrySet()) {
+				if ((entry.getValue()) instanceof String) {
+					//替换文本
+					range.replaceText(entry.getKey(), entry.getValue()
+							.toString());
+				} 
 			}
 			OutputStream os = new FileOutputStream(targetPath);
 			// ByteArrayOutputStream ostream = new ByteArrayOutputStream();

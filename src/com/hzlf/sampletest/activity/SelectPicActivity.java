@@ -2,11 +2,14 @@ package com.hzlf.sampletest.activity;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.BaseColumns;
+import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
@@ -19,7 +22,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.hzlf.sampletest.R;
-
 
 public class SelectPicActivity extends Activity implements OnClickListener {
 
@@ -36,24 +38,22 @@ public class SelectPicActivity extends Activity implements OnClickListener {
 	 * 从Intent获取图片路径的KEY
 	 */
 	public static final String KEY_PHOTO_PATH = "photo_path";
-
 	private static final String TAG = "SelectPicActivity";
-
 	private LinearLayout dialogLayout;
 	private Button takePhotoBtn, pickPhotoBtn, cancelBtn;
 
 	/** 获取到的图片路径 */
 	private String picPath;
-
 	private Intent lastIntent;
-
 	private Uri photoUri;
+	private Context _context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.activity_select_pic);
+		_context = this;
 		initView();
 	}
 
@@ -133,6 +133,7 @@ public class SelectPicActivity extends Activity implements OnClickListener {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
 		if (resultCode == Activity.RESULT_OK) {
 			doPhoto(requestCode, data);
 		}
@@ -146,6 +147,7 @@ public class SelectPicActivity extends Activity implements OnClickListener {
 	 * @param data
 	 */
 	private void doPhoto(int requestCode, Intent data) {
+
 		if (requestCode == SELECT_PIC_BY_PICK_PHOTO) // 从相册取图片，有些手机有异常情况，请注意
 		{
 			if (data == null) {
