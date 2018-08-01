@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -52,8 +54,9 @@ public class fragment_add2 extends Fragment implements OnClickListener {
 			textview12, textview13;
 
 	private RadioGroup radio_xukezheng;
+	private CheckBox checkbox_shengchan;
 
-	String str_xukezheng, str_nianxiaoshoue, str_chuanzhen, str_youbian;
+	String str_xukezheng, str_nianxiaoshoue, str_chuanzhen, str_youbian,str_xukezheng_shengchan;
 	int number;
 
 	private DBManage dbmanage;
@@ -189,6 +192,7 @@ public class fragment_add2 extends Fragment implements OnClickListener {
 		textview13 = (EditText) view.findViewById(R.id.input_dianhua2);
 
 		radio_xukezheng = (RadioGroup) view.findViewById(R.id.radio_xukezheng);
+		checkbox_shengchan=(CheckBox)view.findViewById(R.id.checkbox_xukezheng_shipinshengchan);
 
 		btn_scanning_info = (Button) view.findViewById(R.id.btn_scanning_info);
 		btn_scanning_info.setOnClickListener(this);
@@ -233,6 +237,13 @@ public class fragment_add2 extends Fragment implements OnClickListener {
 						break;
 					}
 				}
+				if(checkbox_shengchan.isChecked())
+				{
+					str_xukezheng_shengchan="*";
+				}
+				else{
+					str_xukezheng_shengchan="";
+				}
 				if (textview6.getText().toString().equals("")) {
 					str_nianxiaoshoue = "/";
 				} else {
@@ -254,13 +265,14 @@ public class fragment_add2 extends Fragment implements OnClickListener {
 						.getSelectedItem().toString(), spinner_chouyanghuanjie
 						.getSelectedItem().toString(), textview1.getText()
 						.toString(), textview2.getText().toString(), textview3
-						.getText().toString(), str_xukezheng, textview4
+						.getText().toString(), str_xukezheng, str_xukezheng_shengchan+textview4
 						.getText().toString(), textview5.getText().toString(),
 						str_nianxiaoshoue, textview7.getText().toString(),
 						textview8.getText().toString(), str_chuanzhen,
 						str_youbian, textview11.getText().toString(),
 						textview12.getText().toString(), textview13.getText()
 								.toString());
+				Log.i("Éú²ú", str_xukezheng_shengchan+textview4.getText().toString());
 				((MyApplication) getActivity().getApplication())
 						.setInfoAdd2(info_add2);
 				((MyApplication) getActivity().getApplication()).setAdd2(1);
@@ -299,7 +311,13 @@ public class fragment_add2 extends Fragment implements OnClickListener {
 						radio_xukezheng
 								.check(R.id.radio_xukezheng_shipinjingying);
 					}
-					textview4.setText(info_add2.getValue9());
+					if(info_add2.getValue9().substring(0, 1).equals("*"))
+					{
+						textview4.setText(info_add2.getValue9().substring(1));
+					}
+					else{
+						textview4.setText(info_add2.getValue9());
+					}
 					textview5.setText(info_add2.getValue10());
 					textview6.setText(info_add2.getValue11());
 					textview7.setText(info_add2.getValue12());

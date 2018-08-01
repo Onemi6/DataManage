@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -308,7 +309,16 @@ public class DetailsActivity extends Activity {
 		textview2_6.setText(info_add.getInfo_add2().getValue6());
 		textview2_7.setText(info_add.getInfo_add2().getValue7());
 		textview2_8.setText(info_add.getInfo_add2().getValue8());
-		textview2_9.setText(info_add.getInfo_add2().getValue9());
+
+		if (info_add.getInfo_add2().getValue9().substring(0, 1).equals("*")) {
+			textview2_9.setText("食品生产许可证:"
+					+ info_add.getInfo_add2().getValue9().substring(1));
+		} else {
+			textview2_9.setText(info_add.getInfo_add2().getValue9());
+		}
+
+		// textview2_9.setText(info_add.getInfo_add2().getValue9());
+
 		textview2_10.setText(info_add.getInfo_add2().getValue10());
 		textview2_11.setText(info_add.getInfo_add2().getValue11());
 		textview2_12.setText(info_add.getInfo_add2().getValue12());
@@ -885,8 +895,8 @@ public class DetailsActivity extends Activity {
 									.getInfo_add3().getValue13());
 							body.put("PACK_TYPE", info_add_upload
 									.getInfo_add3().getValue6());
-							body.put("DRAW_METHOD", info_add_upload
-									.getInfo_add3().getValue17());
+							// body.put("DRAW_METHOD", info_add_upload
+							// .getInfo_add3().getValue17());
 							body.put("DRAW_METHOD", info_add_upload
 									.getInfo_add3().getValue17());
 							body.put("DRAW_PERSON", info_add_upload
@@ -1005,7 +1015,15 @@ public class DetailsActivity extends Activity {
 		map.put("$DWDZ2$", info_add_new.getInfo_add2().getValue6());
 		map.put("$YYZZ$", info_add_new.getInfo_add2().getValue7());
 		map.put("$XKZLX$", info_add_new.getInfo_add2().getValue8());
-		map.put("$XKZBH$", info_add_new.getInfo_add2().getValue9());
+
+		if (info_add_new.getInfo_add2().getValue9().substring(0, 1).equals("*")) {
+			map.put("$XKZBH$", "食品生产许可证\n"
+					+ info_add_new.getInfo_add2().getValue9().substring(1));
+		} else {
+			map.put("$XKZBH$", info_add_new.getInfo_add2().getValue9());
+		}
+		// map.put("$XKZBH$", info_add_new.getInfo_add2().getValue9());
+
 		map.put("$FRDB$", info_add_new.getInfo_add2().getValue10());
 		map.put("$NXSE$", info_add_new.getInfo_add2().getValue11());
 		map.put("$LXR2$", info_add_new.getInfo_add2().getValue12());
@@ -1047,7 +1065,7 @@ public class DetailsActivity extends Activity {
 		map.put("$RQLX$", info_add_new.getInfo_add3().getValue28());
 		map.put("$DYRQ$", str_dayinriqi);
 
-		//android无法插入图片
+		// android无法插入图片
 		writeDoc("yuan.doc", targetPath, map);
 		// 查看
 		// doOpenWord();
@@ -1088,10 +1106,10 @@ public class DetailsActivity extends Activity {
 			// 替换文本内容
 			for (Map.Entry<String, Object> entry : map.entrySet()) {
 				if ((entry.getValue()) instanceof String) {
-					//替换文本
+					// 替换文本
 					range.replaceText(entry.getKey(), entry.getValue()
 							.toString());
-				} 
+				}
 			}
 			OutputStream os = new FileOutputStream(targetPath);
 			// ByteArrayOutputStream ostream = new ByteArrayOutputStream();
