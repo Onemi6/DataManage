@@ -59,18 +59,12 @@ public class HttpUtils {
 		int code;
 		try {
 			URL url = new URL(path);
-			/**
-			 * 这里网络请求使用的是类HttpURLConnection，另外一种可以选择使用类HttpClient。
-			 */
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");// 使用GET方法获取
 			conn.setConnectTimeout(3000);
 			conn.setReadTimeout(2000);
 			code = conn.getResponseCode();
 			if (code == 200) {
-				/**
-				 * 如果获取的code为200，则证明数据获取是正确的。
-				 */
 				String result = readMyInputStream(conn.getInputStream());
 				return result;
 			}
@@ -87,9 +81,6 @@ public class HttpUtils {
 		int code;
 		try {
 			URL url = new URL(path);
-			/**
-			 * 这里网络请求使用的是类HttpURLConnection，另外一种可以选择使用类HttpClient。
-			 */
 			String content = String.valueOf(getjsonData(body));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("POST");// 使用POST方法获取
@@ -105,9 +96,6 @@ public class HttpUtils {
 			os.flush();
 			code = conn.getResponseCode();
 			if (code == 200) {
-				/**
-				 * 如果获取的code为200，则证明数据获取是正确的。
-				 */
 				String result = readMyInputStream(conn.getInputStream());
 				return result;
 			}
@@ -123,18 +111,12 @@ public class HttpUtils {
 		int code;
 		try {
 			URL url = new URL(path);
-			/**
-			 * 这里网络请求使用的是类HttpURLConnection，另外一种可以选择使用类HttpClient。
-			 */
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");// 使用GET方法获取
 			conn.setConnectTimeout(3000);
 			conn.setReadTimeout(2000);
 			code = conn.getResponseCode();
 			if (code == 200) {
-				/**
-				 * 如果获取的code为200，则证明数据获取是正确的。
-				 */
 				String result = readMyInputStream(conn.getInputStream());
 				return result;
 
@@ -152,9 +134,6 @@ public class HttpUtils {
 		int code;
 		try {
 			URL url = new URL(path);
-			/**
-			 * 这里网络请求使用的是类HttpURLConnection，另外一种可以选择使用类HttpClient。
-			 */
 			String content = String.valueOf(getjsonData(body));
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("POST");// 使用POST方法获取
@@ -170,9 +149,6 @@ public class HttpUtils {
 			os.flush();
 			code = conn.getResponseCode();
 			if (code == 200) {
-				/**
-				 * 如果获取的code为200，则证明数据获取是正确的。
-				 */
 				String result = readMyInputStream(conn.getInputStream());
 				return result;
 			}
@@ -189,18 +165,12 @@ public class HttpUtils {
 			int code;
 			try {
 				URL url = new URL(path);
-				/**
-				 * 这里网络请求使用的是类HttpURLConnection，另外一种可以选择使用类HttpClient。
-				 */
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");// 使用GET方法获取
 				conn.setConnectTimeout(3000);
 				conn.setReadTimeout(2000);
 				code = conn.getResponseCode();
 				if (code == 200) {
-					/**
-					 * 如果获取的code为200，则证明数据获取是正确的。
-					 */
 					String result = readMyInputStream(conn.getInputStream());
 					return result;
 
@@ -218,18 +188,12 @@ public class HttpUtils {
 			int code;
 			try {
 				URL url = new URL(path);
-				/**
-				 * 这里网络请求使用的是类HttpURLConnection，另外一种可以选择使用类HttpClient。
-				 */
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");// 使用GET方法获取
 				conn.setConnectTimeout(3000);
 				conn.setReadTimeout(2000);
 				code = conn.getResponseCode();
 				if (code == 200) {
-					/**
-					 * 如果获取的code为200，则证明数据获取是正确的。
-					 */
 					String result = readMyInputStream(conn.getInputStream());
 					return result;
 

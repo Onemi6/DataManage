@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.hwpf.HWPFDocument;
+import org.apache.poi.hwpf.usermodel.Picture;
 import org.apache.poi.hwpf.usermodel.Range;
 
 import android.app.Activity;
@@ -1111,10 +1112,28 @@ public class DetailsActivity extends Activity {
 							.toString());
 				}
 			}
+			//获取doc中的图片数
+	        List<Picture> pics = hdt.getPicturesTable().getAllPictures();
+	        System.out.printf(pics.size()+"\n");
+	        for(Picture pic:pics){
+	            //图片在doc文件中的位置,分析Doc 转化成其他文本时需要用到
+	            int start = pic.getStartOffset();
+	            int width = pic.getWidth();
+	            int height = pic.getHeight();
+	            String mimeType = pic.getMimeType();
+
+	            System.out.printf("开始位置%d\t图片大小度%d,高%d,\t图片类型%s\r\n",start,width,height,mimeType);
+	        }				
+				        	        	        
 			OutputStream os = new FileOutputStream(targetPath);
 			// ByteArrayOutputStream ostream = new ByteArrayOutputStream();
 			// FileOutputStream out = new FileOutputStream(newFile, true);
 			hdt.write(os);
+			
+			//1.通过Picture的writeImageContent方法 写文件
+	        //2.获取Picture的byte 自己写
+	        copyPic2Disk(pics, os);
+			
 			this.closeStream(os);
 			this.closeStream(in);
 			// 输出字节流
@@ -1128,6 +1147,43 @@ public class DetailsActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
+
+    /**
+     * 通过Picture 自己类中的读写方法
+     * @param pics
+     * @param path
+     */
+    public static void copyPic2Disk(List<Picture> pics,OutputStream os){
+    	
+    	
+        if(pics == null  || pics.size()  <=0){
+            return;
+        }
+        /*if(!path.isDirectory()){
+            throw new RuntimeException("路径填写不正确");
+        }
+        //当文件夹路径不存在的情况下，我们自己创建文件夹目录
+        if(!path.exists() ){
+            path.mkdirs();
+        }*/
+
+        try {
+            for(Picture pic:pics){
+                //写出数据，我们使用的是Poi类中，Picture自己所带的函数
+            	pic.writeImageContent(os);
+                /*byte [] picBytes = pic.getContent(); //获取字节流，也可以自己写入数据
+                copyByteToFile(picBytes);*/
+            }
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+	
+	
+	
+	
+	
 
 	/**
 	 * 关闭输入流

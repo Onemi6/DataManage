@@ -292,8 +292,9 @@ int drawable jpush_ic_richpush_actionbar_divider 0x7f02005e
 int drawable jpush_richpush_btn_selector 0x7f02005f
 int drawable jpush_richpush_progressbar 0x7f020060
 int drawable logo 0x7f020061
-int drawable my_button 0x7f020062
-int drawable top_back 0x7f020063
+int drawable logo1 0x7f020062
+int drawable my_button 0x7f020063
+int drawable top_back 0x7f020064
 int id action_bar 0x7f0a002c
 int id action_bar_activity_content 0x7f0a0001
 int id action_bar_container 0x7f0a002b

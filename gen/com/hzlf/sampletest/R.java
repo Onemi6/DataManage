@@ -1168,8 +1168,9 @@ containing a value of this type.
         public static final int jpush_richpush_btn_selector=0x7f02005f;
         public static final int jpush_richpush_progressbar=0x7f020060;
         public static final int logo=0x7f020061;
-        public static final int my_button=0x7f020062;
-        public static final int top_back=0x7f020063;
+        public static final int logo1=0x7f020062;
+        public static final int my_button=0x7f020063;
+        public static final int top_back=0x7f020064;
     }
     public static final class id {
         public static final int action_bar=0x7f0a002c;
