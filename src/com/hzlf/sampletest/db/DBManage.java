@@ -22,8 +22,8 @@ public class DBManage {
 
 	public DBManage(Context context) {
 		// TODO 自动生成的构造函数存根
-		dbHelper = new MyDatabaseHelper(context, "DataManage.db", null, 4);
-		//db = dbHelper.getWritableDatabase();
+		dbHelper = new MyDatabaseHelper(context, "DataManage.db", null, 5);
+		// db = dbHelper.getWritableDatabase();
 		_context = context;
 	}
 
@@ -51,8 +51,8 @@ public class DBManage {
 						+ "yangpinshangbiao,baozhuangfenlei,guigexinghao,zhiliangdengji,yangpintiaoma,riqileixing,riqi,"
 						+ "baozhiqi,chanpinpihao,yangpindanjia,chukou,yuanchandi,chouyangriqi,chouyangfangshi,"
 						+ "chouyangxingtai,yangpinbaozhuang,chucuntiaojian,zhixingbiaozhun,"
-						+ "chouyangshuliangdanwei,chouyangjishu,beiyangshuliang,chouyangshuliang,chouyangren,beizhu)"
-						+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+						+ "chouyangshuliangdanwei,chouyangjishu,beiyangshuliang,chouyangshuliang,chouyangren,beizhu,yangpinxukezheng)"
+						+ "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
 				new Object[] { no, info_add1.getValue1(),
 						info_add1.getValue2(), info_add1.getValue3(),
 						info_add1.getValue4(), info_add1.getValue5(),
@@ -80,7 +80,8 @@ public class DBManage {
 						info_add3.getValue20(), info_add3.getValue22(),
 						info_add3.getValue23(), info_add3.getValue24(),
 						info_add3.getValue25(), info_add3.getValue26(),
-						info_add3.getValue21(), info_add3.getValue27() });
+						info_add3.getValue21(), info_add3.getValue27(),
+						info_add3.getValue29() });
 	}
 
 	// 插入抽样单编号
@@ -104,13 +105,13 @@ public class DBManage {
 		db.execSQL("insert into TaskSource (name) values (?)",
 				new String[] { name });
 	}
-	
+
 	// 修改图片路径
-		public void updateImagePath(String number, String imagepath) {
-			db = dbHelper.getWritableDatabase();
-			db.execSQL("update UploadImg set imagepath=? where number=?",
-					new String[] { imagepath ,number});
-		}
+	public void updateImagePath(String number, String imagepath) {
+		db = dbHelper.getWritableDatabase();
+		db.execSQL("update UploadImg set imagepath=? where number=?",
+				new String[] { imagepath, number });
+	}
 
 	// 修改用户信息
 	public void updateuser(User user) {
@@ -134,7 +135,7 @@ public class DBManage {
 						+ "zhiliangdengji=?,yangpintiaoma=?,riqi=?,baozhiqi=?,chanpinpihao=?,yangpindanjia=?,"
 						+ "chukou=?,yuanchandi=?,chouyangfangshi=?,chouyangxingtai=?,yangpinbaozhuang=?,chucuntiaojian=?,"
 						+ "chouyangren=?,zhixingbiaozhun=?,chouyangshuliangdanwei=?,chouyangjishu=?,beiyangshuliang=?,"
-						+ "chouyangshuliang=?,beizhu=?,riqileixing=? where chouyangdanbianhao=?",
+						+ "chouyangshuliang=?,beizhu=?,yangpinxukezheng=?,riqileixing=? where chouyangdanbianhao=?",
 				new Object[] { info_add.getInfo_add1().getValue2(),
 						info_add.getInfo_add1().getValue3(),
 						info_add.getInfo_add1().getValue4(),
@@ -187,6 +188,7 @@ public class DBManage {
 						info_add.getInfo_add3().getValue25(),
 						info_add.getInfo_add3().getValue26(),
 						info_add.getInfo_add3().getValue27(),
+						info_add.getInfo_add3().getValue29(),
 						info_add.getInfo_add3().getValue28(),
 						info_add.getInfo_add1().getValue1() });
 	}
@@ -205,12 +207,11 @@ public class DBManage {
 				"update SampleNumber set used=?,print=?,upload=? where number=?",
 				new Object[] { used, print, upload, number });
 	}
-	
-	public void updateSign(String number,int sign) {
+
+	public void updateSign(String number, int sign) {
 		db = dbHelper.getWritableDatabase();
-		db.execSQL(
-				"update SampleNumber set sign=? where number=?",
-				new Object[] {sign, number });
+		db.execSQL("update SampleNumber set sign=? where number=?",
+				new Object[] { sign, number });
 	}
 
 	// 删除用户
@@ -393,7 +394,9 @@ public class DBManage {
 									.getColumnIndex("chouyangshuliang")),
 							cursor.getString(cursor.getColumnIndex("beizhu")),
 							cursor.getString(cursor
-									.getColumnIndex("riqileixing"))));
+									.getColumnIndex("riqileixing")),
+							cursor.getString(cursor
+									.getColumnIndex("yangpinxukezheng"))));
 		}
 		return null;
 	}
@@ -465,8 +468,7 @@ public class DBManage {
 		}
 		return null;
 	}
-	
-	
+
 	public String findSign(String number) {
 		db = dbHelper.getWritableDatabase();
 		Cursor cursor = db.rawQuery(
@@ -533,33 +535,28 @@ public class DBManage {
 		Cursor cursor = db.rawQuery(
 				"select * from Details_Info where danweimingcheng2=?",
 				new String[] { String.valueOf(danweimingcheng) });
-			if (cursor.moveToNext()) {
-				return new Info_add2(
-						cursor.getString(cursor.getColumnIndex("suozaidi")),
-						cursor.getString(cursor
-								.getColumnIndex("chouyangdidian")),
-						cursor.getString(cursor.getColumnIndex("quyuleixing")),
-						cursor.getString(cursor
-								.getColumnIndex("chouyanghuanjie")),
-						cursor.getString(cursor
-								.getColumnIndex("danweimingcheng2")),
-						cursor.getString(cursor.getColumnIndex("danweidizhi2")),
-						cursor.getString(cursor.getColumnIndex("yingyezhizhao")),
-						cursor.getString(cursor
-								.getColumnIndex("xukezhengleixing")),
-						cursor.getString(cursor.getColumnIndex("xukezhenghao")),
-						cursor.getString(cursor.getColumnIndex("danweifaren")),
-						cursor.getString(cursor.getColumnIndex("nianxiaoshoue")),
-						cursor.getString(cursor.getColumnIndex("lianxiren2")),
-						cursor.getString(cursor.getColumnIndex("dianhua2")),
-						cursor.getString(cursor.getColumnIndex("chuanzhen2")),
-						cursor.getString(cursor.getColumnIndex("youbian2")),
-						cursor.getString(cursor
-								.getColumnIndex("shengchanzhemingcheng")),
-						cursor.getString(cursor
-								.getColumnIndex("shengchanzhedizhi")), cursor
-								.getString(cursor.getColumnIndex("dianhua3")));
-			}
+		if (cursor.moveToNext()) {
+			return new Info_add2(
+					cursor.getString(cursor.getColumnIndex("suozaidi")),
+					cursor.getString(cursor.getColumnIndex("chouyangdidian")),
+					cursor.getString(cursor.getColumnIndex("quyuleixing")),
+					cursor.getString(cursor.getColumnIndex("chouyanghuanjie")),
+					cursor.getString(cursor.getColumnIndex("danweimingcheng2")),
+					cursor.getString(cursor.getColumnIndex("danweidizhi2")),
+					cursor.getString(cursor.getColumnIndex("yingyezhizhao")),
+					cursor.getString(cursor.getColumnIndex("xukezhengleixing")),
+					cursor.getString(cursor.getColumnIndex("xukezhenghao")),
+					cursor.getString(cursor.getColumnIndex("danweifaren")),
+					cursor.getString(cursor.getColumnIndex("nianxiaoshoue")),
+					cursor.getString(cursor.getColumnIndex("lianxiren2")),
+					cursor.getString(cursor.getColumnIndex("dianhua2")),
+					cursor.getString(cursor.getColumnIndex("chuanzhen2")),
+					cursor.getString(cursor.getColumnIndex("youbian2")),
+					cursor.getString(cursor
+							.getColumnIndex("shengchanzhemingcheng")),
+					cursor.getString(cursor.getColumnIndex("shengchanzhedizhi")),
+					cursor.getString(cursor.getColumnIndex("dianhua3")));
+		}
 		return null;
 	}
 

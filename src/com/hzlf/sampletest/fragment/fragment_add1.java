@@ -31,7 +31,7 @@ public class fragment_add1 extends Fragment {
 
 	private AutoCompleteTextView edittext1;
 	private String[] renwulaiyuan;
-	
+
 	// private EditText edittext1;
 
 	private TextView textview1, textview3, textview4, textview5, textview6,
@@ -69,10 +69,10 @@ public class fragment_add1 extends Fragment {
 
 		edittext1 = (AutoCompleteTextView) view
 				.findViewById(R.id.text_renwulaiyuan);
-		
-		  renwulaiyuan = dbmanage.findList_TaskSource().toArray( new
-		  String[dbmanage.findList_TaskSource().size()]);
-		 
+
+		renwulaiyuan = dbmanage.findList_TaskSource().toArray(
+				new String[dbmanage.findList_TaskSource().size()]);
+
 		/*
 		 * 需要一个适配器 初始化数据源--这个数据源去匹配文本框中输入的内容
 		 */

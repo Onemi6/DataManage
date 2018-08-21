@@ -29,10 +29,10 @@ public class MaininfoAdapter extends ArrayAdapter<MainInfo> {
 		if (convertView == null) {
 			view = LayoutInflater.from(getContext()).inflate(resourceId, null);
 			viewHolder = new ViewHolder();
-			
+
 			viewHolder.maininfo_status = (TextView) view
 					.findViewById(R.id.maininfo_status);
-			
+
 			viewHolder.maininfo_no = (TextView) view
 					.findViewById(R.id.maininfo_no);
 			viewHolder.maininfo_number = (TextView) view

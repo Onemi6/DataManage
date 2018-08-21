@@ -33,8 +33,7 @@ public class GsonTools {
 		}
 		return null;
 	}
-	
-	
+
 	public static LinkedList<Source> getAllSource(String result) {
 
 		try {

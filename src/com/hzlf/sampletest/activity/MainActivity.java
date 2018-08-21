@@ -54,8 +54,6 @@ public class MainActivity extends ActionBarActivity implements
 	private TextView textview;
 	private ListView listview;
 
-	
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -148,7 +146,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	private void initMaininfo() {
 		// TODO 自动生成的方法存根
-		
+
 		List<MainInfo> list_info_main = dbmanage.findList_Info_main();
 		for (MainInfo info_main : list_info_main) {
 			if (dbmanage.findUpload(info_main.getNumber()).equals("1")) {

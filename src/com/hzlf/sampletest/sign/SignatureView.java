@@ -20,7 +20,6 @@ import android.view.View;
 
 import com.hzlf.sampletest.R;
 
-
 public class SignatureView extends View {
 	// View state
 	private List<TimedPoint> mPoints;

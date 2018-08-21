@@ -12,6 +12,7 @@ public class UploadImg {
 		this.status = status;
 		this.message = message;
 	}
+
 	public String getStatus() {
 		return status;
 	}
@@ -19,5 +20,5 @@ public class UploadImg {
 	public String getMessage() {
 		return message;
 	}
-	
+
 }

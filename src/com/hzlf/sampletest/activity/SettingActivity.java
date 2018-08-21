@@ -43,7 +43,8 @@ public class SettingActivity extends Activity {
 	private static final int UPDATE_SUCCESS = 4;
 
 	private TextView version_update, source_update;
-	//private DBManage dbmanage = new DBManage(this);
+
+	// private DBManage dbmanage = new DBManage(this);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -104,42 +105,25 @@ public class SettingActivity extends Activity {
 			}
 		});
 
-		/*source_update = (TextView) findViewById(R.id.source_update);
-		source_update.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO 自动生成的方法存根
-				new Thread(new Runnable() {
-
-					@Override
-					public void run() {
-						String result = HttpUtils
-								.getAllSource(UsedPath.api_Sys_GetAllSource);
-						Log.d("result", result);
-						if (result.equals("获取数据失败") || result.equals("")) {
-						} else {
-							LinkedList<Source> source = GsonTools
-									.getAllSource(result);
-							if (source.size() != 0) {
-								for (Iterator iterator = source.iterator(); iterator
-										.hasNext();) {
-									String name = (String) iterator.next();
-									if (dbmanage.findTaskSource(name) != null) {
-
-									} else {
-										dbmanage.addTaskSource(name);
-									}
-								}
-							}
-							Message msg = new Message();
-							msg.what = UPDATE_SUCCESS;
-							handler.sendMessage(msg);
-						}
-					}
-				}).start();
-			}
-		});*/
+		/*
+		 * source_update = (TextView) findViewById(R.id.source_update);
+		 * source_update.setOnClickListener(new View.OnClickListener() {
+		 * 
+		 * @Override public void onClick(View v) { // TODO 自动生成的方法存根 new
+		 * Thread(new Runnable() {
+		 * 
+		 * @Override public void run() { String result = HttpUtils
+		 * .getAllSource(UsedPath.api_Sys_GetAllSource); Log.d("result",
+		 * result); if (result.equals("获取数据失败") || result.equals("")) { } else {
+		 * LinkedList<Source> source = GsonTools .getAllSource(result); if
+		 * (source.size() != 0) { for (Iterator iterator = source.iterator();
+		 * iterator .hasNext();) { String name = (String) iterator.next(); if
+		 * (dbmanage.findTaskSource(name) != null) {
+		 * 
+		 * } else { dbmanage.addTaskSource(name); } } } Message msg = new
+		 * Message(); msg.what = UPDATE_SUCCESS; handler.sendMessage(msg); } }
+		 * }).start(); } });
+		 */
 	}
 
 	/*

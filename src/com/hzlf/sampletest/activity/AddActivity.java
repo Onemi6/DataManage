@@ -46,8 +46,10 @@ public class AddActivity extends FragmentActivity implements OnClickListener {
 
 	private Context _context;
 
-	/*private static final int UPDATE_TRUE = 3;
-	private static final int UPDATE_FLASE = -3;*/
+	/*
+	 * private static final int UPDATE_TRUE = 3; private static final int
+	 * UPDATE_FLASE = -3;
+	 */
 
 	public String getNumber() {
 		return number;

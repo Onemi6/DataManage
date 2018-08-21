@@ -34,7 +34,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,7 +67,7 @@ public class DetailsActivity extends Activity {
 			btn_update3, btn_sign, btn_upload_data, btn_uploadimg;
 	private Context _context;
 	private Info_add info_add, info_add_new;
-	private String number, str_dayinriqi, str_filename, str_picpath;
+	private String number, str_dayinriqi, str_filename;
 	private EditText textview0, textview1_1, textview1_2, textview1_3,
 			textview1_4, textview1_5, textview1_6, textview1_7, textview1_8,
 			textview1_9, textview2_1, textview2_2, textview2_3, textview2_4,
@@ -81,7 +80,7 @@ public class DetailsActivity extends Activity {
 			textview3_14, textview3_15, textview3_16, textview3_17,
 			textview3_18, textview3_19, textview3_20, textview3_21,
 			textview3_22, textview3_23, textview3_24, textview3_25,
-			textview3_26, textview3_27;
+			textview3_26, textview3_27, textview3_29;
 	private TextView textview3_28;
 	private ProgressDialog mypDialog;
 	private Upload upload;
@@ -276,6 +275,7 @@ public class DetailsActivity extends Activity {
 		textview3_25 = (EditText) findViewById(R.id.details_beiyangshuliang);
 		textview3_26 = (EditText) findViewById(R.id.details_chouyangshuliang);
 		textview3_27 = (EditText) findViewById(R.id.details_beizhu);
+		textview3_29 = (EditText) findViewById(R.id.details_yangpinxukezheng);
 
 		textview3_28 = (TextView) findViewById(R.id.details_riqileixing);
 
@@ -378,6 +378,7 @@ public class DetailsActivity extends Activity {
 		textview3_25.setText(info_add.getInfo_add3().getValue25());
 		textview3_26.setText(info_add.getInfo_add3().getValue26());
 		textview3_27.setText(info_add.getInfo_add3().getValue27());
+		textview3_29.setText(info_add.getInfo_add3().getValue29());
 
 		textview3_1.setEnabled(false);
 		textview3_2.setEnabled(false);
@@ -406,6 +407,7 @@ public class DetailsActivity extends Activity {
 		textview3_25.setEnabled(false);
 		textview3_26.setEnabled(false);
 		textview3_27.setEnabled(false);
+		textview3_29.setEnabled(false);
 
 		btn_update1 = (Button) findViewById(R.id.btn_update1);
 		btn_update1.setOnClickListener(new OnClickListener() {
@@ -568,6 +570,7 @@ public class DetailsActivity extends Activity {
 					textview3_25.setEnabled(true);
 					textview3_26.setEnabled(true);
 					textview3_27.setEnabled(true);
+					textview3_29.setEnabled(true);
 					btn_update3.setText("确认");
 				} else if (btn_update3.getText().toString().equals("确认")) {
 					textview3_1.setEnabled(false);
@@ -597,6 +600,7 @@ public class DetailsActivity extends Activity {
 					textview3_25.setEnabled(false);
 					textview3_26.setEnabled(false);
 					textview3_27.setEnabled(false);
+					textview3_29.setEnabled(false);
 					btn_update3.setText("修改");
 					info_add.getInfo_add3().setValue1(
 							textview3_1.getText().toString());
@@ -651,6 +655,8 @@ public class DetailsActivity extends Activity {
 							textview3_26.getText().toString());
 					info_add.getInfo_add3().setValue27(
 							textview3_27.getText().toString());
+					info_add.getInfo_add3().setValue29(
+							textview3_29.getText().toString());
 					dbmanage.updateinfo(info_add);
 				}
 
@@ -1015,16 +1021,8 @@ public class DetailsActivity extends Activity {
 		map.put("$DWMC2$", info_add_new.getInfo_add2().getValue5());
 		map.put("$DWDZ2$", info_add_new.getInfo_add2().getValue6());
 		map.put("$YYZZ$", info_add_new.getInfo_add2().getValue7());
-		map.put("$XKZLX$", info_add_new.getInfo_add2().getValue8());
-
-		if (info_add_new.getInfo_add2().getValue9().substring(0, 1).equals("*")) {
-			map.put("$XKZBH$", "食品生产许可证\n"
-					+ info_add_new.getInfo_add2().getValue9().substring(1));
-		} else {
-			map.put("$XKZBH$", info_add_new.getInfo_add2().getValue9());
-		}
-		// map.put("$XKZBH$", info_add_new.getInfo_add2().getValue9());
-
+		map.put("$QYXKZ$", info_add_new.getInfo_add2().getValue8()
+				+ info_add_new.getInfo_add2().getValue9());
 		map.put("$FRDB$", info_add_new.getInfo_add2().getValue10());
 		map.put("$NXSE$", info_add_new.getInfo_add2().getValue11());
 		map.put("$LXR2$", info_add_new.getInfo_add2().getValue12());
@@ -1065,6 +1063,8 @@ public class DetailsActivity extends Activity {
 		map.put("$BZ$", info_add_new.getInfo_add3().getValue27());
 		map.put("$RQLX$", info_add_new.getInfo_add3().getValue28());
 		map.put("$DYRQ$", str_dayinriqi);
+
+		map.put("$YPXKZ$", info_add_new.getInfo_add3().getValue29());
 
 		// android无法插入图片
 		writeDoc("yuan.doc", targetPath, map);
@@ -1112,28 +1112,29 @@ public class DetailsActivity extends Activity {
 							.toString());
 				}
 			}
-			//获取doc中的图片数
-	        List<Picture> pics = hdt.getPicturesTable().getAllPictures();
-	        System.out.printf(pics.size()+"\n");
-	        for(Picture pic:pics){
-	            //图片在doc文件中的位置,分析Doc 转化成其他文本时需要用到
-	            int start = pic.getStartOffset();
-	            int width = pic.getWidth();
-	            int height = pic.getHeight();
-	            String mimeType = pic.getMimeType();
+			// 获取doc中的图片数
+			List<Picture> pics = hdt.getPicturesTable().getAllPictures();
+			System.out.printf(pics.size() + "\n");
+			for (Picture pic : pics) {
+				// 图片在doc文件中的位置,分析Doc 转化成其他文本时需要用到
+				int start = pic.getStartOffset();
+				int width = pic.getWidth();
+				int height = pic.getHeight();
+				String mimeType = pic.getMimeType();
 
-	            System.out.printf("开始位置%d\t图片大小度%d,高%d,\t图片类型%s\r\n",start,width,height,mimeType);
-	        }				
-				        	        	        
+				System.out.printf("开始位置%d\t图片大小度%d,高%d,\t图片类型%s\r\n", start,
+						width, height, mimeType);
+			}
+
 			OutputStream os = new FileOutputStream(targetPath);
 			// ByteArrayOutputStream ostream = new ByteArrayOutputStream();
 			// FileOutputStream out = new FileOutputStream(newFile, true);
 			hdt.write(os);
-			
-			//1.通过Picture的writeImageContent方法 写文件
-	        //2.获取Picture的byte 自己写
-	        copyPic2Disk(pics, os);
-			
+
+			// 1.通过Picture的writeImageContent方法 写文件
+			// 2.获取Picture的byte 自己写
+			copyPic2Disk(pics, os);
+
 			this.closeStream(os);
 			this.closeStream(in);
 			// 输出字节流
@@ -1148,42 +1149,36 @@ public class DetailsActivity extends Activity {
 		}
 	}
 
-    /**
-     * 通过Picture 自己类中的读写方法
-     * @param pics
-     * @param path
-     */
-    public static void copyPic2Disk(List<Picture> pics,OutputStream os){
-    	
-    	
-        if(pics == null  || pics.size()  <=0){
-            return;
-        }
-        /*if(!path.isDirectory()){
-            throw new RuntimeException("路径填写不正确");
-        }
-        //当文件夹路径不存在的情况下，我们自己创建文件夹目录
-        if(!path.exists() ){
-            path.mkdirs();
-        }*/
+	/**
+	 * 通过Picture 自己类中的读写方法
+	 * 
+	 * @param pics
+	 * @param path
+	 */
+	public static void copyPic2Disk(List<Picture> pics, OutputStream os) {
 
-        try {
-            for(Picture pic:pics){
-                //写出数据，我们使用的是Poi类中，Picture自己所带的函数
-            	pic.writeImageContent(os);
-                /*byte [] picBytes = pic.getContent(); //获取字节流，也可以自己写入数据
-                copyByteToFile(picBytes);*/
-            }
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-	
-	
-	
-	
-	
+		if (pics == null || pics.size() <= 0) {
+			return;
+		}
+		/*
+		 * if(!path.isDirectory()){ throw new RuntimeException("路径填写不正确"); }
+		 * //当文件夹路径不存在的情况下，我们自己创建文件夹目录 if(!path.exists() ){ path.mkdirs(); }
+		 */
+
+		try {
+			for (Picture pic : pics) {
+				// 写出数据，我们使用的是Poi类中，Picture自己所带的函数
+				pic.writeImageContent(os);
+				/*
+				 * byte [] picBytes = pic.getContent(); //获取字节流，也可以自己写入数据
+				 * copyByteToFile(picBytes);
+				 */
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * 关闭输入流

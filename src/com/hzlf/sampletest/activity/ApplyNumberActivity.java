@@ -51,7 +51,7 @@ public class ApplyNumberActivity extends Activity {
 				for (String code : codes) {
 					dbmanage.addSampleNumber(code);
 					numberlist.add(code);
-					/*numberlist.add(0, code);*/
+					/* numberlist.add(0, code); */
 				}
 				adapter.notifyDataSetChanged();
 				Toast.makeText(ApplyNumberActivity.this, "…Í«Î±‡∫≈≥…π¶",

@@ -27,7 +27,7 @@ public class SignActivity extends Activity {
 	private SignatureView mSignaturePad;
 	private Button mClearButton;
 	private Button mSaveButton;
-	private String mark,sign_number;
+	private String mark, sign_number;
 	private DBManage dbmanage = new DBManage(this);
 
 	@Override
@@ -38,7 +38,7 @@ public class SignActivity extends Activity {
 		getActionBar().setTitle("被抽样单位签字");
 
 		sign_number = getIntent().getStringExtra("sign_number");
-		
+
 		mSignaturePad = (SignatureView) findViewById(R.id.signature_pad);
 		mSignaturePad.setOnSignedListener(new SignatureView.OnSignedListener() {
 			@Override
@@ -70,9 +70,12 @@ public class SignActivity extends Activity {
 				Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();
 
 				if (getActionBar().getTitle().toString().equals("被抽样单位签字")) {
-					/*mark = ((MyApplication) SignActivity.this.getApplication())
-							.getInfoAdd1().getValue1() + "_SUPPLIER";*/
-					mark = sign_number+ "_SUPPLIER";
+					/*
+					 * mark = ((MyApplication)
+					 * SignActivity.this.getApplication())
+					 * .getInfoAdd1().getValue1() + "_SUPPLIER";
+					 */
+					mark = sign_number + "_SUPPLIER";
 					if (addSignatureToGallery(signatureBitmap, mark)) {
 						Toast.makeText(SignActivity.this, "保存成功",
 								Toast.LENGTH_SHORT).show();
@@ -82,12 +85,15 @@ public class SignActivity extends Activity {
 						Toast.makeText(SignActivity.this, "保存失败",
 								Toast.LENGTH_SHORT).show();
 					}
-				}
-				else if (getActionBar().getTitle().toString().equals("抽样人1签字")) {
-					/*mark = ((MyApplication) SignActivity.this.getApplication())
-							.getInfoAdd1().getValue1() + "_DRAW_MAN_1";*/
-					
-					mark = sign_number+ "_DRAW_MAN_1";
+				} else if (getActionBar().getTitle().toString()
+						.equals("抽样人1签字")) {
+					/*
+					 * mark = ((MyApplication)
+					 * SignActivity.this.getApplication())
+					 * .getInfoAdd1().getValue1() + "_DRAW_MAN_1";
+					 */
+
+					mark = sign_number + "_DRAW_MAN_1";
 					if (addSignatureToGallery(signatureBitmap, mark)) {
 						Toast.makeText(SignActivity.this, "保存成功",
 								Toast.LENGTH_SHORT).show();
@@ -97,17 +103,20 @@ public class SignActivity extends Activity {
 						Toast.makeText(SignActivity.this, "保存失败",
 								Toast.LENGTH_SHORT).show();
 					}
-				}else if (getActionBar().getTitle().toString()
+				} else if (getActionBar().getTitle().toString()
 						.equals("抽样人2签字")) {
-					/*mark = ((MyApplication) SignActivity.this.getApplication())
-							.getInfoAdd1().getValue1() + "_DRAW_MAN_2";*/
-					mark = sign_number+ "_DRAW_MAN_2";
+					/*
+					 * mark = ((MyApplication)
+					 * SignActivity.this.getApplication())
+					 * .getInfoAdd1().getValue1() + "_DRAW_MAN_2";
+					 */
+					mark = sign_number + "_DRAW_MAN_2";
 					if (addSignatureToGallery(signatureBitmap, mark)) {
 						Toast.makeText(SignActivity.this, "保存成功",
 								Toast.LENGTH_SHORT).show();
-						
-						dbmanage.updateSign(sign_number,1);
-						
+
+						dbmanage.updateSign(sign_number, 1);
+
 						mSignaturePad.clear();
 						Intent intent_sign = new Intent();
 						intent_sign.setClass(SignActivity.this,

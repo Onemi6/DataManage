@@ -332,14 +332,15 @@
                     android:layout_gravity="center"
                     android:text="食品经营许可证"
                     android:textSize="12sp" />
+                
+                <RadioButton
+                    android:id="@+id/radio_xukezheng_shipinshengchan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="食品生产许可证"
+                    android:textSize="12sp" />
             </RadioGroup>
-
-            <CheckBox
-                android:id="@+id/checkbox_xukezheng_shipinshengchan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="食品生产许可证" />
         </LinearLayout>
 
         <LinearLayout

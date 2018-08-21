@@ -187,7 +187,7 @@ public class ImgUploadActivity extends Activity implements OnClickListener,
 					if (picPath != null) {
 						toUploadFile();
 						handler.sendEmptyMessage(TO_UPLOAD_FILE);
-						//Log.e("picPath", picPath);
+						// Log.e("picPath", picPath);
 					} else {
 						Toast.makeText(this, "上传的文件路径出错", Toast.LENGTH_LONG)
 								.show();
@@ -333,17 +333,17 @@ public class ImgUploadActivity extends Activity implements OnClickListener,
 		params.put("type", img_type);
 		params.put("name", ((MyApplication) getApplication()).getName());
 		uploadUtil.uploadFile(picPath, fileKey, requestURL, params);
-		
-		//Log.e("picPath2", picPath);
+
+		// Log.e("picPath2", picPath);
 	}
 
 	private Handler handler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
-			/*case TO_UPLOAD_FILE:
-				toUploadFile();
-				break;*/
+			/*
+			 * case TO_UPLOAD_FILE: toUploadFile(); break;
+			 */
 			case UPLOAD_FILE_DONE:
 				String result = (String) msg.obj;
 				if (result.equals("上传失败")) {

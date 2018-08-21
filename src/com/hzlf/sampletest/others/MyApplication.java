@@ -18,18 +18,17 @@ public class MyApplication extends Application {
 	private Info_add2 info_add2;
 	private Info_add3 info_add3;
 
-	
 	private static final String TAG = "JPush";
 
-    @Override
-    public void onCreate() {    	     
-    	 Log.d(TAG, "[ExampleApplication] onCreate");
-         super.onCreate();
-         
-         JPushInterface.setDebugMode(true); 	// 设置开启日志,发布时请关闭日志
-         JPushInterface.init(this);     		// 初始化 JPush
-    }
-    
+	@Override
+	public void onCreate() {
+		Log.d(TAG, "[ExampleApplication] onCreate");
+		super.onCreate();
+
+		JPushInterface.setDebugMode(true); // 设置开启日志,发布时请关闭日志
+		JPushInterface.init(this); // 初始化 JPush
+	}
+
 	public String getNo() {
 		return no;
 	}

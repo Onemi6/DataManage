@@ -58,7 +58,8 @@ public class fragment_add3 extends Fragment {
 
 	private EditText textview1, textview2, textview3, textview4, textview5,
 			textview6, textview7, textview8, textview9, textview10, textview11,
-			textview12, textview13, textview14, textview15, textview16;
+			textview12, textview13, textview14, textview15, textview16,
+			textview17;
 
 	private TextView text_shengchanriqi, text_chouyangriqi;
 	private RadioGroup radio_chukou;
@@ -228,6 +229,7 @@ public class fragment_add3 extends Fragment {
 		textview14 = (EditText) view.findViewById(R.id.input_beiyangshuliang);
 		textview15 = (EditText) view.findViewById(R.id.input_chouyangshuliang);
 		textview16 = (EditText) view.findViewById(R.id.input_beizhu);
+		textview17 = (EditText) view.findViewById(R.id.input_yangpinxukezheng);
 
 		radio_chukou = (RadioGroup) view.findViewById(R.id.radio_chukou);
 
@@ -318,7 +320,8 @@ public class fragment_add3 extends Fragment {
 						|| textview12.getText().toString().equals("")
 						|| textview13.getText().toString().equals("")
 						|| textview14.getText().toString().equals("")
-						|| textview15.getText().toString().equals("")) {
+						|| textview15.getText().toString().equals("")
+						|| textview17.getText().toString().equals("")) {
 
 					((MyApplication) getActivity().getApplication()).setAdd3(0);
 					Toast.makeText(getActivity(), "带*的为必填项", Toast.LENGTH_SHORT)
@@ -379,7 +382,8 @@ public class fragment_add3 extends Fragment {
 									.toString(), textview14.getText()
 									.toString(), textview15.getText()
 									.toString(), str_beizhu,
-							spinner_riqileixing.getSelectedItem().toString());
+							spinner_riqileixing.getSelectedItem().toString(),
+							textview17.getText().toString());
 					((MyApplication) getActivity().getApplication()).setAdd3(1);
 					((MyApplication) getActivity().getApplication())
 							.setInfoAdd3(info_add3);
@@ -457,9 +461,8 @@ public class fragment_add3 extends Fragment {
 					new Thread() {
 						@Override
 						public void run() {
-							String result = HttpUtils
-									.getAAQI(UsedPath.api_AAQI
-											+ textview5.getText().toString());
+							String result = HttpUtils.getAAQI(UsedPath.api_AAQI
+									+ textview5.getText().toString());
 							if (result.equals("获取数据失败") || result.equals("")) {
 
 								Toast.makeText(getActivity(), "获取商品信息失败",

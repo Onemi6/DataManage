@@ -4,7 +4,7 @@ public class Info_add2 {
 
 	private String value1, value2, value3, value4, value5, value6, value7,
 			value8, value9, value10, value11, value12, value13, value14,
-			value15,value16,value17,value18;
+			value15, value16, value17, value18;
 
 	public Info_add2() {
 		super();
@@ -13,7 +13,8 @@ public class Info_add2 {
 	public Info_add2(String value1, String value2, String value3,
 			String value4, String value5, String value6, String value7,
 			String value8, String value9, String value10, String value11,
-			String value12, String value13, String value14, String value15, String value16, String value17, String value18) {
+			String value12, String value13, String value14, String value15,
+			String value16, String value17, String value18) {
 		super();
 		this.value1 = value1;
 		this.value2 = value2;
@@ -31,7 +32,7 @@ public class Info_add2 {
 		this.value13 = value13;
 		this.value14 = value14;
 		this.value15 = value15;
-		
+
 		this.value16 = value16;
 		this.value17 = value17;
 		this.value18 = value18;
@@ -156,7 +157,7 @@ public class Info_add2 {
 	public String getValue15() {
 		return this.value15;
 	}
-	
+
 	public void setValue16(String value16) {
 		this.value16 = value16;
 	}
@@ -164,7 +165,7 @@ public class Info_add2 {
 	public String getValue16() {
 		return this.value16;
 	}
-	
+
 	public void setValue17(String value17) {
 		this.value17 = value17;
 	}
@@ -172,7 +173,7 @@ public class Info_add2 {
 	public String getValue17() {
 		return this.value17;
 	}
-	
+
 	public void setValue18(String value18) {
 		this.value18 = value18;
 	}

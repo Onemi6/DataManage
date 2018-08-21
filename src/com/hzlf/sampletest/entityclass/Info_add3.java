@@ -5,7 +5,8 @@ public class Info_add3 {
 	private String value1, value2, value3, value4, value5, value6, value7,
 			value8, value9, value10, value11, value12, value13, value14,
 			value15, value16, value17, value18, value19, value20, value21,
-			value22, value23, value24, value25, value26, value27,value28;
+			value22, value23, value24, value25, value26, value27, value28,
+			value29;
 
 	public Info_add3() {
 		super();
@@ -17,7 +18,8 @@ public class Info_add3 {
 			String value12, String value13, String value14, String value15,
 			String value16, String value17, String value18, String value19,
 			String value20, String value21, String value22, String value23,
-			String value24, String value25, String value26, String value27 ,String value28) {
+			String value24, String value25, String value26, String value27,
+			String value28, String value29) {
 		super();
 		this.value1 = value1;
 		this.value2 = value2;
@@ -47,6 +49,7 @@ public class Info_add3 {
 		this.value26 = value26;
 		this.value27 = value27;
 		this.value28 = value28;
+		this.value29 = value29;
 	}
 
 	public void setValue1(String value1) {
@@ -264,12 +267,20 @@ public class Info_add3 {
 	public String getValue27() {
 		return this.value27;
 	}
-	
+
 	public void setValue28(String value28) {
 		this.value28 = value28;
 	}
 
 	public String getValue28() {
 		return this.value28;
+	}
+
+	public void setValue29(String value29) {
+		this.value29 = value29;
+	}
+
+	public String getValue29() {
+		return this.value29;
 	}
 }

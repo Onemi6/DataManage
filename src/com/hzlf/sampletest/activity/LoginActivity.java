@@ -98,7 +98,7 @@ public class LoginActivity extends InstrumentedActivity {
 					// remember_mima.setChecked(false);
 				}
 				editor.commit();
-				 str = ((String) msg.obj).split("[,]");
+				str = ((String) msg.obj).split("[,]");
 				((MyApplication) getApplication()).setNo(str[0]);
 				((MyApplication) getApplication()).setName(str[1]);
 				Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT)
@@ -141,10 +141,12 @@ public class LoginActivity extends InstrumentedActivity {
 				break;
 			case LOGIN_FLASE:
 				progressbar_login.setVisibility(View.GONE);
-				
-				/*Toast.makeText(LoginActivity.this, (String) msg.obj,
-						Toast.LENGTH_SHORT).show();*/
-				
+
+				/*
+				 * Toast.makeText(LoginActivity.this, (String) msg.obj,
+				 * Toast.LENGTH_SHORT).show();
+				 */
+
 				if ("当前网络不可用".equals(msg.obj)) {
 					if ((dbmanage.check(_zhanghao) != null)
 							&& (dbmanage.check(_zhanghao).equals(_mima))) {
@@ -253,7 +255,7 @@ public class LoginActivity extends InstrumentedActivity {
 				}
 			}
 		}).start();
-		
+
 		// 登录
 		btn_denglu = (Button) findViewById(R.id.btn_denglu);
 		btn_denglu.setOnClickListener(new OnClickListener() {

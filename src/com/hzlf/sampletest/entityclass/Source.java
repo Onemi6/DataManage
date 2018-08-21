@@ -7,6 +7,7 @@ public class Source {
 		super();
 		this.SOURCE_NAME = SOURCE_NAME;
 	}
+
 	public String getSOURCE_NAME() {
 		return SOURCE_NAME;
 	}
@@ -14,5 +15,5 @@ public class Source {
 	public void setSOURCE_NAME(String sOURCE_NAME) {
 		SOURCE_NAME = sOURCE_NAME;
 	}
-	
+
 }

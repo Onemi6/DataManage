@@ -158,52 +158,50 @@ public class HttpUtils {
 		}
 		return "";
 	}
-	
-	
+
 	// 获得ClientByName
-		public static String getClientByName(String path) {
-			int code;
-			try {
-				URL url = new URL(path);
-				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-				conn.setRequestMethod("GET");// 使用GET方法获取
-				conn.setConnectTimeout(3000);
-				conn.setReadTimeout(2000);
-				code = conn.getResponseCode();
-				if (code == 200) {
-					String result = readMyInputStream(conn.getInputStream());
-					return result;
+	public static String getClientByName(String path) {
+		int code;
+		try {
+			URL url = new URL(path);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");// 使用GET方法获取
+			conn.setConnectTimeout(3000);
+			conn.setReadTimeout(2000);
+			code = conn.getResponseCode();
+			if (code == 200) {
+				String result = readMyInputStream(conn.getInputStream());
+				return result;
 
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				return "";
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 			return "";
 		}
-		
-		
-		// 同步用户信息
-		public static String getAAQI(String path) {
-			int code;
-			try {
-				URL url = new URL(path);
-				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-				conn.setRequestMethod("GET");// 使用GET方法获取
-				conn.setConnectTimeout(3000);
-				conn.setReadTimeout(2000);
-				code = conn.getResponseCode();
-				if (code == 200) {
-					String result = readMyInputStream(conn.getInputStream());
-					return result;
+		return "";
+	}
 
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				return "1";
+	// 同步用户信息
+	public static String getAAQI(String path) {
+		int code;
+		try {
+			URL url = new URL(path);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");// 使用GET方法获取
+			conn.setConnectTimeout(3000);
+			conn.setReadTimeout(2000);
+			code = conn.getResponseCode();
+			if (code == 200) {
+				String result = readMyInputStream(conn.getInputStream());
+				return result;
+
 			}
-			return "";
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "1";
 		}
+		return "";
+	}
 
 	/*
 	 * 用pull解析器解析服务器返回的xml文件 (xml封装了版本号)

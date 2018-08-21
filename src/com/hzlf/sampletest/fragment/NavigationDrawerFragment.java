@@ -49,7 +49,7 @@ public class NavigationDrawerFragment extends Fragment {
 	private boolean mUserLearnedDrawer;
 
 	private Button btn_exitlogin, btn_update;
-	private TextView txt_user_name,app_version;
+	private TextView txt_user_name, app_version;
 
 	// private Context _context;
 	public NavigationDrawerFragment() {
@@ -87,19 +87,18 @@ public class NavigationDrawerFragment extends Fragment {
 		txt_user_name = (TextView) sideView.findViewById(R.id.user_name);
 		txt_user_name.setText(((MyApplication) getActivity().getApplication())
 				.getName() + "抽检员");
-		
-		app_version= (TextView) sideView.findViewById(R.id.app_version);
 
-			// getPackageName()是你当前类的包名，0代表是获取版本信息
-			try {
-				PackageInfo packInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(),
-						0);
-				app_version.setText("V"+packInfo.versionName);
-			} catch (NameNotFoundException e) {
-				// TODO 自动生成的 catch 块
-				e.printStackTrace();
-			}
-	
+		app_version = (TextView) sideView.findViewById(R.id.app_version);
+
+		// getPackageName()是你当前类的包名，0代表是获取版本信息
+		try {
+			PackageInfo packInfo = getActivity().getPackageManager()
+					.getPackageInfo(getActivity().getPackageName(), 0);
+			app_version.setText("V" + packInfo.versionName);
+		} catch (NameNotFoundException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
 
 		btn_update = (Button) sideView.findViewById(R.id.btn_update);
 		btn_update.setOnClickListener(new View.OnClickListener() {
@@ -107,7 +106,7 @@ public class NavigationDrawerFragment extends Fragment {
 			public void onClick(View v) {
 				getActivity().startActivity(
 						new Intent(getActivity(), SettingActivity.class));
-				//getActivity().finish();
+				// getActivity().finish();
 				mDrawerLayout.closeDrawer(Gravity.START);
 			}
 		});

@@ -71,7 +71,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 			+ "chouyangshuliangdanwei text,"
 			+ "chouyangjishu text not null,"
 			+ "beiyangshuliang text not null,"
-			+ "chouyangshuliang text not null," + "beizhu text," + "id text)";
+			+ "chouyangshuliang text not null,"
+			+ "beizhu text,"
+			+ "yangpinxukezheng text," + "id text)";
 
 	// 创建抽样单编号表
 	public static final String CREATE_SAMPLENUMBER = "create table SampleNumber("
@@ -127,6 +129,9 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
 			db.execSQL(CREATE_TASK_SOURCE);
 		case 3:
 			db.execSQL("alter table SampleNumber add column sign text");
+		case 4:
+		case 5:
+			db.execSQL("alter table Details_Info add column yangpinxukezheng text");
 		default:
 		}
 
