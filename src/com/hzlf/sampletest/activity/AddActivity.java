@@ -1,5 +1,12 @@
 package com.hzlf.sampletest.activity;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -17,8 +24,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+
+import com.google.gson.Gson;
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.db.DBManage;
+import com.hzlf.sampletest.entityclass.Info_add;
 import com.hzlf.sampletest.entityclass.Source;
 import com.hzlf.sampletest.fragment.fragment_add1;
 import com.hzlf.sampletest.fragment.fragment_add2;
@@ -43,13 +53,8 @@ public class AddActivity extends FragmentActivity implements OnClickListener {
 	private Button btn_back;
 	private String number;
 	private DBManage dbmanage = new DBManage(this);
-
 	private Context _context;
-
-	/*
-	 * private static final int UPDATE_TRUE = 3; private static final int
-	 * UPDATE_FLASE = -3;
-	 */
+	private Info_add info_add_cache;
 
 	public String getNumber() {
 		return number;
@@ -193,5 +198,54 @@ public class AddActivity extends FragmentActivity implements OnClickListener {
 		default:
 			break;
 		}
+	}
+
+	public void save(Info_add info) {
+		Gson info_add_gson = new Gson();
+		String str = info_add_gson.toJson(info);
+		FileOutputStream out = null;
+		BufferedWriter writer = null;
+		try {
+			// MODE_PRIVATE ¸²¸ÇÄÚÈÝ
+			// MODE_APPEND ×·¼ÓÄÚÈÝ
+			out = openFileOutput("data.txt", Context.MODE_PRIVATE);
+			writer = new BufferedWriter(new OutputStreamWriter(out));
+			writer.write(str);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (writer != null) {
+					writer.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public String load() {
+		FileInputStream in = null;
+		BufferedReader reader = null;
+		StringBuilder content = new StringBuilder();
+		try {
+			in = openFileInput("data.txt");
+			reader = new BufferedReader(new InputStreamReader(in));
+			String line = "";
+			while ((line = reader.readLine()) != null) {
+				content.append(line);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (reader != null) {
+				try {
+					reader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return content.toString();
 	}
 }

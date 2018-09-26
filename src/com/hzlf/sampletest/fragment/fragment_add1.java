@@ -13,11 +13,14 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.activity.AddActivity;
 import com.hzlf.sampletest.db.DBManage;
+import com.hzlf.sampletest.entityclass.Info_add;
 import com.hzlf.sampletest.entityclass.Info_add1;
 import com.hzlf.sampletest.others.MyApplication;
 
@@ -40,24 +43,21 @@ public class fragment_add1 extends Fragment {
 
 	private DBManage dbmanage;
 
+	private AddActivity addActivity;
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
-		AddActivity addActivity = (AddActivity) getActivity();
+		addActivity = (AddActivity) getActivity();
 		number = addActivity.getNumber();
-
 		View view = inflater.inflate(R.layout.add_layout1, container, false);
-
 		dbmanage = new DBManage(getActivity());
-
 		spinner_renwuleibie = (Spinner) view
 				.findViewById(R.id.spinner_renwuleibie);
 		// 数据
 		data_renwuleibie = new ArrayList<String>();
 		data_renwuleibie.add("监督抽检");
 		data_renwuleibie.add("风险监测");
-
 		// 适配器
 		adapter_renwuleibie = new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_spinner_item, data_renwuleibie); // 设置样式
@@ -66,19 +66,15 @@ public class fragment_add1 extends Fragment {
 		spinner_renwuleibie.setAdapter(adapter_renwuleibie);
 
 		textview1 = (TextView) view.findViewById(R.id.text_chouyangdanbianhao);
-
 		edittext1 = (AutoCompleteTextView) view
 				.findViewById(R.id.text_renwulaiyuan);
-
 		renwulaiyuan = dbmanage.findList_TaskSource().toArray(
 				new String[dbmanage.findList_TaskSource().size()]);
-
 		/*
 		 * 需要一个适配器 初始化数据源--这个数据源去匹配文本框中输入的内容
 		 */
 		adapter_renwulaiyuan = new ArrayAdapter<String>(getActivity(),
 				android.R.layout.simple_list_item_1, renwulaiyuan);
-
 		// 将adpter与当前AutoCompleteTextView绑定
 		edittext1.setAdapter(adapter_renwulaiyuan);
 
@@ -91,6 +87,8 @@ public class fragment_add1 extends Fragment {
 
 		textview1.setText(number);
 
+		initdata();
+
 		btn_next1 = (Button) view.findViewById(R.id.btn_next1);
 		btn_next1.setOnClickListener(new OnClickListener() {
 
@@ -98,9 +96,9 @@ public class fragment_add1 extends Fragment {
 			public void onClick(View v) {
 				// TODO 自动生成的方法存根
 				if (edittext1.getText().toString().equals("")) {
-					((MyApplication) getActivity().getApplication()).setAdd1(0);
+					((MyApplication) addActivity.getApplication()).setAdd1(0);
 				} else {
-					((MyApplication) getActivity().getApplication()).setAdd1(1);
+					((MyApplication) addActivity.getApplication()).setAdd1(1);
 				}
 				if (textview7.getText().toString().equals("")) {
 					str_chuanzhen = "/";
@@ -119,16 +117,68 @@ public class fragment_add1 extends Fragment {
 								.toString(), textview5.getText().toString(),
 						textview6.getText().toString(), str_chuanzhen,
 						str_youbian);
-
-				((MyApplication) getActivity().getApplication())
+				((MyApplication) addActivity.getApplication())
 						.setInfoAdd1(info_add1);
-
-				AddActivity addActivity = (AddActivity) getActivity();
 				addActivity.nextFragment();
 			}
 		});
-
 		return view;
 	}
 
+	public void initdata() {
+		String info_add_str = addActivity.load();
+		Gson gson = new Gson();
+		Info_add info = gson.fromJson(info_add_str, Info_add.class);
+		if (info != null && info.getInfo_add1() != null) {
+			edittext1.setText(info.getInfo_add1().getValue2());
+			SpinnerAdapter adapter = spinner_renwuleibie.getAdapter();
+			for (int i = 0; i < adapter.getCount(); i++) {
+				if (info.getInfo_add1().getValue3()
+						.equals(adapter.getItem(i).toString())) {
+					spinner_renwuleibie.setSelection(i, true);
+					break;
+				}
+			}
+		}
+	}
+
+	@Override
+	public void onPause() {
+		Info_add1 info_add1 = new Info_add1(textview1.getText().toString(),
+				edittext1.getText().toString(), spinner_renwuleibie
+						.getSelectedItem().toString(), textview3.getText()
+						.toString(), textview4.getText().toString(), textview5
+						.getText().toString(), textview6.getText().toString(),
+				str_chuanzhen, str_youbian);
+		((MyApplication) addActivity.getApplication()).setInfoAdd1(info_add1);
+		Info_add info = new Info_add();
+		info.setInfo_add1(((MyApplication) addActivity.getApplication())
+				.getInfoAdd1());
+		info.setInfo_add2(((MyApplication) addActivity.getApplication())
+				.getInfoAdd2());
+		info.setInfo_add3(((MyApplication) addActivity.getApplication())
+				.getInfoAdd3());
+		addActivity.save(info);
+		super.onPause();
+	}
+
+	@Override
+	public void onDestroy() {
+		Info_add1 info_add1 = new Info_add1(textview1.getText().toString(),
+				edittext1.getText().toString(), spinner_renwuleibie
+						.getSelectedItem().toString(), textview3.getText()
+						.toString(), textview4.getText().toString(), textview5
+						.getText().toString(), textview6.getText().toString(),
+				str_chuanzhen, str_youbian);
+		((MyApplication) getActivity().getApplication()).setInfoAdd1(info_add1);
+		Info_add info = new Info_add();
+		info.setInfo_add1(((MyApplication) addActivity.getApplication())
+				.getInfoAdd1());
+		info.setInfo_add2(((MyApplication) addActivity.getApplication())
+				.getInfoAdd2());
+		info.setInfo_add3(((MyApplication) addActivity.getApplication())
+				.getInfoAdd3());
+		addActivity.save(info);
+		super.onDestroy();
+	}
 }

@@ -10,8 +10,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.BaseColumns;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.MediaStore.MediaColumns;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -174,8 +176,7 @@ public class SelectPicActivity extends Activity implements OnClickListener {
 									.equals(photoUri.getAuthority())) { // MediaProvider
 								//  π”√':'∑÷∏Ó
 								String id = documentId.split(":")[1];
-								String selection = MediaStore.Images.Media._ID
-										+ "=?";
+								String selection = BaseColumns._ID + "=?";
 								String[] selectionArgs = { id };
 								picPath = getDataColumn(
 										_context,
@@ -232,7 +233,7 @@ public class SelectPicActivity extends Activity implements OnClickListener {
 			String selection, String[] selectionArgs) {
 		String path = null;
 
-		String[] projection = new String[] { MediaStore.Images.Media.DATA };
+		String[] projection = new String[] { MediaColumns.DATA };
 		Cursor cursor = null;
 		try {
 			cursor = context.getContentResolver().query(uri, projection,

@@ -20,12 +20,15 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.activity.AddActivity;
 import com.hzlf.sampletest.activity.CaptureActivity;
 import com.hzlf.sampletest.db.DBManage;
+import com.hzlf.sampletest.entityclass.Info_add;
 import com.hzlf.sampletest.entityclass.Info_add2;
 import com.hzlf.sampletest.others.MyApplication;
 
@@ -56,11 +59,14 @@ public class fragment_add2 extends Fragment implements OnClickListener {
 	String str_xukezheng, str_nianxiaoshoue, str_chuanzhen, str_youbian;
 	int number;
 
+	private AddActivity addActivity;
+
 	private DBManage dbmanage;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		addActivity = (AddActivity) getActivity();
 		View view = inflater.inflate(R.layout.add_layout2, container, false);
 		dbmanage = new DBManage(getActivity());
 		number = 0;
@@ -189,6 +195,13 @@ public class fragment_add2 extends Fragment implements OnClickListener {
 		textview13 = (EditText) view.findViewById(R.id.input_dianhua2);
 
 		radio_xukezheng = (RadioGroup) view.findViewById(R.id.radio_xukezheng);
+		for (int i = 0; i < radio_xukezheng.getChildCount(); i++) {
+			RadioButton r = (RadioButton) radio_xukezheng.getChildAt(i);
+			if (r.isChecked()) {
+				str_xukezheng = r.getText().toString();
+				break;
+			}
+		}
 
 		btn_scanning_info = (Button) view.findViewById(R.id.btn_scanning_info);
 		btn_scanning_info.setOnClickListener(this);
@@ -201,7 +214,7 @@ public class fragment_add2 extends Fragment implements OnClickListener {
 
 		btn_queren = (Button) view.findViewById(R.id.btn_queren);
 		btn_queren.setOnClickListener(this);
-
+		initdata();
 		return view;
 	}
 
@@ -209,7 +222,7 @@ public class fragment_add2 extends Fragment implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_scanning_info:
-			Intent intent_scan = new Intent(getActivity(),
+			Intent intent_scan = new Intent(addActivity,
 					CaptureActivity.class);
 			startActivityForResult(intent_scan, 2);
 			break;
@@ -226,14 +239,6 @@ public class fragment_add2 extends Fragment implements OnClickListener {
 					|| textview13.getText().toString().equals("")) {
 				((MyApplication) getActivity().getApplication()).setAdd2(0);
 			} else {
-				for (int i = 0; i < radio_xukezheng.getChildCount(); i++) {
-					RadioButton r = (RadioButton) radio_xukezheng.getChildAt(i);
-					if (r.isChecked()) {
-						str_xukezheng = r.getText().toString();
-						break;
-					}
-				}
-
 				if (textview6.getText().toString().equals("")) {
 					str_nianxiaoshoue = "/";
 				} else {
@@ -266,8 +271,8 @@ public class fragment_add2 extends Fragment implements OnClickListener {
 						.setInfoAdd2(info_add2);
 				((MyApplication) getActivity().getApplication()).setAdd2(1);
 			}
-			AddActivity nextFragment = (AddActivity) getActivity();
-			nextFragment.nextFragment();
+			AddActivity addActivity = (AddActivity) getActivity();
+			addActivity.nextFragment();
 			break;
 		case R.id.btn_back2:
 			AddActivity backFragment = (AddActivity) getActivity();
@@ -280,7 +285,7 @@ public class fragment_add2 extends Fragment implements OnClickListener {
 						.show();
 			} else {
 				if (dbmanage.findInfo_add2(textview1.getText().toString()) == null) {
-					Toast.makeText(getActivity(), "无记录", Toast.LENGTH_SHORT)
+					Toast.makeText(getActivity(), "无填写记录", Toast.LENGTH_SHORT)
 							.show();
 				} else {
 					Info_add2 info_add2 = dbmanage.findInfo_add2(textview1
@@ -363,6 +368,133 @@ public class fragment_add2 extends Fragment implements OnClickListener {
 		if (isVisibleToUser) {
 		} else {
 
+		}
+	}
+
+	@Override
+	public void onPause() {
+		for (int i = 0; i < radio_xukezheng.getChildCount(); i++) {
+			RadioButton r = (RadioButton) radio_xukezheng.getChildAt(i);
+			if (r.isChecked()) {
+				str_xukezheng = r.getText().toString();
+				break;
+			}
+		}
+		Info_add2 info_add2 = new Info_add2(spinner_suozaidi.getSelectedItem()
+				.toString(), spinner_chouyangdidian.getSelectedItem()
+				.toString(), spinner_quyuleixing.getSelectedItem().toString(),
+				spinner_chouyanghuanjie.getSelectedItem().toString(), textview1
+						.getText().toString(), textview2.getText().toString(),
+				textview3.getText().toString(), str_xukezheng, textview4
+						.getText().toString(), textview5.getText().toString(),
+				str_nianxiaoshoue, textview7.getText().toString(), textview8
+						.getText().toString(), str_chuanzhen, str_youbian,
+				textview11.getText().toString(), textview12.getText()
+						.toString(), textview13.getText().toString());
+		((MyApplication) getActivity().getApplication()).setInfoAdd2(info_add2);
+		Info_add info = new Info_add();
+		info.setInfo_add1(((MyApplication) addActivity.getApplication())
+				.getInfoAdd1());
+		info.setInfo_add2(((MyApplication) addActivity.getApplication())
+				.getInfoAdd2());
+		info.setInfo_add3(((MyApplication) addActivity.getApplication())
+				.getInfoAdd3());
+		addActivity.save(info);
+		super.onPause();
+	}
+
+	@Override
+	public void onDestroy() {
+		for (int i = 0; i < radio_xukezheng.getChildCount(); i++) {
+			RadioButton r = (RadioButton) radio_xukezheng.getChildAt(i);
+			if (r.isChecked()) {
+				str_xukezheng = r.getText().toString();
+				break;
+			}
+		}
+		Info_add2 info_add2 = new Info_add2(spinner_suozaidi.getSelectedItem()
+				.toString(), spinner_chouyangdidian.getSelectedItem()
+				.toString(), spinner_quyuleixing.getSelectedItem().toString(),
+				spinner_chouyanghuanjie.getSelectedItem().toString(), textview1
+						.getText().toString(), textview2.getText().toString(),
+				textview3.getText().toString(), str_xukezheng, textview4
+						.getText().toString(), textview5.getText().toString(),
+				str_nianxiaoshoue, textview7.getText().toString(), textview8
+						.getText().toString(), str_chuanzhen, str_youbian,
+				textview11.getText().toString(), textview12.getText()
+						.toString(), textview13.getText().toString());
+		((MyApplication) getActivity().getApplication()).setInfoAdd2(info_add2);
+		Info_add info = new Info_add();
+		info.setInfo_add1(((MyApplication) addActivity.getApplication())
+				.getInfoAdd1());
+		info.setInfo_add2(((MyApplication) addActivity.getApplication())
+				.getInfoAdd2());
+		info.setInfo_add3(((MyApplication) addActivity.getApplication())
+				.getInfoAdd3());
+		addActivity.save(info);
+		super.onDestroy();
+	}
+
+	public void initdata() {
+		String info_add_str = addActivity.load();
+		Gson gson = new Gson();
+		Info_add info = gson.fromJson(info_add_str, Info_add.class);
+		if (info != null && info.getInfo_add2() != null) {
+			SpinnerAdapter adapter1 = spinner_suozaidi.getAdapter();
+			for (int i = 0; i < adapter1.getCount(); i++) {
+				if (info.getInfo_add2().getValue1()
+						.equals(adapter1.getItem(i).toString())) {
+					spinner_suozaidi.setSelection(i, true);
+					break;
+				}
+			}
+			SpinnerAdapter adapter2 = spinner_chouyangdidian.getAdapter();
+			for (int i = 0; i < adapter2.getCount(); i++) {
+				if (info.getInfo_add2().getValue2()
+						.equals(adapter2.getItem(i).toString())) {
+					spinner_chouyangdidian.setSelection(i, true);
+					break;
+				}
+			}
+			SpinnerAdapter adapter3 = spinner_quyuleixing.getAdapter();
+			for (int i = 0; i < adapter3.getCount(); i++) {
+				if (info.getInfo_add2().getValue3()
+						.equals(adapter3.getItem(i).toString())) {
+					spinner_quyuleixing.setSelection(i, true);
+					break;
+				}
+			}
+			SpinnerAdapter adapter4 = spinner_chouyanghuanjie.getAdapter();
+			for (int i = 0; i < adapter4.getCount(); i++) {
+				if (info.getInfo_add2().getValue4()
+						.equals(adapter4.getItem(i).toString())) {
+					spinner_chouyanghuanjie.setSelection(i, true);
+					break;
+				}
+			}
+
+			textview1.setText(info.getInfo_add2().getValue5());
+			textview2.setText(info.getInfo_add2().getValue6());
+			textview3.setText(info.getInfo_add2().getValue7());
+			if (info.getInfo_add2().getValue8().equals("流通许可证")) {
+				radio_xukezheng.check(R.id.radio_xukezheng_liutong);
+			} else if (info.getInfo_add2().getValue8().equals("餐饮服务许可证")) {
+				radio_xukezheng.check(R.id.radio_xukezheng_canyinfuwu);
+			} else if (info.getInfo_add2().getValue8().equals("食品经营许可证")) {
+				radio_xukezheng.check(R.id.radio_xukezheng_shipinjingying);
+			} else if (info.getInfo_add2().getValue8().equals("食品生产许可证")) {
+				radio_xukezheng.check(R.id.radio_xukezheng_shipinshengchan);
+			}
+			textview4.setText(info.getInfo_add2().getValue9());
+			textview5.setText(info.getInfo_add2().getValue10());
+			textview6.setText(info.getInfo_add2().getValue11());
+			textview7.setText(info.getInfo_add2().getValue12());
+			textview8.setText(info.getInfo_add2().getValue13());
+			textview9.setText(info.getInfo_add2().getValue14());
+			textview10.setText(info.getInfo_add2().getValue15());
+			textview11.setText(info.getInfo_add2().getValue16());
+			textview12.setText(info.getInfo_add2().getValue17());
+			textview13.setText(info.getInfo_add2().getValue18());
 		}
 	}
 }

@@ -1115,17 +1115,15 @@ public class DetailsActivity extends Activity {
 			// 获取doc中的图片数
 			List<Picture> pics = hdt.getPicturesTable().getAllPictures();
 			System.out.printf(pics.size() + "\n");
-			for (Picture pic : pics) {
+			/*for (Picture pic : pics) {
 				// 图片在doc文件中的位置,分析Doc 转化成其他文本时需要用到
 				int start = pic.getStartOffset();
 				int width = pic.getWidth();
 				int height = pic.getHeight();
 				String mimeType = pic.getMimeType();
-
 				System.out.printf("开始位置%d\t图片大小度%d,高%d,\t图片类型%s\r\n", start,
 						width, height, mimeType);
-			}
-
+			}*/
 			OutputStream os = new FileOutputStream(targetPath);
 			// ByteArrayOutputStream ostream = new ByteArrayOutputStream();
 			// FileOutputStream out = new FileOutputStream(newFile, true);
