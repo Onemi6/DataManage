@@ -101,7 +101,7 @@
                         android:layout_marginRight="5dip"
                         android:text="任务类别:" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/details_renwuleibie"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -279,7 +279,7 @@
                         android:layout_marginRight="5dip"
                         android:text="所在地:" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/details_suozaidi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -296,7 +296,7 @@
                         android:layout_marginRight="5dip"
                         android:text="抽样地点:" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/details_chouyangdidian"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -313,7 +313,7 @@
                         android:layout_marginRight="5dip"
                         android:text="区域类型:" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/details_quyuleixing"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -330,7 +330,7 @@
                         android:layout_marginRight="5dip"
                         android:text="抽样环节:" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/details_chouyanghuanjie"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -398,7 +398,7 @@
                         android:layout_marginRight="5dip"
                         android:text="许可证类型:" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/details_xukezhengleixing"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -646,7 +646,7 @@
                         android:layout_marginRight="5dip"
                         android:text="样品类型:" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/details_yangpinleixing"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -663,7 +663,7 @@
                         android:layout_marginRight="5dip"
                         android:text="样品来源:" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/details_yangpinlaiyuan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -680,7 +680,7 @@
                         android:layout_marginRight="5dip"
                         android:text="样品属性:" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/details_yangpinshuxing"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -714,7 +714,7 @@
                         android:layout_marginRight="5dip"
                         android:text="包装分类:" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/details_baozhuangfenlei"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -776,12 +776,10 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal" >
 
-                    <TextView
+                    <Spinner
                         android:id="@+id/details_riqileixing"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="5dip"
-                        android:text="生产日期:" />
+                        android:layout_height="wrap_content"/>
 
                     <EditText
                         android:id="@+id/details_shengchanriqi"
@@ -851,7 +849,7 @@
                         android:layout_marginRight="5dip"
                         android:text="是否出口:" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/details_shifouchukou"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -902,7 +900,7 @@
                         android:layout_marginRight="5dip"
                         android:text="抽样方式:" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/details_chouyangfangshi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -919,7 +917,7 @@
                         android:layout_marginRight="5dip"
                         android:text="样品形态:" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/details_yangpinxingtai"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -936,7 +934,7 @@
                         android:layout_marginRight="5dip"
                         android:text="样品包装:" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/details_yangpinbaozhuang"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -953,7 +951,7 @@
                         android:layout_marginRight="5dip"
                         android:text="抽样时储存条件:" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/details_chucuntiaojian"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />

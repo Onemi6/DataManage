@@ -431,7 +431,7 @@ public class fragment_add3 extends Fragment {
 		btn_back3.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO 自动生成的方法存�?
+				// TODO 自动生成的方法存根
 				addActivity.backFragment();
 			}
 		});
@@ -528,7 +528,7 @@ public class fragment_add3 extends Fragment {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data); // 这个super可不能落下，否则可能回调不了
+		super.onActivityResult(requestCode, resultCode, data); // 这个super不能落下，否则可能回调不了
 		if (requestCode == 3) {
 			if (data != null) {
 				Bundle bundle = data.getExtras();

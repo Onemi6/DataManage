@@ -16,6 +16,23 @@ public final class R {
         public static final int abc_slide_out_bottom=0x7f040004;
         public static final int abc_slide_out_top=0x7f040005;
     }
+    public static final class array {
+        public static final int array1_3=0x7f0d0000;
+        public static final int array2_1=0x7f0d0001;
+        public static final int array2_3=0x7f0d0002;
+        public static final int array2_4=0x7f0d0003;
+        public static final int array2_8=0x7f0d0004;
+        public static final int array3_14=0x7f0d000a;
+        public static final int array3_17=0x7f0d000b;
+        public static final int array3_18=0x7f0d000c;
+        public static final int array3_19=0x7f0d000d;
+        public static final int array3_2=0x7f0d0005;
+        public static final int array3_20=0x7f0d000e;
+        public static final int array3_28=0x7f0d0009;
+        public static final int array3_3=0x7f0d0006;
+        public static final int array3_4=0x7f0d0007;
+        public static final int array3_6=0x7f0d0008;
+    }
     public static final class attr {
         /**  Custom divider drawable to use for elements in the action bar. 
          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
@@ -1539,8 +1556,8 @@ containing a value of this type.
         public static final int zxing_camera=0x7f030031;
     }
     public static final class menu {
-        public static final int add=0x7f0d0000;
-        public static final int setting=0x7f0d0001;
+        public static final int add=0x7f0e0000;
+        public static final int setting=0x7f0e0001;
     }
     public static final class raw {
         public static final int beep=0x7f050000;
