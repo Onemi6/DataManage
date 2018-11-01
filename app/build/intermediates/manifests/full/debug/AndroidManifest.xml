@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hzlf.sampletest"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.1" >
 
     <uses-sdk
         android:minSdkVersion="18"
@@ -45,26 +45,27 @@
         android:icon="@drawable/logo"
         android:label="@string/app_name"
         android:testOnly="true"
-        android:theme="@style/AppTheme.Light.NoActionBar" >
+        android:theme="@style/AppTheme.NoActionBar" >
         <activity
             android:name="com.hzlf.sampletest.activity.LoginActivity"
-            android:label="@string/app_name" >
+            android:theme="@style/AppTheme.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.hzlf.sampletest.activity.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.hzlf.sampletest.activity.MainActivity" />
         <activity android:name="com.hzlf.sampletest.activity.AddActivity" />
         <activity android:name="com.hzlf.sampletest.activity.DetailsActivity" />
         <activity android:name="com.hzlf.sampletest.activity.SignActivity" />
         <activity android:name="com.hzlf.sampletest.activity.CaptureActivity" />
-        <activity android:name="com.hzlf.sampletest.activity.ApplyNumberActivity" />
-        <activity android:name="com.hzlf.sampletest.activity.ImgUploadActivity" />
-        <activity android:name="com.hzlf.sampletest.activity.SelectPicActivity" />
+        <activity
+            android:name="com.hzlf.sampletest.activity.ApplyNumberActivity"
+            android:theme="@style/AppTheme.Light.NoActionBar" />
+        <activity
+            android:name="com.hzlf.sampletest.activity.ImgUploadActivity"
+            android:theme="@style/AppTheme.Light.NoActionBar" />
         <activity android:name="com.hzlf.sampletest.activity.AboutActivity" />
 
         <!-- Image Selector Entry -->
@@ -75,7 +76,8 @@
         <!-- For test only 测试状态通知栏，需要打开的Activity -->
         <activity
             android:name="com.hzlf.sampletest.activity.ResultActivity"
-            android:exported="false" >
+            android:exported="false"
+            android:theme="@style/AppTheme.Light.NoActionBar" >
             <intent-filter>
                 <action android:name="jpush.testAction" />
 

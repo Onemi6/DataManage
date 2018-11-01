@@ -52,7 +52,7 @@ public class fragment_add3 extends Fragment {
     private RadioGroup radio_15;
     private Button btn_back3, btn_clear3, btn_save, btn_scanning;
     private int mYear, mMonth, mDay;
-    private String str_chukou, str_beizhu, str_shengchanriqi, str_chouyangriqi, number;
+    private String str_chukou, str_shengchanriqi, str_chouyangriqi, number;
     private DBManage dbmanage;
     private AddActivity addActivity;
     private Info_add info_add_now;
@@ -120,25 +120,25 @@ public class fragment_add3 extends Fragment {
         sp_6.setAdapter(adapter_baozhuangfenlei);
 
         adapter_riqileixing = ArrayAdapter.createFromResource(getActivity(),
-                R.array.array3_28, android.R.layout.simple_spinner_dropdown_item);
+                R.array.array3_10, android.R.layout.simple_spinner_dropdown_item);
         sp_10.setAdapter(adapter_riqileixing);
 
         adapter_chouyangfangshi = ArrayAdapter.createFromResource(
-                getActivity(), R.array.array3_17,
+                getActivity(), R.array.array3_18,
                 android.R.layout.simple_spinner_dropdown_item);
         sp_18.setAdapter(adapter_chouyangfangshi);
 
         adapter_yangpinxingtai = ArrayAdapter.createFromResource(getActivity(),
-                R.array.array3_18, android.R.layout.simple_spinner_dropdown_item);
+                R.array.array3_19, android.R.layout.simple_spinner_dropdown_item);
         sp_19.setAdapter(adapter_yangpinxingtai);
 
         adapter_yangpinbaozhuang = ArrayAdapter.createFromResource(
-                getActivity(), R.array.array3_19,
+                getActivity(), R.array.array3_20,
                 android.R.layout.simple_spinner_dropdown_item);
         sp_20.setAdapter(adapter_yangpinbaozhuang);
 
         adapter_chucuntiaojian = ArrayAdapter.createFromResource(getActivity(),
-                R.array.array3_20, android.R.layout.simple_spinner_dropdown_item);
+                R.array.array3_21, android.R.layout.simple_spinner_dropdown_item);
         sp_21.setAdapter(adapter_chucuntiaojian);
         /*--------------------------------------------------------------------*/
 
@@ -200,7 +200,7 @@ public class fragment_add3 extends Fragment {
 
             @Override
             public void onClick(View v) {
-                // TODO 自动生成的方法存�?
+                // TODO 自动生成的方法存根
                 Intent intent_scan = new Intent(addActivity,
                         CaptureActivity.class);
                 startActivityForResult(intent_scan, 3);
@@ -211,7 +211,7 @@ public class fragment_add3 extends Fragment {
 
             @Override
             public void onClick(View v) {
-                // TODO 自动生成的方法存
+                // TODO 自动生成的方法存根
 
                 if (et_1.getText().toString().equals("")
                         || et_5.getText().toString().equals("")
@@ -241,7 +241,7 @@ public class fragment_add3 extends Fragment {
                         et_16.setText("/");
                     }
                     if (et_29.getText().toString().equals("")) {
-                        et_16.setText("/");
+                        et_29.setText("/");
                     }
                     for (int i = 0; i < radio_15.getChildCount(); i++) {
                         RadioButton r = (RadioButton) radio_15

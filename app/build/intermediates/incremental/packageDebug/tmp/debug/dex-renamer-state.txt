@@ -1,10 +1,10 @@
-#Mon Oct 29 14:58:22 CST 2018
+#Thu Nov 01 22:12:14 CST 2018
 path.2=classes.dex
 path.1=classes.dex
 path.0=classes.dex
 renamed.2=classes3.dex
 renamed.1=classes2.dex
 renamed.0=classes.dex
-base.2=E\:\\Android\\AScode\\DataManage\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\12
-base.1=E\:\\Android\\AScode\\DataManage\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\13
-base.0=E\:\\Android\\AScode\\DataManage\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\14
+base.2=E\:\\Android\\code\\DataManage\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\11
+base.1=E\:\\Android\\code\\DataManage\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\13
+base.0=E\:\\Android\\code\\DataManage\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\12

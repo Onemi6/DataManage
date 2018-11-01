@@ -1,5 +1,6 @@
 package com.hzlf.sampletest.activity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ProgressDialog;
@@ -137,17 +138,15 @@ public class AboutActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /*
-     * 获取当前程序的版本号
-     */
+    /* 获取当前程序的版本号*/
     public PackageInfo getPackageInfo() throws Exception {
         // 获取packagemanager的实例  getPackageManager()
         // getPackageName()是你当前类的包名，0代表是获取版本信息
         return getPackageManager().getPackageInfo(getPackageName(), 0);
     }
 
+    @SuppressLint("HandlerLeak")
     Handler handler = new Handler() {
-
         @Override
         public void handleMessage(Message msg) {
             // TODO Auto-generated method stub
@@ -175,16 +174,14 @@ public class AboutActivity extends AppCompatActivity {
                     break;
                 case NUMBERFORMAT_ERROR:
                     Log.i(TAG, "版本号转换出错 ");
-                    Toast.makeText(getApplicationContext(), "更新出错，请稍后再试", 1).show();
+                    Toast.makeText(getApplicationContext(), "更新出错，请稍后再试", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
     };
 
     /*
-     *
      * 弹出对话框通知用户更新程序
-     *
      * 弹出对话框的步骤： 1.创建alertDialog的builder. 2.要给builder设置属性, 对话框的内容,样式,按钮
      * 3.通过builder 创建一个对话框 4.对话框show()出来
      */
@@ -237,7 +234,6 @@ public class AboutActivity extends AppCompatActivity {
             }
         }.start();
     }
-
     // 安装apk
     public void installApk(File file) {
         Intent intent = new Intent();

@@ -2,9 +2,9 @@ package com.hzlf.sampletest.others;
 
 public class UsedPath {
 
-    private static String ip = "http://www.3tpi.com:8016/api/";
+    //private static String ip = "http://www.3tpi.com:8016/api/";
     // private static String ip = "http://115.231.208.133/api/";
-    //private static String ip = "http://111.2.23.176:8083/api/";
+    private static String ip = "http://111.2.23.176:8083/api/";
 
     public static String api_Emp_GET = ip + "Emp";
     public static String api_Login_POST = ip + "Login";

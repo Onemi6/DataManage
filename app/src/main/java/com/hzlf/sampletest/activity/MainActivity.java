@@ -15,12 +15,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -235,14 +238,14 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -253,9 +256,8 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -272,13 +274,13 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_account:
                 editor.clear();
                 editor.commit();
-
                 Intent intent_login = new Intent();
                 intent_login.setClass(this, LoginActivity.class);
                 finish();// 结束当前活动
                 startActivity(intent_login);
                 break;
             case R.id.nav_share:
+                ShareAppCode();
                 break;
             case R.id.nav_send:
                 break;
@@ -288,5 +290,16 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void ShareAppCode() {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.img_item, (ViewGroup) findViewById(R
+                .id.dialog_img));
+        ImageView imageview = layout.findViewById(R.id.imageView);
+        imageview.setImageResource(R.drawable.appcode);
+        AlertDialog.Builder dialog_img = new AlertDialog.Builder(_context).setView(layout)
+                .setPositiveButton("确定", null);
+        dialog_img.show();
     }
 }

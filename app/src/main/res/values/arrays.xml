@@ -59,33 +59,33 @@
         <item>散装</item>
         <item>预包装</item>
     </string-array>
-    <string-array name="array3_28">
+    <string-array name="array3_10">
         <item>生产日期</item>
         <item>加工日期</item>
         <item>购进日期</item>
     </string-array>
-    <string-array name="array3_14">
+    <string-array name="array3_15">
         <item>是</item>
         <item>否</item>
     </string-array>
-    <string-array name="array3_17">
+    <string-array name="array3_18">
         <item>无菌抽样</item>
         <item>非无菌抽样</item>
     </string-array>
-    <string-array name="array3_18">
+    <string-array name="array3_19">
         <item>固体</item>
         <item>半固体</item>
         <item>液体</item>
         <item>气体</item>
     </string-array>
-    <string-array name="array3_19">
+    <string-array name="array3_20">
         <item>玻璃瓶</item>
         <item>塑料瓶</item>
         <item>塑料袋</item>
         <item>无菌袋</item>
         <item>其他</item>
     </string-array>
-    <string-array name="array3_20">
+    <string-array name="array3_21">
         <item>常温</item>
         <item>冷藏</item>
         <item>冷冻</item>

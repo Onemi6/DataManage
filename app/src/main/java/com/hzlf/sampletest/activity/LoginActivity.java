@@ -81,7 +81,7 @@ public class LoginActivity extends InstrumentedActivity {
     private static final int DOWN_ERROR = -5;
     private static final int NUMBERFORMAT_ERROR = -6;
     private String[] str;
-    private boolean isRemember;
+    private boolean isRemember, isupdate;
     private DBManage dbmanage = new DBManage(this);
     public static final int MY_PERMISSIONS_REQUEST = 3000;
     /*定义一个list，用于存储需要申请的权限*/
@@ -95,11 +95,12 @@ public class LoginActivity extends InstrumentedActivity {
         _context = this;
         CrashHandler.getInstance().init(_context);
 
+        permissionList.add(Manifest.permission.INTERNET);
         permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
         permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         permissionList.add(Manifest.permission.CAMERA);
 
-        isremember = this.getSharedPreferences("User", MODE_PRIVATE);
+        isremember = getSharedPreferences("User", MODE_PRIVATE);
         input_zhanghao = findViewById(R.id.input_zhanghao);
         input_mima = findViewById(R.id.input_mima);
         remember_mima = findViewById(R.id.remember_mima);
@@ -245,6 +246,7 @@ public class LoginActivity extends InstrumentedActivity {
     }
 
     public void UpdateApp() throws Exception {
+        isupdate = false;
         versionname = getVersionName();
         /* 从服务器获取xml解析并进行比对版本号 */
         new Thread(new Runnable() {
@@ -258,6 +260,7 @@ public class LoginActivity extends InstrumentedActivity {
                     InputStream is = conn.getInputStream();
                     info = HttpUtils.getUpdataInfo(is);
                     if (Double.parseDouble(info.getVersion()) > Double.parseDouble(versionname)) {
+                        isupdate = true;
                         Log.i(TAG_UPDATE, "服务器版本号大于本地 ,提示用户升级  ");
                         Message msg = new Message();
                         msg.what = UPDATA_CLIENT;
@@ -350,51 +353,53 @@ public class LoginActivity extends InstrumentedActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case LOGIN_TRUE:
-                    if (msg.obj != null) {
-                        str = ((String) msg.obj).split("[,]");
-                        editor = isremember.edit();
-                        if (remember_mima.isChecked()) {
-                            editor.putBoolean("remember_mima", true);
-                            editor.putString("ZHANGHAO", input_zhanghao.getText().toString());
-                            editor.putString("MIMA", input_mima.getText().toString());
-                            editor.putString("NO", str[0]);
-                            editor.putString("NAME", str[1]);
-                        } else {
-                            editor.clear();
-                            /* remember_mima.setChecked(false);*/
-                        }
-                        editor.commit();
-                        ((MyApplication) getApplication()).setNo(str[0]);
-                        ((MyApplication) getApplication()).setName(str[1]);
-                        JPushInterface.init(getApplicationContext());
-                        String alias = ((MyApplication) getApplication()).getNo();
-                        if (TextUtils.isEmpty(alias)) {
-                            Log.d("alias", "空");
-                            return;
-                        }
-                        if (!Util.isValidTagAndAlias(alias)) {
-                            Log.d("alias", "格式不对");
-                            return;
-                        }/* 调用JPush API设置Alias*/
-                        try {
-                            JPushInterface.setAliasAndTags(getApplicationContext(), alias, null,
-                                    mAliasCallback);
-                            Log.d("alias", "设置成功");
-                        } catch (Exception e) {/* TODO 自动生成的 catch 块*/
-                            e.printStackTrace();
-                            Log.d("alias", "设置失败");
-                        }
-                        Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {/* do something*/
-                                progressbar_login.setVisibility(View.GONE);
-                                Intent intent_main = new Intent();
-                                intent_main.setClass(LoginActivity.this, MainActivity.class);
-                                finish();/* 结束当前活动*/
-                                startActivity(intent_main);
+                    if (!isupdate) {
+                        if (msg.obj != null) {
+                            str = ((String) msg.obj).split("[,]");
+                            editor = isremember.edit();
+                            if (remember_mima.isChecked()) {
+                                editor.putBoolean("remember_mima", true);
+                                editor.putString("ZHANGHAO", input_zhanghao.getText().toString());
+                                editor.putString("MIMA", input_mima.getText().toString());
+                                editor.putString("NO", str[0]);
+                                editor.putString("NAME", str[1]);
+                            } else {
+                                editor.clear();
+                                /* remember_mima.setChecked(false);*/
                             }
-                        }, 1000); /* 延时1s执行*/
+                            editor.commit();
+                            ((MyApplication) getApplication()).setNo(str[0]);
+                            ((MyApplication) getApplication()).setName(str[1]);
+                            JPushInterface.init(getApplicationContext());
+                            String alias = ((MyApplication) getApplication()).getNo();
+                            if (TextUtils.isEmpty(alias)) {
+                                Log.d("alias", "空");
+                                return;
+                            }
+                            if (!Util.isValidTagAndAlias(alias)) {
+                                Log.d("alias", "格式不对");
+                                return;
+                            }/* 调用JPush API设置Alias*/
+                            try {
+                                JPushInterface.setAliasAndTags(getApplicationContext(), alias, null,
+                                        mAliasCallback);
+                                Log.d("alias", "设置成功");
+                            } catch (Exception e) {/* TODO 自动生成的 catch 块*/
+                                e.printStackTrace();
+                                Log.d("alias", "设置失败");
+                            }
+                            Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {/* do something*/
+                                    progressbar_login.setVisibility(View.GONE);
+                                    Intent intent_main = new Intent();
+                                    intent_main.setClass(LoginActivity.this, MainActivity.class);
+                                    finish();/* 结束当前活动*/
+                                    startActivity(intent_main);
+                                }
+                            }, 1000); /* 延时1s执行*/
+                        }
                     }
                     break;
                 case LOGIN_FLASE:

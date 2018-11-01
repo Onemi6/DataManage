@@ -1,5 +1,6 @@
 package com.hzlf.sampletest.activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -21,7 +22,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -38,7 +38,6 @@ import com.hzlf.sampletest.others.ImgAdapter;
 import com.hzlf.sampletest.others.MyApplication;
 import com.hzlf.sampletest.others.UsedPath;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -307,6 +306,7 @@ public class ImgUploadActivity extends Activity implements OnClickListener,
 
     }
 
+    @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

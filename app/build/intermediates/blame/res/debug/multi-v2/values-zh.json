@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "E:\\Android\\AScode\\DataManage\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
+            "outputFile": "E:\\Android\\code\\DataManage\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-zh\\values-zh.xml",
             "map": [
                 {
                     "source": "C:\\Users\\yy\\.gradle\\caches\\transforms-1\\files-1.1\\MultiImageSelector-1.2.aar\\8d7e30b02257e47bea4c233d59805844\\res\\values-zh\\values-zh.xml",

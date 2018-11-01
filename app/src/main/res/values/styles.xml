@@ -32,7 +32,6 @@
     </style>
 
     <style name="AppTheme.Light.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-
         <item name="coordinatorLayoutStyle">@style/Widget.Support.CoordinatorLayout</item>
     </style>
 

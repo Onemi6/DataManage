@@ -272,22 +272,22 @@ public class DetailsActivity extends AppCompatActivity {
         adapter3_6 = ArrayAdapter.createFromResource(_context, R.array.array3_6, android.R.layout
                 .simple_spinner_dropdown_item);
         spinner3_6.setAdapter(adapter3_6);
-        adapter3_10 = ArrayAdapter.createFromResource(_context, R.array.array3_28, android.R.layout
+        adapter3_10 = ArrayAdapter.createFromResource(_context, R.array.array3_10, android.R.layout
                 .simple_spinner_dropdown_item);
         spinner3_10.setAdapter(adapter3_10);
-        adapter3_15 = ArrayAdapter.createFromResource(_context, R.array.array3_14, android.R.layout
+        adapter3_15 = ArrayAdapter.createFromResource(_context, R.array.array3_15, android.R.layout
                 .simple_spinner_dropdown_item);
         spinner3_15.setAdapter(adapter3_15);
-        adapter3_18 = ArrayAdapter.createFromResource(_context, R.array.array3_17, android.R.layout
+        adapter3_18 = ArrayAdapter.createFromResource(_context, R.array.array3_18, android.R.layout
                 .simple_spinner_dropdown_item);
         spinner3_18.setAdapter(adapter3_18);
-        adapter3_19 = ArrayAdapter.createFromResource(_context, R.array.array3_18, android.R.layout
+        adapter3_19 = ArrayAdapter.createFromResource(_context, R.array.array3_19, android.R.layout
                 .simple_spinner_dropdown_item);
         spinner3_19.setAdapter(adapter3_19);
-        adapter3_20 = ArrayAdapter.createFromResource(_context, R.array.array3_19, android.R.layout
+        adapter3_20 = ArrayAdapter.createFromResource(_context, R.array.array3_20, android.R.layout
                 .simple_spinner_dropdown_item);
         spinner3_20.setAdapter(adapter3_20);
-        adapter3_21 = ArrayAdapter.createFromResource(_context, R.array.array3_20, android.R.layout
+        adapter3_21 = ArrayAdapter.createFromResource(_context, R.array.array3_21, android.R.layout
                 .simple_spinner_dropdown_item);
         spinner3_21.setAdapter(adapter3_21);
         adapter2_2 = new ArrayAdapter<String>(_context, android.R.layout
@@ -863,7 +863,8 @@ public class DetailsActivity extends AppCompatActivity {
                 body.put("DRAW_ORG", info_add_upload.getInfo_add1().getValue6());
                 body.put("DRAW_NUM", info_add_upload.getInfo_add3().getValue24() +
                         info_add_upload.getInfo_add3().getValue23());
-                body.put("DRAW_ADDR", info_add_upload.getInfo_add2().getValue2());
+                body.put("DRAW_ADDR", info_add_upload.getInfo_add2().getValue4() + ":" +
+                        info_add_upload.getInfo_add2().getValue2());
                 body.put("DATE_PRODUCT", info_add_upload.getInfo_add3().getValue11());
                 body.put("SUPPLIER", info_add_upload.getInfo_add2().getValue5());
                 body.put("SAMPLING_NO", info_add_upload.getInfo_add1().getValue1());
@@ -884,8 +885,7 @@ public class DetailsActivity extends AppCompatActivity {
                 body.put("SUPPLIER_FAX", info_add_upload.getInfo_add2().getValue14());
                 body.put("SAMPLE_TYPE", info_add_upload.getInfo_add1().getValue4());
                 body.put("ANNUAL_SALES", info_add_upload.getInfo_add2().getValue11());
-                body.put("BUSINESS_LICENCE", info_add_upload.getInfo_add2().getValue7
-                        ());
+                body.put("BUSINESS_LICENCE", info_add_upload.getInfo_add2().getValue7());
                 body.put("PERMIT_TYPE", info_add_upload.getInfo_add2().getValue8());
                 body.put("PERMIT_NUM", info_add_upload.getInfo_add2().getValue9());
                 body.put("SUPPLIER_ZIPCODE", info_add_upload.getInfo_add2()

@@ -5,20 +5,28 @@
     android:layout_height="match_parent"
     tools:context=".activity.SignActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_sign"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbarlayout_sign"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_alignParentStart="true"
-        android:background="#ff404040"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_sign"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentStart="true"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
 
     <com.hzlf.sampletest.sign.SignatureView
         android:id="@+id/signature_pad"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/buttons_container"
-        android:layout_below="@+id/toolbar_sign" />
+        android:layout_below="@+id/appbarlayout_sign" />
 
     <LinearLayout
         android:id="@+id/buttons_container"

@@ -6,12 +6,20 @@
     android:orientation="vertical"
     tools:context=".activity.AboutActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_about"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbarlayout_about"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#ff404040"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar_about"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
 
     <View
         android:layout_width="match_parent"
@@ -40,11 +48,5 @@
         android:layout_height="wrap_content"
         android:text="@string/version_update"
         android:textSize="16sp" />
-
-    <!-- <TextView
-        android:id="@+id/source_update"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_source_update" /> -->
 
 </LinearLayout>
