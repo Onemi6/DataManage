@@ -2,10 +2,10 @@
 <resources>
 
     <!-- Messages IDs -->
-    <item name="fillOrderLine" type="id"/>
-    <item name="fillOrderLayoutUC" type="id"/>
-    <item name="fillOrderLayoutPhone" type="id"/>
-    <item name="toolLayout" type="id"/>
+    <item name="fillOrderLine" type="id" />
+    <item name="fillOrderLayoutUC" type="id" />
+    <item name="fillOrderLayoutPhone" type="id" />
+    <item name="toolLayout" type="id" />
     <item name="auto_focus" type="id" />
     <item name="decode" type="id" />
     <item name="decode_failed" type="id" />

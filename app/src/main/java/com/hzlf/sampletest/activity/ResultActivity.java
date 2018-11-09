@@ -3,12 +3,11 @@ package com.hzlf.sampletest.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Window;
 import android.widget.TextView;
 
-import cn.jpush.android.api.JPushInterface;
-
 import com.hzlf.sampletest.R;
+
+import cn.jpush.android.api.JPushInterface;
 
 public class ResultActivity extends Activity {
 

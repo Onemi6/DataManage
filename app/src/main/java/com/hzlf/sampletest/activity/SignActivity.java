@@ -1,11 +1,5 @@
 package com.hzlf.sampletest.activity;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -25,6 +19,11 @@ import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.db.DBManage;
 import com.hzlf.sampletest.others.MyApplication;
 import com.hzlf.sampletest.sign.SignatureView;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 public class SignActivity extends AppCompatActivity {
 
@@ -52,7 +51,7 @@ public class SignActivity extends AppCompatActivity {
         //菜单点击事件（注意需要在setSupportActionBar(toolbar)之后才有效果）
         //toolbar.setOnMenuItemClickListener(onMenuItemClick);
 
-        mSignaturePad =  findViewById(R.id.signature_pad);
+        mSignaturePad = findViewById(R.id.signature_pad);
         mSignaturePad.setOnSignedListener(new SignatureView.OnSignedListener() {
             @Override
             public void onSigned() {
@@ -67,8 +66,8 @@ public class SignActivity extends AppCompatActivity {
             }
         });
 
-        mClearButton =  findViewById(R.id.clear_button);
-        mSaveButton =  findViewById(R.id.save_button);
+        mClearButton = findViewById(R.id.clear_button);
+        mSaveButton = findViewById(R.id.save_button);
 
         mClearButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -16,8 +16,6 @@
 
 package com.zxing.camera;
 
-import java.io.IOException;
-
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
@@ -28,6 +26,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.SurfaceHolder;
 
+import java.io.IOException;
+
 /**
  * This object wraps the Camera service object and expects to be the only one
  * talking to it. The implementation encapsulates the steps needed to take
@@ -35,16 +35,13 @@ import android.view.SurfaceHolder;
  */
 public final class CameraManager {
 
+    static final int SDK_INT; // Later we can use Build.VERSION.SDK_INT
     private static final String TAG = CameraManager.class.getSimpleName();
-
     private static final int MIN_FRAME_WIDTH = 240;
     private static final int MIN_FRAME_HEIGHT = 240;
     private static final int MAX_FRAME_WIDTH = 480;
     private static final int MAX_FRAME_HEIGHT = 360;
-
     private static CameraManager cameraManager;
-
-    static final int SDK_INT; // Later we can use Build.VERSION.SDK_INT
 
     static {
         int sdkInt;
@@ -59,11 +56,6 @@ public final class CameraManager {
 
     private final Context context;
     private final CameraConfigurationManager configManager;
-    private Camera camera;
-    private Rect framingRect;
-    private Rect framingRectInPreview;
-    private boolean initialized;
-    private boolean previewing;
     private final boolean useOneShotPreviewCallback;
     /**
      * Preview frames are delivered here, which we pass on to the registered
@@ -76,26 +68,11 @@ public final class CameraManager {
      * requested them.
      */
     private final AutoFocusCallback autoFocusCallback;
-
-    /**
-     * Initializes this static object with the Context of the calling Activity.
-     *
-     * @param context The Activity which wants to use the camera.
-     */
-    public static void init(Context context) {
-        if (cameraManager == null) {
-            cameraManager = new CameraManager(context);
-        }
-    }
-
-    /**
-     * Gets the CameraManager singleton instance.
-     *
-     * @return A reference to the CameraManager singleton.
-     */
-    public static CameraManager get() {
-        return cameraManager;
-    }
+    private Camera camera;
+    private Rect framingRect;
+    private Rect framingRectInPreview;
+    private boolean initialized;
+    private boolean previewing;
 
     private CameraManager(Context context) {
 
@@ -119,6 +96,26 @@ public final class CameraManager {
         previewCallback = new PreviewCallback(configManager,
                 useOneShotPreviewCallback);
         autoFocusCallback = new AutoFocusCallback();
+    }
+
+    /**
+     * Initializes this static object with the Context of the calling Activity.
+     *
+     * @param context The Activity which wants to use the camera.
+     */
+    public static void init(Context context) {
+        if (cameraManager == null) {
+            cameraManager = new CameraManager(context);
+        }
+    }
+
+    /**
+     * Gets the CameraManager singleton instance.
+     *
+     * @return A reference to the CameraManager singleton.
+     */
+    public static CameraManager get() {
+        return cameraManager;
     }
 
     /**

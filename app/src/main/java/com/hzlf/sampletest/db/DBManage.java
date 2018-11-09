@@ -42,18 +42,26 @@ public class DBManage {
                         Info_add3 info_add3) {
         db = dbHelper.getWritableDatabase();
         db.execSQL(
-                "insert into Details_Info(no,chouyangdanbianhao,renwulaiyuan,weituodanweidizhi,renwuleibie,"
-                        + "renwushuxing,danweimingcheng1,danweidizhi1,lianxiren1,dianhau1,chuanzhen1,youbian1,"
+                "insert into Details_Info(no,chouyangdanbianhao,renwulaiyuan,weituodanweidizhi," +
+                        "renwuleibie,"
+                        + "renwushuxing,danweimingcheng1,danweidizhi1,lianxiren1,dianhau1," +
+                        "chuanzhen1,youbian1,"
                         + "suozaidi,chouyangdidian,quyuleixing,chouyanghuanjie,danweimingcheng2,"
-                        + "danweidizhi2,yingyezhizhao,xukezhengleixing,xukezhenghao,danweifaren,nianxiaoshoue,"
-                        + "lianxiren2,dianhua2,chuanzhen2,youbian2,shengchanzhemingcheng,shengchanzhedizhi,dianhua3,"
+                        + "danweidizhi2,yingyezhizhao,xukezhengleixing,xukezhenghao,danweifaren," +
+                        "nianxiaoshoue,"
+                        + "lianxiren2,dianhua2,chuanzhen2,youbian2,shengchanzhemingcheng," +
+                        "shengchanzhedizhi,dianhua3,"
                         + "shengchanzhelianxiren,jiezhiriqi,jisongdizhi,"
                         + "yangpinmingcheng,yangpinleixing,yangpinlaiyuan,yangpinshuxing,"
-                        + "yangpinshangbiao,baozhuangfenlei,guigexinghao,zhiliangdengji,yangpintiaoma,riqileixing,riqi,"
-                        + "baozhiqi,chanpinpihao,yangpindanjia,chukou,yuanchandi,chouyangriqi,chouyangfangshi,"
+                        + "yangpinshangbiao,baozhuangfenlei,guigexinghao,zhiliangdengji," +
+                        "yangpintiaoma,riqileixing,riqi,"
+                        + "baozhiqi,chanpinpihao,yangpindanjia,chukou,yuanchandi,chouyangriqi," +
+                        "chouyangfangshi,"
                         + "chouyangxingtai,yangpinbaozhuang,chucuntiaojian,zhixingbiaozhun,"
-                        + "chouyangshuliangdanwei,chouyangjishu,beiyangshuliang,chouyangshuliang,chouyangren,yangpinxukezheng,beizhu,dayinriqi)"
-                        + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                        + "chouyangshuliangdanwei,chouyangjishu,beiyangshuliang,chouyangshuliang," +
+                        "chouyangren,yangpinxukezheng,beizhu,dayinriqi)"
+                        + "values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?," +
+                        "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 new Object[]{no, info_add1.getValue1(),
                         info_add1.getValue2(), info_add1.getValue3(),
                         info_add1.getValue4(), info_add1.getValue5(),
@@ -131,17 +139,26 @@ public class DBManage {
     public void updateinfo(Info_add info_add) {
         db = dbHelper.getWritableDatabase();
         db.execSQL(
-                "update Details_Info set renwulaiyuan=?,weituodanweidizhi=?,renwuleibie=?,renwushuxing=?,danweimingcheng1=?,danweidizhi1=?,lianxiren1=?,dianhau1=?,"
-                        + "chuanzhen1=?,youbian1=?,suozaidi=?,chouyangdidian=?,quyuleixing=?,chouyanghuanjie=?,danweimingcheng2=?,"
-                        + "danweidizhi2=?,yingyezhizhao=?,xukezhengleixing=?,xukezhenghao=?,danweifaren=?,nianxiaoshoue=?,"
-                        + "lianxiren2=?,dianhua2=?,chuanzhen2=?,youbian2=?,shengchanzhemingcheng=?,shengchanzhedizhi=?,"
+                "update Details_Info set renwulaiyuan=?,weituodanweidizhi=?,renwuleibie=?," +
+                        "renwushuxing=?,danweimingcheng1=?,danweidizhi1=?,lianxiren1=?,dianhau1=?,"
+                        + "chuanzhen1=?,youbian1=?,suozaidi=?,chouyangdidian=?,quyuleixing=?," +
+                        "chouyanghuanjie=?,danweimingcheng2=?,"
+                        + "danweidizhi2=?,yingyezhizhao=?,xukezhengleixing=?,xukezhenghao=?," +
+                        "danweifaren=?,nianxiaoshoue=?,"
+                        + "lianxiren2=?,dianhua2=?,chuanzhen2=?,youbian2=?," +
+                        "shengchanzhemingcheng=?,shengchanzhedizhi=?,"
                         + "shengchanzhelianxiren=?,dianhua3=?,jiezhiriqi=?,jisongdizhi=?,"
                         + "yangpinmingcheng=?,yangpinleixing=?,"
-                        + "yangpinlaiyuan=?,yangpinshuxing=?,yangpinshangbiao=?,baozhuangfenlei=?,guigexinghao=?,"
-                        + "zhiliangdengji=?,yangpintiaoma=?,riqileixing=?,riqi=?,baozhiqi=?,chanpinpihao=?,yangpindanjia=?,"
-                        + "chukou=?,yuanchandi=?,chouyangriqi=?,chouyangfangshi=?,chouyangxingtai=?,yangpinbaozhuang=?,chucuntiaojian=?,"
-                        + "zhixingbiaozhun=?,chouyangshuliangdanwei=?,chouyangjishu=?,beiyangshuliang=?,"
-                        + "chouyangshuliang=?,chouyangren=?,yangpinxukezheng=?,beizhu=?,dayinriqi=? where chouyangdanbianhao=?",
+                        + "yangpinlaiyuan=?,yangpinshuxing=?,yangpinshangbiao=?," +
+                        "baozhuangfenlei=?,guigexinghao=?,"
+                        + "zhiliangdengji=?,yangpintiaoma=?,riqileixing=?,riqi=?,baozhiqi=?," +
+                        "chanpinpihao=?,yangpindanjia=?,"
+                        + "chukou=?,yuanchandi=?,chouyangriqi=?,chouyangfangshi=?," +
+                        "chouyangxingtai=?,yangpinbaozhuang=?,chucuntiaojian=?,"
+                        + "zhixingbiaozhun=?,chouyangshuliangdanwei=?,chouyangjishu=?," +
+                        "beiyangshuliang=?,"
+                        + "chouyangshuliang=?,chouyangren=?,yangpinxukezheng=?,beizhu=?," +
+                        "dayinriqi=? where chouyangdanbianhao=?",
                 new Object[]{info_add.getInfo_add1().getValue2(),
                         info_add.getInfo_add1().getValue3(),
                         info_add.getInfo_add1().getValue4(),
@@ -413,7 +430,7 @@ public class DBManage {
                             cursor.getString(cursor
                                     .getColumnIndex("chouyangshuliang")),
                             cursor.getString(cursor
-                                            .getColumnIndex("chouyangren")),
+                                    .getColumnIndex("chouyangren")),
                             cursor.getString(cursor
                                     .getColumnIndex("yangpinxukezheng")),
                             cursor.getString(cursor.getColumnIndex("beizhu")),
@@ -459,12 +476,14 @@ public class DBManage {
         } else if (type == 2) {// 查询打印过的
             cursor = db
                     .rawQuery(
-                            "select number from SampleNumber where print=1 and used=1 and upload=0 order by id DESC",
+                            "select number from SampleNumber where print=1 and used=1 and " +
+                                    "upload=0 order by id DESC",
                             null);
         } else if (type == 3) {// 查询上传过的
             cursor = db
                     .rawQuery(
-                            "select number from SampleNumber where print=1 and used=1 and upload=1 order by id DESC",
+                            "select number from SampleNumber where print=1 and used=1 and " +
+                                    "upload=1 order by id DESC",
                             null);
         }
         return cursor;
@@ -524,7 +543,6 @@ public class DBManage {
     }
 
     // 查询任务来源
-
     public Source findTaskSource(String name) {
         db = dbHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery("select * from TaskSource where name=?",
@@ -551,6 +569,13 @@ public class DBManage {
         }
         cursor.close();
         return Sources;
+    }
+
+    // 修改任务来源地址
+    public void updateTaskSource(Source source) {
+        db = dbHelper.getWritableDatabase();
+        db.execSQL("update TaskSource set addr=? where name=?",
+                new String[]{source.getSOURCE_NAME(), source.getADDR()});
     }
 
     // 查询Info_add2

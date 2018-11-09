@@ -18,7 +18,8 @@ import com.hzlf.sampletest.R;
 
 import java.util.List;
 
-public class ImgAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener, View.OnLongClickListener {
+public class ImgAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View
+        .OnClickListener, View.OnLongClickListener {
     private static final int VIEW_TYPE = -1;
     private List<String> imgList;
     private Activity mactivity;
@@ -103,7 +104,7 @@ public class ImgAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> im
         return super.getItemViewType(position);
     }
 
-    public List<String> getImgList(){
+    public List<String> getImgList() {
         return this.imgList;
     }
 

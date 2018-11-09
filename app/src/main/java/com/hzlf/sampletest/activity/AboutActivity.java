@@ -3,22 +3,24 @@ package com.hzlf.sampletest.activity;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,29 +36,63 @@ import java.net.URL;
 
 public class AboutActivity extends AppCompatActivity {
 
-    // 更新版本要用到的一些信息
-    private static String versionname, TAG = "update";
-    private static UpdateInfo info;
-
     private static final int UPDATE_CLIENT = 4;
     private static final int GET_UNDATAINFO_ERROR = -4;
     private static final int DOWN_ERROR = -5;
     private static final int UPDATE_NO = -3;
     private static final int UPDATE_SUCCESS = 2;
     private static final int NUMBERFORMAT_ERROR = -6;
-
+    // 更新版本要用到的一些信息
+    private static String versionname, TAG = "update";
+    private static UpdateInfo info;
     private TextView version_update, tv_app_version;
     private Toolbar toolbar;
     private PackageInfo packInfo;
+    private Context context;
 
     // private DBManage dbmanage = new DBManage(this);
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            // TODO Auto-generated method stub
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case UPDATE_CLIENT:
+                    // 对话框通知用户升级程序
+                    showUpdataDialog();
+                    break;
+                case GET_UNDATAINFO_ERROR:
+                    // 服务器超时
+                    Toast.makeText(getApplicationContext(), "获取服务器更新信息失败", Toast.LENGTH_SHORT)
+                            .show();
+                    break;
+                case DOWN_ERROR:
+                    // 下载apk失败
+                    Toast.makeText(getApplicationContext(), "下载新版本失败", Toast.LENGTH_SHORT).show();
+                    break;
+                case UPDATE_NO:
+                    // 已是最新版本
+                    Toast.makeText(getApplicationContext(), "已是最新版本", Toast.LENGTH_SHORT).show();
+                    break;
+                case UPDATE_SUCCESS:
+                    Toast.makeText(getApplicationContext(), "更新成功", Toast.LENGTH_SHORT).show();
+                    break;
+                case NUMBERFORMAT_ERROR:
+                    Log.i(TAG, "版本号转换出错 ");
+                    Toast.makeText(getApplicationContext(), "更新出错，请稍后再试", Toast.LENGTH_SHORT)
+                            .show();
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_about);
-
+        context = this;
         version_update = findViewById(R.id.version_update);
         tv_app_version = findViewById(R.id.app_version);
         toolbar = findViewById(R.id.toolbar_about);
@@ -72,7 +108,7 @@ public class AboutActivity extends AppCompatActivity {
             packInfo = getPackageInfo();
             versionname = packInfo.versionName;
             tv_app_version.setText("V" + versionname);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         version_update.setOnClickListener(new View.OnClickListener() {
@@ -145,67 +181,32 @@ public class AboutActivity extends AppCompatActivity {
         return getPackageManager().getPackageInfo(getPackageName(), 0);
     }
 
-    @SuppressLint("HandlerLeak")
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            // TODO Auto-generated method stub
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case UPDATE_CLIENT:
-                    // 对话框通知用户升级程序
-                    showUpdataDialog();
-                    break;
-                case GET_UNDATAINFO_ERROR:
-                    // 服务器超时
-                    Toast.makeText(getApplicationContext(), "获取服务器更新信息失败", Toast.LENGTH_SHORT)
-                            .show();
-                    break;
-                case DOWN_ERROR:
-                    // 下载apk失败
-                    Toast.makeText(getApplicationContext(), "下载新版本失败", Toast.LENGTH_SHORT).show();
-                    break;
-                case UPDATE_NO:
-                    // 已是最新版本
-                    Toast.makeText(getApplicationContext(), "已是最新版本", Toast.LENGTH_SHORT).show();
-                    break;
-                case UPDATE_SUCCESS:
-                    Toast.makeText(getApplicationContext(), "更新成功", Toast.LENGTH_SHORT).show();
-                    break;
-                case NUMBERFORMAT_ERROR:
-                    Log.i(TAG, "版本号转换出错 ");
-                    Toast.makeText(getApplicationContext(), "更新出错，请稍后再试", Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    };
-
     /*
      * 弹出对话框通知用户更新程序
      * 弹出对话框的步骤： 1.创建alertDialog的builder. 2.要给builder设置属性, 对话框的内容,样式,按钮
      * 3.通过builder 创建一个对话框 4.对话框show()出来
      */
     public void showUpdataDialog() {
-        AlertDialog.Builder builer = new Builder(this);
-        builer.setTitle("有新版本,请升级");
-        // 当点确定按钮时从服务器上下载 新的apk 然后安装
-        builer.setPositiveButton("马上更新", new DialogInterface.OnClickListener() {
+        AlertDialog.Builder builder = new Builder(context, R.style.dialog_update);
+        LayoutInflater inflater = LayoutInflater.from(context);
+        View v = inflater.inflate(R.layout.dialog_update, null);
+        TextView tv_title = v.findViewById(R.id.tv_title);
+        TextView tv_msg = v.findViewById(R.id.tv_msg);
+        Button btn_commit = v.findViewById(R.id.btn_commit);
+        //builer.setView(v);//这里如果使用builer.setView(v)，自定义布局只会覆盖title和button之间的那部分
+        final Dialog dialog = builder.create();
+        dialog.show();
+        dialog.getWindow().setContentView(v);//自定义布局应该在这里添加，要在dialog.show()的后面
+        //dialog.getWindow().setGravity(Gravity.CENTER);//可以设置显示的位置
+        dialog.setCanceledOnTouchOutside(false);//点击对话框以外的区域，对话框不消失
+        btn_commit.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Log.i(TAG, "下载apk,更新");
+            public void onClick(View v) {
+                dialog.dismiss();
                 downLoadApk();
             }
         });
-        // 当点取消按钮时进行登录
-        builer.setNegativeButton("以后再说", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // TODO Auto-generated method stub
-                // LoginMain();
-            }
-        });
-        AlertDialog dialog = builer.create();
-        dialog.show();
     }
 
     /*
@@ -234,14 +235,35 @@ public class AboutActivity extends AppCompatActivity {
             }
         }.start();
     }
+
     // 安装apk
     public void installApk(File file) {
-        Intent intent = new Intent();
+        /*Intent intent = new Intent();
         // 执行动作
         intent.setAction(Intent.ACTION_VIEW);
         // 执行的数据类型
         intent.setDataAndType(Uri.fromFile(file),
                 "application/vnd.android.package-archive");
-        startActivity(intent);
+        startActivity(intent);*/
+
+        if (file != null) {   // file 即 apk文件
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            // 由于没有在Activity环境下启动Activity,设置下面的标签
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { // 7.0+以上版本
+            if (Build.VERSION.SDK_INT >= 24) { //判读版本是否在7.0以上
+                //参数1 上下文, 参数2 Provider主机地址 和配置文件中保持一致   参数3  共享的文件
+                Uri apkUri =
+                        FileProvider.getUriForFile(context, "com.hzlf.sampletest.fileprovider",
+                                file);
+                //添加这一句表示对目标应用临时授权该Uri所代表的文件
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+            } else {
+                intent.setDataAndType(Uri.fromFile(file),
+                        "application/vnd.android.package-archive");
+            }
+            startActivity(intent);
+        }
     }
 }

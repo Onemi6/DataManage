@@ -1,6 +1,6 @@
 package com.hzlf.sampletest.activity;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -31,7 +31,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -107,6 +106,108 @@ public class DetailsActivity extends AppCompatActivity {
     private ImgAdapter ada_upload_img;
     private List<String> list_paths = new ArrayList<String>();
     private Map<String, String> body = new HashMap<String, String>();
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case UPLOAD_TRUE:
+                    upload = (Upload) msg.obj;
+                    dbmanage.updateId(upload.getId(), number);
+                    dbmanage.updateNumber(number, 1, 1, 1);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {/* do something*/
+                            mypDialog.dismiss();
+                            Toast.makeText(_context, "上传" + number + upload.getMessage(), Toast
+                                    .LENGTH_SHORT).show();
+                        }
+                    }, 1000); /* 延时1s执行*/
+                    break;
+                case UPLOAD_FLASE:
+                    mypDialog.dismiss();
+                    Toast.makeText(_context, "该" + (String) msg.obj, Toast.LENGTH_SHORT).show();
+                    break;
+                case UPLOAD_NO:
+                    mypDialog.dismiss();
+                    Toast.makeText(_context, (String) msg.obj, Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
+
+    /**
+     * 通过Picture 自己类中的读写方法 <p> pics path
+     */
+    public static void copyPic2Disk(List<Picture> pics, OutputStream os) {
+        if (pics == null || pics.size() <= 0)
+            return; /* if(!path.isDirectory()){ throw new RuntimeException("路径填写不正确"); }
+            //当文件夹路径不存在的情况下，我们自己创建文件夹目录
+            if(!path.exists() ){ path.mkdirs(); } */
+        try {
+            for (Picture pic : pics) {/* 写出数据，我们使用的是Poi类中，Picture自己所带的函数*/
+                pic.writeImageContent(os); /* byte [] picBytes = pic.getContent();
+                //获取字节流，也可以自己写入数据 copyByteToFile
+                (picBytes); */
+            }
+        } catch (Exception e) {/* TODO Auto-generated catch block*/
+            e.printStackTrace();
+        }
+    }/* 判断apk是否安装*/
+
+    public static boolean appIsInstalled(Context context, String pageName) {
+        try {
+            context.getPackageManager().getPackageInfo(pageName, 0);
+            return true;
+        } catch (NameNotFoundException e) {
+            return false;
+        }
+    }/* 把Asset下的apk拷贝到sdcard下 /Android/data/你的包名/cache 目录下*/
+
+    public static File getAssetFileToCacheDir(Context context, String fileName) {
+        try {
+            File cacheDir = getCacheDir(context);
+            final String cachePath = cacheDir.getAbsolutePath() + File.separator + fileName;
+            InputStream is = context.getAssets().open(fileName);
+            File file = new File(cachePath);
+            file.createNewFile();
+            FileOutputStream fos = new FileOutputStream(file);
+            byte[] temp = new byte[1024];
+            int i = 0;
+            while ((i = is.read(temp)) > 0) fos.write(temp, 0, i);
+            fos.close();
+            is.close();
+            return file;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }/* 获取sdcard中的缓存目录*/
+
+    public static File getCacheDir(Context context) {
+        String APP_DIR_NAME = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                "/Android/data/";
+        File dir = new File(APP_DIR_NAME + context.getPackageName() + "/cache/");
+        if (!dir.exists()) dir.mkdirs();
+        return dir;
+    }
+
+    /**
+     * 检测当的网络（WLAN、3G/2G）状态 @param context Context @return true 表示网络可用
+     */
+    public static boolean isNetworkAvailable(Context context) {
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context
+                .CONNECTIVITY_SERVICE);
+        if (connectivity != null) {
+            NetworkInfo info = connectivity.getActiveNetworkInfo();
+            if (info != null && info.isConnected()) {/* 当前网络是连接的*/
+                if (info.getState() == NetworkInfo.State.CONNECTED) {/* 当前所连接的网络可用*/
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1215,106 +1316,4 @@ public class DetailsActivity extends AppCompatActivity {
         et_3_29.setEnabled(false);
         tv_dayinriqi.setEnabled(false);
     }
-
-    /**
-     * 通过Picture 自己类中的读写方法 <p> pics path
-     */
-    public static void copyPic2Disk(List<Picture> pics, OutputStream os) {
-        if (pics == null || pics.size() <= 0)
-            return; /* if(!path.isDirectory()){ throw new RuntimeException("路径填写不正确"); }
-            //当文件夹路径不存在的情况下，我们自己创建文件夹目录
-            if(!path.exists() ){ path.mkdirs(); } */
-        try {
-            for (Picture pic : pics) {/* 写出数据，我们使用的是Poi类中，Picture自己所带的函数*/
-                pic.writeImageContent(os); /* byte [] picBytes = pic.getContent();
-                //获取字节流，也可以自己写入数据 copyByteToFile
-                (picBytes); */
-            }
-        } catch (Exception e) {/* TODO Auto-generated catch block*/
-            e.printStackTrace();
-        }
-    }/* 判断apk是否安装*/
-
-    public static boolean appIsInstalled(Context context, String pageName) {
-        try {
-            context.getPackageManager().getPackageInfo(pageName, 0);
-            return true;
-        } catch (NameNotFoundException e) {
-            return false;
-        }
-    }/* 把Asset下的apk拷贝到sdcard下 /Android/data/你的包名/cache 目录下*/
-
-    public static File getAssetFileToCacheDir(Context context, String fileName) {
-        try {
-            File cacheDir = getCacheDir(context);
-            final String cachePath = cacheDir.getAbsolutePath() + File.separator + fileName;
-            InputStream is = context.getAssets().open(fileName);
-            File file = new File(cachePath);
-            file.createNewFile();
-            FileOutputStream fos = new FileOutputStream(file);
-            byte[] temp = new byte[1024];
-            int i = 0;
-            while ((i = is.read(temp)) > 0) fos.write(temp, 0, i);
-            fos.close();
-            is.close();
-            return file;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }/* 获取sdcard中的缓存目录*/
-
-    public static File getCacheDir(Context context) {
-        String APP_DIR_NAME = Environment.getExternalStorageDirectory().getAbsolutePath() +
-                "/Android/data/";
-        File dir = new File(APP_DIR_NAME + context.getPackageName() + "/cache/");
-        if (!dir.exists()) dir.mkdirs();
-        return dir;
-    }
-
-    /**
-     * 检测当的网络（WLAN、3G/2G）状态 @param context Context @return true 表示网络可用
-     */
-    public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context
-                .CONNECTIVITY_SERVICE);
-        if (connectivity != null) {
-            NetworkInfo info = connectivity.getActiveNetworkInfo();
-            if (info != null && info.isConnected()) {/* 当前网络是连接的*/
-                if (info.getState() == NetworkInfo.State.CONNECTED) {/* 当前所连接的网络可用*/
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case UPLOAD_TRUE:
-                    upload = (Upload) msg.obj;
-                    dbmanage.updateId(upload.getId(), number);
-                    dbmanage.updateNumber(number, 1, 1, 1);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {/* do something*/
-                            mypDialog.dismiss();
-                            Toast.makeText(_context, "上传" + number + upload.getMessage(), Toast
-                                    .LENGTH_SHORT).show();
-                        }
-                    }, 1000); /* 延时1s执行*/
-                    break;
-                case UPLOAD_FLASE:
-                    mypDialog.dismiss();
-                    Toast.makeText(_context, "该" + (String) msg.obj, Toast.LENGTH_SHORT).show();
-                    break;
-                case UPLOAD_NO:
-                    mypDialog.dismiss();
-                    Toast.makeText(_context, (String) msg.obj, Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    };
 }

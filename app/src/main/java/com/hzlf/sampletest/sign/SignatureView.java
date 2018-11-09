@@ -1,8 +1,5 @@
 package com.hzlf.sampletest.sign;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -19,6 +16,9 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.hzlf.sampletest.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SignatureView extends View {
     // View state
@@ -249,7 +249,8 @@ public class SignatureView extends View {
 
         int backgroundColor = Color.TRANSPARENT;
 
-        int xMin = Integer.MAX_VALUE, xMax = Integer.MIN_VALUE, yMin = Integer.MAX_VALUE, yMax = Integer.MIN_VALUE;
+        int xMin = Integer.MAX_VALUE, xMax = Integer.MIN_VALUE, yMin = Integer.MAX_VALUE, yMax =
+                Integer.MIN_VALUE;
 
         boolean foundPixel = false;
 
@@ -485,7 +486,8 @@ public class SignatureView extends View {
     private int convertDpToPx(float dp) {
         return Math
                 .round(dp
-                        * (getResources().getDisplayMetrics().xdpi / DisplayMetrics.DENSITY_DEFAULT));
+                        * (getResources().getDisplayMetrics().xdpi / DisplayMetrics
+                        .DENSITY_DEFAULT));
     }
 
     public interface OnSignedListener {

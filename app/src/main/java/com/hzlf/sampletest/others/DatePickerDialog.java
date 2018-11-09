@@ -1,7 +1,5 @@
 package com.hzlf.sampletest.others;
 
-import java.lang.reflect.Field;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,6 +12,8 @@ import android.widget.DatePicker.OnDateChangedListener;
 
 import com.hzlf.sampletest.R;
 
+import java.lang.reflect.Field;
+
 public class DatePickerDialog extends AlertDialog implements OnClickListener,
         OnDateChangedListener {
 
@@ -23,12 +23,6 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
 
     private final DatePicker mDatePicker;
     private final OnDateSetListener mCallBack;
-
-    public interface OnDateSetListener {
-
-        void onDateSet(DatePicker DatePicker, int Year, int MonthOfYear,
-                       int DayOfMonth);
-    }
 
     public DatePickerDialog(Context context, OnDateSetListener callBack,
                             int year, int monthOfYear, int dayOfMonth) {
@@ -146,5 +140,11 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
         int day = savedInstanceState.getInt(DAY);
         mDatePicker.init(year, month, day, this);
 
+    }
+
+    public interface OnDateSetListener {
+
+        void onDateSet(DatePicker DatePicker, int Year, int MonthOfYear,
+                       int DayOfMonth);
     }
 }

@@ -1,19 +1,19 @@
 {
-    "logs": [
+  "logs": [
+    {
+      "outputFile": "E:\\Android\\code\\DataManage\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-port\\values-port.xml",
+      "map": [
         {
-            "outputFile": "E:\\Android\\code\\DataManage\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-port\\values-port.xml",
-            "map": [
-                {
-                    "source": "C:\\Users\\yy\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-28.0.0.aar\\31c698953d8023f4918846b9edefad45\\res\\values-port\\values-port.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "55",
-                        "endOffsets": "106"
-                    }
-                }
-            ]
+          "source": "C:\\Users\\yy\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-28.0.0.aar\\d08dac8ecd4ed220e501afd5afca8a24\\res\\values-port\\values-port.xml",
+          "from": {
+            "startLines": "2",
+            "startColumns": "4",
+            "startOffsets": "55",
+            "endColumns": "55",
+            "endOffsets": "106"
+          }
         }
-    ]
+      ]
+    }
+  ]
 }

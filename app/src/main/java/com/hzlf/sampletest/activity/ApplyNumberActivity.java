@@ -1,8 +1,5 @@
 package com.hzlf.sampletest.activity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +8,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
@@ -29,8 +25,13 @@ import com.hzlf.sampletest.http.HttpUtils;
 import com.hzlf.sampletest.others.MyApplication;
 import com.hzlf.sampletest.others.UsedPath;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ApplyNumberActivity extends Activity {
 
+    private static final int APPLY_TRUE = 1;
+    private static final int APPLY_FLASE = 0;
     private DBManage dbmanage = new DBManage(this);
     private List<String> numberlist = new ArrayList<String>();
     private ArrayAdapter<String> adapter;
@@ -39,8 +40,29 @@ public class ApplyNumberActivity extends Activity {
     private EditText input_number;
     private TextView text_number;
     private ListView list_number;
-    private static final int APPLY_TRUE = 1;
-    private static final int APPLY_FLASE = 0;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case APPLY_TRUE:
+                    String[] codes = ((String) msg.obj).split("[,]");
+                    for (String code : codes) {
+                        dbmanage.addSampleNumber(code);
+                        numberlist.add(code);
+                        /* numberlist.add(0, code); */
+                    }
+                    adapter.notifyDataSetChanged();
+                    Toast.makeText(ApplyNumberActivity.this, "申请编号成功",
+                            Toast.LENGTH_SHORT).show();
+                    input_number.getText().clear();
+                    break;
+                case APPLY_FLASE:
+                    Toast.makeText(ApplyNumberActivity.this, (String) msg.obj,
+                            Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,28 +149,4 @@ public class ApplyNumberActivity extends Activity {
             }
         });
     }
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case APPLY_TRUE:
-                    String[] codes = ((String) msg.obj).split("[,]");
-                    for (String code : codes) {
-                        dbmanage.addSampleNumber(code);
-                        numberlist.add(code);
-                        /* numberlist.add(0, code); */
-                    }
-                    adapter.notifyDataSetChanged();
-                    Toast.makeText(ApplyNumberActivity.this, "申请编号成功",
-                            Toast.LENGTH_SHORT).show();
-                    input_number.getText().clear();
-                    break;
-                case APPLY_FLASE:
-                    Toast.makeText(ApplyNumberActivity.this, (String) msg.obj,
-                            Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    };
 }

@@ -1,5 +1,10 @@
 package com.hzlf.sampletest.http;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.os.Environment;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -17,19 +22,35 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Environment;
-import android.util.Log;
-
 public class UploadUtil {
-    private static UploadUtil uploadUtil;
+    /***
+     * 上传成功
+     */
+    public static final int UPLOAD_SUCCESS_CODE = 1;
+    /**
+     * 文件不存在
+     */
+    public static final int UPLOAD_FILE_NOT_EXISTS_CODE = 2;
+    /**
+     * 服务器出错
+     */
+    public static final int UPLOAD_SERVER_ERROR_CODE = 3;
+    protected static final int WHAT_TO_UPLOAD = 1;
+    protected static final int WHAT_UPLOAD_DONE = 2;
     private static final String BOUNDARY = UUID.randomUUID().toString(); // 边界标识 随机生成
     private static final String PREFIX = "--";
     private static final String LINE_END = "\r\n";
     private static final String CONTENT_TYPE = "multipart/form-data"; // 内容类型
-
+    private static final String TAG = "UploadUtil";
+    private static final String CHARSET = "utf-8"; // 设置编码
+    private static UploadUtil uploadUtil;
+    /***
+     * 请求使用多长时间
+     */
+    private static int requestTime = 0;
+    private int readTimeOut = 10 * 1000; // 读取超时
+    private int connectTimeout = 10 * 1000; // 超时时间
+    private OnUploadProcessListener onUploadProcessListener;
     private UploadUtil() {
 
     }
@@ -46,30 +67,103 @@ public class UploadUtil {
         return uploadUtil;
     }
 
-    private static final String TAG = "UploadUtil";
-    private int readTimeOut = 10 * 1000; // 读取超时
-    private int connectTimeout = 10 * 1000; // 超时时间
-    /***
-     * 请求使用多长时间
-     */
-    private static int requestTime = 0;
-
-    private static final String CHARSET = "utf-8"; // 设置编码
-
-    /***
-     * 上传成功
-     */
-    public static final int UPLOAD_SUCCESS_CODE = 1;
     /**
-     * 文件不存在
+     * 获取上传使用的时间
+     *
+     * @return
      */
-    public static final int UPLOAD_FILE_NOT_EXISTS_CODE = 2;
-    /**
-     * 服务器出错
-     */
-    public static final int UPLOAD_SERVER_ERROR_CODE = 3;
-    protected static final int WHAT_TO_UPLOAD = 1;
-    protected static final int WHAT_UPLOAD_DONE = 2;
+    public static int getRequestTime() {
+        return requestTime;
+    }
+
+    public static File scal(String path) {
+        // String path = fileUri.getPath();
+
+        File outputFile = new File(path);
+        long fileSize = outputFile.length();
+        final long fileMaxSize = 200 * 1024;
+        if (fileSize >= fileMaxSize) {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(path, options);
+            int height = options.outHeight;
+            int width = options.outWidth;
+
+            double scale = Math.sqrt((float) fileSize / fileMaxSize);
+            options.outHeight = (int) (height / scale);
+            options.outWidth = (int) (width / scale);
+            options.inSampleSize = (int) (scale + 0.5);
+            options.inJustDecodeBounds = false;
+
+            Bitmap bitmap = BitmapFactory.decodeFile(path, options);
+            outputFile = new File(createImageFile().getPath());
+            FileOutputStream fos = null;
+            try {
+                fos = new FileOutputStream(outputFile);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
+                fos.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            if (!bitmap.isRecycled()) {
+                bitmap.recycle();
+            } else {
+                File tempFile = outputFile;
+                outputFile = new File(createImageFile().getPath());
+                copyFileUsingFileChannels(tempFile, outputFile);
+            }
+
+        }
+        return outputFile;
+
+    }
+
+    public static Uri createImageFile() {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+                .format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment
+                .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File image = null;
+        try {
+            image = File.createTempFile(imageFileName, /* prefix */
+                    ".jpg", /* suffix */
+                    storageDir /* directory */
+            );
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        // Save a file: path for use with ACTION_VIEW intents
+        return Uri.fromFile(image);
+    }
+
+    public static void copyFileUsingFileChannels(File source, File dest) {
+        FileChannel inputChannel = null;
+        FileChannel outputChannel = null;
+        try {
+            try {
+                inputChannel = new FileInputStream(source).getChannel();
+                outputChannel = new FileOutputStream(dest).getChannel();
+                outputChannel
+                        .transferFrom(inputChannel, 0, inputChannel.size());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        } finally {
+            try {
+                inputChannel.close();
+                outputChannel.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * android上传文件到服务器
@@ -264,6 +358,27 @@ public class UploadUtil {
         onUploadProcessListener.onUploadDone(responseCode, responseMessage);
     }
 
+    public void setOnUploadProcessListener(
+            OnUploadProcessListener onUploadProcessListener) {
+        this.onUploadProcessListener = onUploadProcessListener;
+    }
+
+    public int getReadTimeOut() {
+        return readTimeOut;
+    }
+
+    public void setReadTimeOut(int readTimeOut) {
+        this.readTimeOut = readTimeOut;
+    }
+
+    public int getConnectTimeout() {
+        return connectTimeout;
+    }
+
+    public void setConnectTimeout(int connectTimeout) {
+        this.connectTimeout = connectTimeout;
+    }
+
     /**
      * 下面是一个自定义的回调函数，用到回调上传文件是否完成
      *
@@ -293,128 +408,7 @@ public class UploadUtil {
         void initUpload(int fileSize);
     }
 
-    private OnUploadProcessListener onUploadProcessListener;
-
-    public void setOnUploadProcessListener(
-            OnUploadProcessListener onUploadProcessListener) {
-        this.onUploadProcessListener = onUploadProcessListener;
-    }
-
-    public int getReadTimeOut() {
-        return readTimeOut;
-    }
-
-    public void setReadTimeOut(int readTimeOut) {
-        this.readTimeOut = readTimeOut;
-    }
-
-    public int getConnectTimeout() {
-        return connectTimeout;
-    }
-
-    public void setConnectTimeout(int connectTimeout) {
-        this.connectTimeout = connectTimeout;
-    }
-
-    /**
-     * 获取上传使用的时间
-     *
-     * @return
-     */
-    public static int getRequestTime() {
-        return requestTime;
-    }
-
     public static interface uploadProcessListener {
 
-    }
-
-    public static File scal(String path) {
-        // String path = fileUri.getPath();
-
-        File outputFile = new File(path);
-        long fileSize = outputFile.length();
-        final long fileMaxSize = 200 * 1024;
-        if (fileSize >= fileMaxSize) {
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(path, options);
-            int height = options.outHeight;
-            int width = options.outWidth;
-
-            double scale = Math.sqrt((float) fileSize / fileMaxSize);
-            options.outHeight = (int) (height / scale);
-            options.outWidth = (int) (width / scale);
-            options.inSampleSize = (int) (scale + 0.5);
-            options.inJustDecodeBounds = false;
-
-            Bitmap bitmap = BitmapFactory.decodeFile(path, options);
-            outputFile = new File(createImageFile().getPath());
-            FileOutputStream fos = null;
-            try {
-                fos = new FileOutputStream(outputFile);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 50, fos);
-                fos.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            if (!bitmap.isRecycled()) {
-                bitmap.recycle();
-            } else {
-                File tempFile = outputFile;
-                outputFile = new File(createImageFile().getPath());
-                copyFileUsingFileChannels(tempFile, outputFile);
-            }
-
-        }
-        return outputFile;
-
-    }
-
-    public static Uri createImageFile() {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
-                .format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = Environment
-                .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File image = null;
-        try {
-            image = File.createTempFile(imageFileName, /* prefix */
-                    ".jpg", /* suffix */
-                    storageDir /* directory */
-            );
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
-        // Save a file: path for use with ACTION_VIEW intents
-        return Uri.fromFile(image);
-    }
-
-    public static void copyFileUsingFileChannels(File source, File dest) {
-        FileChannel inputChannel = null;
-        FileChannel outputChannel = null;
-        try {
-            try {
-                inputChannel = new FileInputStream(source).getChannel();
-                outputChannel = new FileOutputStream(dest).getChannel();
-                outputChannel
-                        .transferFrom(inputChannel, 0, inputChannel.size());
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        } finally {
-            try {
-                inputChannel.close();
-                outputChannel.close();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
     }
 }

@@ -133,7 +133,11 @@ public class fragment_add1 extends Fragment {
 
     @Override
     public void onDestroy() {
-        Info_add1 info_add1 = new Info_add1(tv_1.getText().toString(), actv_2.getText().toString(), et_3.getText().toString(), spinner_4.getSelectedItem().toString(), et_5.getText().toString(), tv_6.getText().toString(), tv_7.getText().toString(), tv_8.getText().toString(), tv_9.getText().toString(), tv_10.getText().toString(), tv_11.getText().toString());
+        Info_add1 info_add1 = new Info_add1(tv_1.getText().toString(), actv_2.getText().toString
+                (), et_3.getText().toString(), spinner_4.getSelectedItem().toString(),
+                et_5.getText().toString(), tv_6.getText().toString(), tv_7.getText().toString(),
+                tv_8.getText().toString(), tv_9.getText().toString(), tv_10.getText().toString(),
+                tv_11.getText().toString());
         ((MyApplication) addActivity.getApplication()).setInfoAdd1(info_add1);
         Info_add info = new Info_add();
         info.setInfo_add1(((MyApplication) addActivity.getApplication()).getInfoAdd1());

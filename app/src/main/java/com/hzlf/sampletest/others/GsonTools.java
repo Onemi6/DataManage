@@ -1,12 +1,12 @@
 package com.hzlf.sampletest.others;
 
-import java.lang.reflect.Type;
-import java.util.LinkedList;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hzlf.sampletest.entityclass.Source;
 import com.hzlf.sampletest.entityclass.User;
+
+import java.lang.reflect.Type;
+import java.util.LinkedList;
 
 public class GsonTools {
 

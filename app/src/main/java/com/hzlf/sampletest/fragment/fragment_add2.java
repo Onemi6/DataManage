@@ -1,8 +1,5 @@
 package com.hzlf.sampletest.fragment;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -31,7 +28,11 @@ import com.hzlf.sampletest.entityclass.Info_add;
 import com.hzlf.sampletest.entityclass.Info_add2;
 import com.hzlf.sampletest.others.MyApplication;
 
-public class fragment_add2 extends Fragment implements OnClickListener, CompoundButton.OnCheckedChangeListener {
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class fragment_add2 extends Fragment implements OnClickListener, CompoundButton
+        .OnCheckedChangeListener {
 
     private Spinner spinner_suozaidi, spinner_chouyangdidian,
             spinner_quyuleixing, spinner_chouyanghuanjie;
@@ -136,7 +137,8 @@ public class fragment_add2 extends Fragment implements OnClickListener, Compound
                                 android.R.layout.simple_spinner_dropdown_item,
                                 data_chouyangdidian[position]);
                         adapter_chouyangdidian
-                                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item); // 加载适配器
+                                .setDropDownViewResource(android.R.layout
+                                        .simple_spinner_dropdown_item); // 加载适配器
                         spinner_chouyangdidian
                                 .setAdapter(adapter_chouyangdidian);
                         SpinnerAdapter adapter2 = spinner_chouyangdidian.getAdapter();

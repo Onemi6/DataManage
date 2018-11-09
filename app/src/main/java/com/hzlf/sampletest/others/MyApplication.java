@@ -4,22 +4,20 @@ import android.app.Application;
 import android.os.StrictMode;
 import android.util.Log;
 
-import cn.jpush.android.api.JPushInterface;
-
 import com.hzlf.sampletest.entityclass.Info_add1;
 import com.hzlf.sampletest.entityclass.Info_add2;
 import com.hzlf.sampletest.entityclass.Info_add3;
 
+import cn.jpush.android.api.JPushInterface;
+
 public class MyApplication extends Application {
 
+    private static final String TAG = "JPush";
     private String no, name, number;
     private Integer add1, add2, add3;
-
     private Info_add1 info_add1;
     private Info_add2 info_add2;
     private Info_add3 info_add3;
-
-    private static final String TAG = "JPush";
 
     @Override
     public void onCreate() {

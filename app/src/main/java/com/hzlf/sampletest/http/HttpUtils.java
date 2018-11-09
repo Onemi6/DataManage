@@ -1,5 +1,15 @@
 package com.hzlf.sampletest.http;
 
+import android.app.ProgressDialog;
+import android.os.Environment;
+import android.util.Xml;
+
+import com.hzlf.sampletest.entityclass.UpdateInfo;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParser;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -10,16 +20,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
-
-import android.app.ProgressDialog;
-import android.os.Environment;
-import android.util.Xml;
-
-import com.hzlf.sampletest.entityclass.UpdateInfo;
 
 /**
  * 将字节流转换为字符串的工具类

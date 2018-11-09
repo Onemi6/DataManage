@@ -1,7 +1,5 @@
 package com.hzlf.sampletest.others;
 
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +9,8 @@ import android.widget.TextView;
 
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.entityclass.MainInfo;
+
+import java.util.List;
 
 public class MaininfoAdapter extends ArrayAdapter<MainInfo> {
     private int resourceId;

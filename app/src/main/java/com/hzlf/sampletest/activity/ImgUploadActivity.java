@@ -76,6 +76,73 @@ public class ImgUploadActivity extends Activity implements OnClickListener,
     private int pos;
 
     private ProgressDialog mypDialog;
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                /*
+                 * case TO_UPLOAD_FILE: toUploadFile(); break;
+                 */
+                case UPLOAD_FILE_DONE:
+                    String result = (String) msg.obj;
+                    if (result.equals("上传失败")) {
+                        mypDialog.dismiss();
+                        Toast.makeText(ImgUploadActivity.this, result,
+                                Toast.LENGTH_SHORT).show();
+                        status.add("0");
+                        fail_num++;
+                    } else {
+                        Gson gson = new Gson();
+                        UploadImg uploadimg = gson
+                                .fromJson(result, UploadImg.class);
+                        if (uploadimg.getStatus().equals("success")) {
+                            status.add("1");
+                            if (status.size() >= picList.size()) {
+                                mypDialog.dismiss();
+                                Toast.makeText(
+                                        ImgUploadActivity.this,
+                                        "共上传" + picList.size() + "张图片,其中失败"
+                                                + fail_num + "张",
+                                        Toast.LENGTH_SHORT).show();
+                                for (int i = 0; i < picList.size(); i++) {
+                                    if (status.get(i).equals("1")) {
+                                        dbmanage.addImagePath(number,
+                                                picList.get(i));
+                                    }
+                                }
+                                new Handler().postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        // do something
+                                        Intent intent_details = new Intent();
+                                        intent_details.setClass(
+                                                ImgUploadActivity.this,
+                                                DetailsActivity.class);
+                                        intent_details.putExtra("info_number",
+                                                number);
+                                        finish();// 结束当前活动
+                                        ImgUploadActivity.this
+                                                .startActivity(intent_details);
+                                    }
+                                }, 2000); // 延时1s执行
+                            }
+                        } else {
+                            mypDialog.dismiss();
+                            status.add("0");
+                            fail_num++;
+                            Toast.makeText(ImgUploadActivity.this,
+                                    uploadimg.getMessage(), Toast.LENGTH_LONG)
+                                    .show();
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
 
     /**
      * Called when the activity is first created.
@@ -301,78 +368,10 @@ public class ImgUploadActivity extends Activity implements OnClickListener,
 
         String _requestURL = requestURL + "id=" + number + "&type=" + img_type + "&name=" + (
                 (MyApplication) getApplication()).getName();
-        Log.i("picPath",picPath);
+        Log.i("picPath", picPath);
         uploadUtil.uploadFile(picPath, fileKey, _requestURL, params);
 
     }
-
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                /*
-                 * case TO_UPLOAD_FILE: toUploadFile(); break;
-                 */
-                case UPLOAD_FILE_DONE:
-                    String result = (String) msg.obj;
-                    if (result.equals("上传失败")) {
-                        mypDialog.dismiss();
-                        Toast.makeText(ImgUploadActivity.this, result,
-                                Toast.LENGTH_SHORT).show();
-                        status.add("0");
-                        fail_num++;
-                    } else {
-                        Gson gson = new Gson();
-                        UploadImg uploadimg = gson
-                                .fromJson(result, UploadImg.class);
-                        if (uploadimg.getStatus().equals("success")) {
-                            status.add("1");
-                            if (status.size() >= picList.size()) {
-                                mypDialog.dismiss();
-                                Toast.makeText(
-                                        ImgUploadActivity.this,
-                                        "共上传" + picList.size() + "张图片,其中失败"
-                                                + fail_num + "张",
-                                        Toast.LENGTH_SHORT).show();
-                                for (int i = 0; i < picList.size(); i++) {
-                                    if (status.get(i).equals("1")) {
-                                        dbmanage.addImagePath(number,
-                                                picList.get(i));
-                                    }
-                                }
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // do something
-                                        Intent intent_details = new Intent();
-                                        intent_details.setClass(
-                                                ImgUploadActivity.this,
-                                                DetailsActivity.class);
-                                        intent_details.putExtra("info_number",
-                                                number);
-                                        finish();// 结束当前活动
-                                        ImgUploadActivity.this
-                                                .startActivity(intent_details);
-                                    }
-                                }, 2000); // 延时1s执行
-                            }
-                        } else {
-                            mypDialog.dismiss();
-                            status.add("0");
-                            fail_num++;
-                            Toast.makeText(ImgUploadActivity.this,
-                                    uploadimg.getMessage(), Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    };
 
     @Override
     public void onUploadProcess(int uploadSize) {

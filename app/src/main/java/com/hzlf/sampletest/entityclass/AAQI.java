@@ -10,6 +10,28 @@ public class AAQI {
         this.message = message;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Message getMessage() {
+        return message;
+    }
+
+    public void setMessage(Message message) {
+        this.message = message;
+    }
+
+    // 重写toString方法
+    @Override
+    public String toString() {
+        return "{status = " + status + ", message = " + message + "}";
+    }
+
     public class Message {
         private String GOODS_NAME;
         private String TRADEMARK;
@@ -78,28 +100,6 @@ public class AAQI {
                     + "}";
         }
 
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Message getMessage() {
-        return message;
-    }
-
-    public void setMessage(Message message) {
-        this.message = message;
-    }
-
-    // 重写toString方法
-    @Override
-    public String toString() {
-        return "{status = " + status + ", message = " + message + "}";
     }
 
 }

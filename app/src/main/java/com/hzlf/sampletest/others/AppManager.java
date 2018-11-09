@@ -1,9 +1,9 @@
 package com.hzlf.sampletest.others;
 
-import java.util.Stack;
-
 import android.app.Activity;
 import android.content.Context;
+
+import java.util.Stack;
 
 public class AppManager {
     // Activity栈

@@ -1,20 +1,20 @@
 {
-    "logs": [
+  "logs": [
+    {
+      "outputFile": "E:\\Android\\code\\DataManage\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-watch-v21\\values-watch-v21.xml",
+      "map": [
         {
-            "outputFile": "E:\\Android\\code\\DataManage\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-watch-v21\\values-watch-v21.xml",
-            "map": [
-                {
-                    "source": "C:\\Users\\yy\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-28.0.0.aar\\31c698953d8023f4918846b9edefad45\\res\\values-watch-v21\\values-watch-v21.xml",
-                    "from": {
-                        "startLines": "2,6,10",
-                        "startColumns": "4,4,4",
-                        "startOffsets": "55,271,499",
-                        "endLines": "5,9,13",
-                        "endColumns": "12,12,12",
-                        "endOffsets": "266,494,724"
-                    }
-                }
-            ]
+          "source": "C:\\Users\\yy\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-28.0.0.aar\\d08dac8ecd4ed220e501afd5afca8a24\\res\\values-watch-v21\\values-watch-v21.xml",
+          "from": {
+            "startLines": "2,6,10",
+            "startColumns": "4,4,4",
+            "startOffsets": "55,271,499",
+            "endLines": "5,9,13",
+            "endColumns": "12,12,12",
+            "endOffsets": "266,494,724"
+          }
         }
-    ]
+      ]
+    }
+  ]
 }

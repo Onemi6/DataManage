@@ -42,5 +42,7 @@
     <string name="feedback">反馈</string>
     <string name="more">更多</string>
     <string name="nav_header_desc">Navigation header</string>
+    <string name="update_content">更新内容</string>
+    <string name="update_title">检测到新版本</string>
 
 </resources>

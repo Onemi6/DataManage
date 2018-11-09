@@ -1,5 +1,14 @@
 package com.hzlf.sampletest.others;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Environment;
+import android.os.Looper;
+import android.util.Log;
+import android.widget.Toast;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
@@ -11,16 +20,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.Environment;
-import android.os.Looper;
-import android.util.Log;
-import android.widget.Toast;
-
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
+    private static CrashHandler mInstance;
     /**
      * 系统默认UncaughtExceptionHandler
      */
@@ -39,7 +40,6 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     private SimpleDateFormat format = new SimpleDateFormat(
             "yyyy-MM-dd-HH-mm-ss");
     private String TAG = "TEST";// this.getClass().getSimpleName();
-    private static CrashHandler mInstance;
 
     private CrashHandler() {
     }
