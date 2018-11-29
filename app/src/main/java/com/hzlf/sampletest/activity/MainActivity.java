@@ -265,24 +265,19 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
         switch (id) {
             case R.id.nav_settings:
-                Intent intent_apply = new Intent();
-                intent_apply.setClass(this, AboutActivity.class);
-                // finish();// 结束当前活动
-                startActivity(intent_apply);
+                startActivity(new Intent(this, AboutActivity.class));
                 break;
             case R.id.nav_account:
                 editor.clear();
                 editor.commit();
-                Intent intent_login = new Intent();
-                intent_login.setClass(this, LoginActivity.class);
-                finish();// 结束当前活动
-                startActivity(intent_login);
+                startActivity(new Intent(this, LoginActivity.class));
+                finish();
                 break;
             case R.id.nav_share:
                 ShareAppCode();
                 break;
             case R.id.nav_send:
-                startActivity(new Intent(this, testActivity.class));
+                //startActivity(new Intent(this, testActivity.class));
                 break;
             default:
                 break;

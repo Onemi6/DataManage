@@ -1,2 +1,0 @@
-# Referenced at E:\Android\code\DataManage\app\build\intermediates\manifests\full\debug\AndroidManifest.xml:41
--keep class com.hzlf.sampletest.others.MyApplication { <init>(...); }

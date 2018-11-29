@@ -29,11 +29,6 @@ import com.zxing.view.ViewfinderView;
 import java.io.IOException;
 import java.util.Vector;
 
-/**
- * Initial the camera
- *
- * @author Ryan.Tang
- */
 public class CaptureActivity extends Activity implements Callback {
 
     private static final float BEEP_VOLUME = 0.10f;

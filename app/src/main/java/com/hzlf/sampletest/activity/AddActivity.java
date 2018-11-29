@@ -7,17 +7,23 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.google.gson.Gson;
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.db.DBManage;
 import com.hzlf.sampletest.entityclass.Info_add;
+import com.hzlf.sampletest.entityclass.Source;
 import com.hzlf.sampletest.fragment.fragment_add1;
 import com.hzlf.sampletest.fragment.fragment_add2;
 import com.hzlf.sampletest.fragment.fragment_add3;
+import com.hzlf.sampletest.http.HttpUtils;
+import com.hzlf.sampletest.http.NetworkUtil;
+import com.hzlf.sampletest.others.GsonTools;
 import com.hzlf.sampletest.others.MyApplication;
 import com.hzlf.sampletest.others.MyViewPager;
+import com.hzlf.sampletest.others.UsedPath;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -27,6 +33,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 public class AddActivity extends AppCompatActivity {
@@ -79,6 +87,45 @@ public class AddActivity extends AppCompatActivity {
         ((MyApplication) this.getApplication()).setAdd1(0);
         ((MyApplication) this.getApplication()).setAdd2(0);
         ((MyApplication) this.getApplication()).setAdd3(0);
+
+        UpdateTaskSource();//更新任务来源
+    }
+
+    public void UpdateTaskSource() {
+        if (NetworkUtil.checkedNetWork(_context)) {
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    String result = HttpUtils
+                            .getAllSource(UsedPath.api_Sys_GetAllSource);
+                    if (result.equals("获取数据失败") || result.equals("")) {
+                        Log.d("source", "更新任务来源失败");
+                    } else {
+                        LinkedList<Source> source = GsonTools
+                                .getAllSource(result);
+                        if (source.size() != 0) {
+                            for (Iterator iterator = source.iterator(); iterator
+                                    .hasNext(); ) {
+                                Source newsource = (Source) iterator.next();
+                                Source oldsource = dbmanage.findTaskSource(newsource
+                                        .getSOURCE_NAME());
+                                if (oldsource != null) {
+                                    if (oldsource.getADDR() != newsource.getADDR()) {
+                                        dbmanage.updateTaskSource(newsource);
+                                    }
+                                } else {
+                                    dbmanage.addTaskSource(newsource);
+                                }
+                            }
+                            Log.d("source", "更新任务来源成功");
+                        }
+                    }
+                }
+            });
+            thread.start();
+        } else {
+            Log.d("source", "更新任务来源时无网络");
+        }
     }
 
     public void nextFragment() {

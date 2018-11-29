@@ -6,15 +6,21 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.hzlf.sampletest.R;
-import com.hzlf.sampletest.entityclass.Status;
 import com.hzlf.sampletest.http.Post_Login;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class testActivity extends AppCompatActivity {
     private Button btn_test;
@@ -37,29 +43,34 @@ public class testActivity extends AppCompatActivity {
     }
 
     public void request_login() {
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("loginName", "123");
+        map.put("passWord", "123");
+
+        Gson gson = new Gson();
+        String obj = gson.toJson(map);
+
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://www.3tpi.com:8016")
-                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("http://www.3tpi.com:8016/")
                 .build();
+        RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"),
+                obj);
         Post_Login request = retrofit.create(Post_Login.class);
-        Call<Status> call = request.getCall("zhouzy", "123");
-        call.enqueue(new Callback<Status>() {
+        Call<ResponseBody> call = request.getCall(body);
+        call.enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(Call<Status> call, Response<Status> response) {
-                if (response.body() != null) {
-                    tv_test.setText(tv_test.getText() + "请求成功!" + response.body().toString());
-                } else {
-                    tv_test.setText(tv_test.getText() + "请求成功!" + "NULL");
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    tv_test.setText(tv_test.getText() + "请求成功!" + response.body().string());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-                //System.out.println("请求成功");
-                //System.out.print(response.body().getStatus());
             }
 
             @Override
-            public void onFailure(Call<Status> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
                 tv_test.setText(tv_test.getText() + "请求失败!" + t.getMessage());
-                //System.out.println("请求失败");
-                // System.out.print(t.getMessage());
             }
         });
     }
