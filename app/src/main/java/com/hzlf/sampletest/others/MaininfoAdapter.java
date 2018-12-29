@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.hzlf.sampletest.R;
-import com.hzlf.sampletest.entityclass.MainInfo;
+import com.hzlf.sampletest.model.MainInfo;
 
 import java.util.List;
 

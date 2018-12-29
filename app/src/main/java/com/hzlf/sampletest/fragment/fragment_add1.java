@@ -19,9 +19,9 @@ import com.google.gson.Gson;
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.activity.AddActivity;
 import com.hzlf.sampletest.db.DBManage;
-import com.hzlf.sampletest.entityclass.Info_add;
-import com.hzlf.sampletest.entityclass.Info_add1;
-import com.hzlf.sampletest.entityclass.Source;
+import com.hzlf.sampletest.model.Info_add;
+import com.hzlf.sampletest.model.Info_add1;
+import com.hzlf.sampletest.model.Source;
 import com.hzlf.sampletest.others.MyApplication;
 
 import java.util.ArrayList;

@@ -1,19 +1,17 @@
 package com.hzlf.sampletest.activity;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,153 +19,72 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.db.DBManage;
-import com.hzlf.sampletest.entityclass.UploadImg;
-import com.hzlf.sampletest.http.UploadUtil;
-import com.hzlf.sampletest.http.UploadUtil.OnUploadProcessListener;
+import com.hzlf.sampletest.http.HttpUtils;
+import com.hzlf.sampletest.http.NetworkUtil;
+import com.hzlf.sampletest.http.eLab_API;
+import com.hzlf.sampletest.model.UploadImg;
 import com.hzlf.sampletest.others.ImgAdapter;
 import com.hzlf.sampletest.others.MyApplication;
-import com.hzlf.sampletest.others.UsedPath;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import me.nereo.multi_image_selector.MultiImageSelector;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-public class ImgUploadActivity extends Activity implements OnClickListener,
-        OnUploadProcessListener {
-    //去上传文件
-    protected static final int TO_UPLOAD_FILE = 1;
-    //上传文件响应
-    protected static final int UPLOAD_FILE_DONE = 2;
-    //上传初始化
-    private static final int UPLOAD_INIT_PROCESS = 4;
-    //上传中
-    private static final int UPLOAD_IN_PROCESS = 5;
+public class ImgUploadActivity extends Activity implements OnClickListener {
 
     private static final int REQUEST_IMAGE = 2;
-
-    private static String requestURL = UsedPath.api_ImgUpload_POST;
     private Button selectButton, uploadButton;
-
-    private int num = 0, fail_num = 0;
-
     private DBManage dbmanage = new DBManage(this);
     private Spinner sp_img_type;
-    private List<String> selectPaths = new ArrayList<String>(), picList = new ArrayList<String>(),
-            status = new ArrayList<String>();
+    private List<String> selectPaths = new ArrayList<>(), picList = new ArrayList<>(),
+            status = new ArrayList<>();
     private ArrayAdapter ada_img_type;
     private RecyclerView rv_add_img;
     private GridLayoutManager layoutmanager;
     private ImgAdapter adapter_img;
     private Context _context;
-    private String img_type = null, number = null, picPath;
-    private int pos;
-
+    private int fail_num = 0, pos;
+    private String img_type = null, number = null, picPath, token, name;
+    private SharedPreferences sharedPreferences;
     private ProgressDialog mypDialog;
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                /*
-                 * case TO_UPLOAD_FILE: toUploadFile(); break;
-                 */
-                case UPLOAD_FILE_DONE:
-                    String result = (String) msg.obj;
-                    if (result.equals("上传失败")) {
-                        mypDialog.dismiss();
-                        Toast.makeText(ImgUploadActivity.this, result,
-                                Toast.LENGTH_SHORT).show();
-                        status.add("0");
-                        fail_num++;
-                    } else {
-                        Gson gson = new Gson();
-                        UploadImg uploadimg = gson
-                                .fromJson(result, UploadImg.class);
-                        if (uploadimg.getStatus().equals("success")) {
-                            status.add("1");
-                            if (status.size() >= picList.size()) {
-                                mypDialog.dismiss();
-                                Toast.makeText(
-                                        ImgUploadActivity.this,
-                                        "共上传" + picList.size() + "张图片,其中失败"
-                                                + fail_num + "张",
-                                        Toast.LENGTH_SHORT).show();
-                                for (int i = 0; i < picList.size(); i++) {
-                                    if (status.get(i).equals("1")) {
-                                        dbmanage.addImagePath(number,
-                                                picList.get(i));
-                                    }
-                                }
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        // do something
-                                        Intent intent_details = new Intent();
-                                        intent_details.setClass(
-                                                ImgUploadActivity.this,
-                                                DetailsActivity.class);
-                                        intent_details.putExtra("info_number",
-                                                number);
-                                        finish();// 结束当前活动
-                                        ImgUploadActivity.this
-                                                .startActivity(intent_details);
-                                    }
-                                }, 2000); // 延时1s执行
-                            }
-                        } else {
-                            mypDialog.dismiss();
-                            status.add("0");
-                            fail_num++;
-                            Toast.makeText(ImgUploadActivity.this,
-                                    uploadimg.getMessage(), Toast.LENGTH_LONG)
-                                    .show();
-                        }
-                    }
-                    break;
-                default:
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    };
 
-    /**
-     * Called when the activity is first created.
-     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_img_upload);
-        _context = this;
         initView();
     }
 
-    /**
-     * 初始化数据
-     */
     private void initView() {
+        sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
+        number = ((MyApplication) getApplication()).getNumber();
+        _context = this;
+
         selectButton = findViewById(R.id.selectImage);
         uploadButton = findViewById(R.id.uploadImage);
         sp_img_type = findViewById(R.id.spinner_img_type);
         rv_add_img = findViewById(R.id.rv_img_add);
         selectButton.setOnClickListener(this);
         uploadButton.setOnClickListener(this);
-        num = 0;
-        number = ((MyApplication) getApplication()).getNumber();
 
         ada_img_type = ArrayAdapter.createFromResource(_context, R.array.IMG_TYPE, android.R
                 .layout.simple_spinner_dropdown_item);
@@ -185,8 +102,6 @@ public class ImgUploadActivity extends Activity implements OnClickListener,
         adapter_img.setOnClickListener(new ImgAdapter.OnClickListener() {
             @Override
             public void onClick(View view, int position) {
-                /*Snackbar.make(view, "点击了第" + (position + 1) + "张", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();*/
                 String path = picList.get(position);
                 if (path != null) {
                     Options opt = new Options();
@@ -212,7 +127,7 @@ public class ImgUploadActivity extends Activity implements OnClickListener,
                     Bitmap bm = BitmapFactory.decodeFile(path, opt);
                     LayoutInflater inflater = getLayoutInflater();
                     View layout = inflater.inflate(R.layout.img_item,
-                            (ViewGroup) findViewById(R.id.dialog_img));
+                            findViewById(R.id.dialog_img));
                     ImageView imageview = layout
                             .findViewById(R.id.imageView);
                     imageview.setImageBitmap(bm);
@@ -227,8 +142,6 @@ public class ImgUploadActivity extends Activity implements OnClickListener,
         adapter_img.setOnLongClickListener(new ImgAdapter.OnLongClickListener() {
             @Override
             public void onLongClick(View view, int position) {
-                //Snackbar.make(view, "长按了第" + (position + 1) + "行", Snackbar.LENGTH_LONG)
-                //   .setAction("Action", null).show();
                 pos = position;
                 // 通过AlertDialog.Builder这个类来实例化我们的一个AlertDialog的对象
                 AlertDialog.Builder builder = new AlertDialog.Builder(
@@ -306,18 +219,15 @@ public class ImgUploadActivity extends Activity implements OnClickListener,
                     for (String onepath : picList) {
                         picPath = onepath;
                         if (picPath != null) {
-                            toUploadFile();
-                            handler.sendEmptyMessage(TO_UPLOAD_FILE);
-                            // Log.e("picPath", picPath);
+                            attempImgUpload();
                         } else {
                             Toast.makeText(this, "上传的文件路径出错", Toast.LENGTH_LONG)
                                     .show();
                         }
                     }
-
                 } else if (adapter_img.getImgList().size() == 0) {
                     mypDialog.dismiss();
-                    Toast.makeText(this, "无图片", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, "至少选择一张图片", Toast.LENGTH_LONG).show();
                 }
                 break;
             default:
@@ -344,48 +254,85 @@ public class ImgUploadActivity extends Activity implements OnClickListener,
         adapter_img.changList_add(picList);
     }
 
-    /**
-     * 上传服务器响应回调
-     */
     @Override
-    public void onUploadDone(int responseCode, String message) {
-        Message msg = Message.obtain();
-        msg.what = UPLOAD_FILE_DONE;
-        msg.arg1 = responseCode;
-        msg.obj = message;
-        handler.sendMessage(msg);
+    protected void onPause() {
+        super.onPause();
+        if (mypDialog != null) {
+            mypDialog.dismiss();
+        }
     }
 
-    private void toUploadFile() {
-        String fileKey = "file";
-        UploadUtil uploadUtil = UploadUtil.getInstance();
-        uploadUtil.setOnUploadProcessListener(this); // 设置监听器监听上传状态
+    public void attempImgUpload() {
+        if (NetworkUtil.isNetworkAvailable(_context)) {
+            eLab_API request = HttpUtils.GsonApi();
+            if (((MyApplication) getApplication()).getToken() == null) {
+                token = "Bearer " + sharedPreferences.getString("token", "");
+            } else {
+                token = "Bearer " + ((MyApplication) getApplication()).getToken();
+            }
+            if (((MyApplication) getApplication()).getName() == null) {
+                name = sharedPreferences.getString("token", null);
+            } else {
+                name = ((MyApplication) getApplication()).getName();
+            }
+            Map<String, String> params = new HashMap<>();
+            params.put("id", number);
+            params.put("type", img_type);
+            params.put("name", name);
 
-        Map<String, String> params = new HashMap<String, String>();
-        /*params.put("id", number);
-        params.put("type", img_type);
-        params.put("name", ((MyApplication) getApplication()).getName());*/
+            File file = new File(picPath);
+            RequestBody requestFile = RequestBody.create(MediaType.parse("image/png"), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("file", picPath,
+                    requestFile);
+            Call<UploadImg> call = request.ApplyImgUpload(token, params, body);
+            call.enqueue(new Callback<UploadImg>() {
+                @Override
+                public void onResponse(Call<UploadImg> call, Response<UploadImg> response) {
+                    if (response.code() == 401) {
+                        Log.v("ImgUpload请求", "token过期");
+                        Intent intent_login = new Intent();
+                        intent_login.setClass(ImgUploadActivity.this,
+                                LoginActivity.class);
+                        intent_login.putExtra("login_type", 1);
+                        startActivity(intent_login);
+                    } else if (response.code() == 200) {
+                        if (response.body() != null) {
+                            if (response.body().getStatus().equals("success")) {
+                                status.add("1");
+                                Log.v("图片上传成功", response.body().getMessage());
+                            } else {
+                                status.add("0");
+                                fail_num++;
+                                Log.v("图片上传失败", response.body().getMessage());
+                            }
+                        } else {
+                            Log.v("ImgUpload请求成功!", "response.body is null");
+                        }
+                        if (status.size() >= picList.size()) {
+                            mypDialog.dismiss();
+                            Toast.makeText(
+                                    ImgUploadActivity.this,
+                                    "共上传" + picList.size() + "张图片,其中失败"
+                                            + fail_num + "张",
+                                    Toast.LENGTH_SHORT).show();
+                            for (int i = 0; i < picList.size(); i++) {
+                                if (status.get(i).equals("1")) {
+                                    dbmanage.addImagePath(number,
+                                            picList.get(i));
+                                }
+                            }
+                        }
+                    }
+                }
 
-        String _requestURL = requestURL + "id=" + number + "&type=" + img_type + "&name=" + (
-                (MyApplication) getApplication()).getName();
-        Log.i("picPath", picPath);
-        uploadUtil.uploadFile(picPath, fileKey, _requestURL, params);
-
-    }
-
-    @Override
-    public void onUploadProcess(int uploadSize) {
-        Message msg = Message.obtain();
-        msg.what = UPLOAD_IN_PROCESS;
-        msg.arg1 = uploadSize;
-        handler.sendMessage(msg);
-    }
-
-    @Override
-    public void initUpload(int fileSize) {
-        Message msg = Message.obtain();
-        msg.what = UPLOAD_INIT_PROCESS;
-        msg.arg1 = fileSize;
-        handler.sendMessage(msg);
+                @Override
+                public void onFailure(Call<UploadImg> call, Throwable t) {
+                    Log.v("ImgUpload请求失败!", t.getMessage());
+                }
+            });
+        } else {
+            Toast.makeText(ImgUploadActivity.this, "当前无网络", Toast.LENGTH_SHORT)
+                    .show();
+        }
     }
 }

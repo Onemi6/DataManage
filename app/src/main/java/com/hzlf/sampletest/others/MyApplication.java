@@ -4,18 +4,14 @@ import android.app.Application;
 import android.content.Context;
 import android.os.StrictMode;
 import android.support.multidex.MultiDex;
-import android.util.Log;
 
-import com.hzlf.sampletest.entityclass.Info_add1;
-import com.hzlf.sampletest.entityclass.Info_add2;
-import com.hzlf.sampletest.entityclass.Info_add3;
-
-import cn.jpush.android.api.JPushInterface;
+import com.hzlf.sampletest.model.Info_add1;
+import com.hzlf.sampletest.model.Info_add2;
+import com.hzlf.sampletest.model.Info_add3;
 
 public class MyApplication extends Application {
 
-    private static final String TAG = "JPush";
-    private String no, name, number;
+    private String no, name, number, token;
     private Integer add1, add2, add3;
     private Info_add1 info_add1;
     private Info_add2 info_add2;
@@ -23,16 +19,12 @@ public class MyApplication extends Application {
 
     @Override
     public void onCreate() {
-        Log.d(TAG, "[ExampleApplication] onCreate");
         super.onCreate();
 
         // android 7.0系统解决拍照的问题
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         builder.detectFileUriExposure();
-
-        JPushInterface.setDebugMode(false); // 设置开启日志,发布时请关闭日志
-        JPushInterface.init(this); // 初始化 JPush
     }
 
     @Override
@@ -63,6 +55,14 @@ public class MyApplication extends Application {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public Integer getAdd1() {

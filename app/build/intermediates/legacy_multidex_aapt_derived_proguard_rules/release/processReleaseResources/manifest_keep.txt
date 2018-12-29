@@ -1,0 +1,2 @@
+# Referenced at E:\Android\code\DataManage\app\build\intermediates\merged_manifests\release\processReleaseManifest\merged\AndroidManifest.xml:36
+-keep class com.hzlf.sampletest.others.MyApplication { <init>(...); }

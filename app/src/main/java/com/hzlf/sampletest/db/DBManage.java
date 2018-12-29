@@ -4,13 +4,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.hzlf.sampletest.entityclass.Info_add;
-import com.hzlf.sampletest.entityclass.Info_add1;
-import com.hzlf.sampletest.entityclass.Info_add2;
-import com.hzlf.sampletest.entityclass.Info_add3;
-import com.hzlf.sampletest.entityclass.MainInfo;
-import com.hzlf.sampletest.entityclass.Source;
-import com.hzlf.sampletest.entityclass.User;
+import com.hzlf.sampletest.model.Info_add;
+import com.hzlf.sampletest.model.Info_add1;
+import com.hzlf.sampletest.model.Info_add2;
+import com.hzlf.sampletest.model.Info_add3;
+import com.hzlf.sampletest.model.MainInfo;
+import com.hzlf.sampletest.model.Source;
+import com.hzlf.sampletest.model.User;
 
 import java.util.ArrayList;
 import java.util.List;

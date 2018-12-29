@@ -1,9 +1,11 @@
 package com.hzlf.sampletest.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,22 +22,29 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.activity.AddActivity;
-import com.hzlf.sampletest.activity.CaptureActivity;
+import com.hzlf.sampletest.activity.LoginActivity;
 import com.hzlf.sampletest.activity.MainActivity;
+import com.hzlf.sampletest.activity.ScanActivity;
 import com.hzlf.sampletest.db.DBManage;
-import com.hzlf.sampletest.entityclass.AAQI;
-import com.hzlf.sampletest.entityclass.Info_add;
-import com.hzlf.sampletest.entityclass.Info_add3;
+import com.hzlf.sampletest.model.AAQI;
+import com.hzlf.sampletest.model.Info_add;
+import com.hzlf.sampletest.model.Info_add3;
 import com.hzlf.sampletest.http.HttpUtils;
 import com.hzlf.sampletest.http.NetworkUtil;
+import com.hzlf.sampletest.http.eLab_API;
 import com.hzlf.sampletest.others.DatePickerDialog;
 import com.hzlf.sampletest.others.MyApplication;
-import com.hzlf.sampletest.others.UsedPath;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class fragment_add3 extends Fragment {
 
@@ -51,10 +60,11 @@ public class fragment_add3 extends Fragment {
     private RadioGroup radio_15;
     private Button btn_back3, btn_clear3, btn_save, btn_scanning;
     private int mYear, mMonth, mDay;
-    private String str_chukou, str_shengchanriqi, str_chouyangriqi, number;
+    private String str_chukou, str_shengchanriqi, str_chouyangriqi, number, token;
     private DBManage dbmanage;
     private AddActivity addActivity;
     private Info_add info_add_now;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,6 +73,7 @@ public class fragment_add3 extends Fragment {
         View view = inflater.inflate(R.layout.add_layout3, container, false);
         dbmanage = new DBManage(addActivity);
         number = addActivity.getNumber();
+        sharedPreferences = addActivity.getSharedPreferences("User", addActivity.MODE_PRIVATE);
 
         /*--------------------------------------------------------------------*/
         et_1 = view.findViewById(R.id.input_yangpinmingcheng);
@@ -94,6 +105,16 @@ public class fragment_add3 extends Fragment {
         et_27 = view.findViewById(R.id.input_chouyangren);
         et_28 = view.findViewById(R.id.input_yangpinxukezheng);
         et_29 = view.findViewById(R.id.input_beizhu);
+
+
+        /*//设置EditText的显示方式为多行文本输入
+        et_1.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        //文本显示的位置在EditText的最上方
+        et_1.setGravity(Gravity.TOP);
+        //改变默认的单行模式
+        et_1.setSingleLine(false);
+        //水平滚动设置为False
+        et_1.setHorizontallyScrolling(false);*/
 
         btn_scanning = view.findViewById(R.id.btn_scanning);
         btn_save = view.findViewById(R.id.btn_save);
@@ -156,7 +177,6 @@ public class fragment_add3 extends Fragment {
                 // TODO 自动生成的方法存
                 new DatePickerDialog(addActivity, 0,
                         new DatePickerDialog.OnDateSetListener() {
-
                             @Override
                             public void onDateSet(DatePicker DatePicker,
                                                   int Year, int MonthOfYear, int DayOfMonth) {
@@ -200,9 +220,17 @@ public class fragment_add3 extends Fragment {
             @Override
             public void onClick(View v) {
                 // TODO 自动生成的方法存根
-                Intent intent_scan = new Intent(addActivity,
-                        CaptureActivity.class);
-                startActivityForResult(intent_scan, 3);
+                IntentIntegrator integrator = new IntentIntegrator(getActivity());
+                integrator = integrator.forSupportFragment(fragment_add3.this);
+                // 设置要扫描的条码类型，ONE_D_CODE_TYPES：一维码，QR_CODE_TYPES-二维码
+                integrator.setDesiredBarcodeFormats(IntentIntegrator.ONE_D_CODE_TYPES);
+                integrator.setCaptureActivity(ScanActivity.class); //设置打开摄像头的Activity
+                integrator.setPrompt("请扫描一维码"); //底部的提示文字，设为""可以置空
+                integrator.setRequestCode(3);
+                //integrator.setCameraId(0); //前置或者后置摄像头
+                //integrator.setBeepEnabled(true); //扫描成功的「哔哔」声，默认开启
+                //integrator.setBarcodeImageEnabled(true); // 扫完码之后生成二维码的图片
+                integrator.initiateScan();
             }
         });
 
@@ -458,64 +486,15 @@ public class fragment_add3 extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data); // 这个super不能落下，否则可能回调不了
-        if (requestCode == 3) {
-            if (data != null) {
-                Bundle bundle = data.getExtras();
-                String scanResult = bundle.getString("result");
-                et_9.setText(scanResult);
-                if (NetworkUtil.checkedNetWork(addActivity)) {
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            String result = HttpUtils.getAAQI(UsedPath.api_AAQI
-                                    + et_9.getText().toString());
-                            //Log.v("result",result);
-                            if (result.equals("获取数据失败") || result.equals("")) {
-                                Looper.prepare();
-                                Toast.makeText(addActivity, "获取商品信息失败",
-                                        Toast.LENGTH_SHORT).show();
-                            } else if (result.equals("1")) {
-                                Looper.prepare();
-                                Toast.makeText(addActivity, "当前网络不可用",
-                                        Toast.LENGTH_SHORT).show();
-                            } else {
-                                Gson gson = new Gson();
-                                final AAQI aaqi = gson.fromJson(result,
-                                        AAQI.class);
-                                //Log.v("result",aaqi.toString());
-                                if (aaqi.getStatus().equals("success")) {
-                                    et_1.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            //Log.v("GOODS_NAME",aaqi.getMessage().getGOODS_NAME());
-                                            et_1.setText(aaqi.getMessage().getGOODS_NAME());
-                                        }
-                                    });
-                                    et_5.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            et_5.setText(aaqi.getMessage().getTRADEMARK());
-                                        }
-                                    });
-                                    et_8.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            et_8.setText(aaqi.getMessage().getSAMPLE_MODEL());
-                                        }
-                                    });
-                                } else {
-                                    Looper.prepare();
-                                    Toast.makeText(addActivity, "条码扫描错误，请重试",
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }
-                    }.start();
-                } else {
-                    Toast.makeText(addActivity, "当前无网络", Toast.LENGTH_SHORT)
-                            .show();
-                }
+        // 这个super不能落下，否则可能回调不了
+        //super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 3) {
+                //parseActivityResult activity调用三个参数的
+                IntentResult scanResult = IntentIntegrator.parseActivityResult(resultCode, data);
+                String result_id = scanResult.getContents();
+                et_9.setText(result_id);
+                attempAAQI();
             }
         }
     }
@@ -622,6 +601,96 @@ public class fragment_add3 extends Fragment {
             et_27.setText(info.getInfo_add3().getValue27());
             et_28.setText(info.getInfo_add3().getValue28());
             et_29.setText(info.getInfo_add3().getValue29());
+        }
+    }
+
+    public void attempAAQI() {
+        if (NetworkUtil.isNetworkAvailable(addActivity)) {
+            eLab_API request = HttpUtils.GsonApi();
+            if (((MyApplication) addActivity.getApplication()).getToken() == null) {
+                token = "Bearer " + sharedPreferences.getString("token", "");
+            } else {
+                token = "Bearer " + ((MyApplication) addActivity.getApplication()).getToken();
+            }
+            Call<AAQI> call = request.AAQI(token, et_9.getText().toString());
+            call.enqueue(new Callback<AAQI>() {
+                @Override
+                public void onResponse(Call<AAQI> call, Response<AAQI> response) {
+                    if (response.code() == 401) {
+                        Log.v("AAQI请求", "token过期");
+                        Intent intent_login = new Intent();
+                        intent_login.setClass(addActivity,
+                                LoginActivity.class);
+                        intent_login.putExtra("login_type", 1);
+                        startActivity(intent_login);
+                    } else if (response.code() == 200) {
+                        if (response.body() != null) {
+                            if (response.body().getStatus().equals("success")) {
+                                et_1.setText(response.body().getMessage().getGOODS_NAME());
+                                et_5.setText(response.body().getMessage().getTRADEMARK());
+                                et_8.setText(response.body().getMessage().getSAMPLE_MODEL());
+                            } else {
+                                //Looper.prepare();
+                                Toast.makeText(addActivity, "条码错误，请重试",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Log.v("AAQI请求成功!", "response.body is null");
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<AAQI> call, Throwable t) {
+                    Log.v("AAQI请求失败!", t.getMessage());
+                }
+            });
+                    /*new Thread() {
+                        @Override
+                        public void run() {
+                            String result = HttpUtils.getAAQI(et_9.getText().toString());
+                            if (result.equals("获取数据失败") || result.equals("")) {
+                                Looper.prepare();
+                                Toast.makeText(addActivity, "获取商品信息失败",
+                                        Toast.LENGTH_SHORT).show();
+                            } else if (result.equals("1")) {
+                                Looper.prepare();
+                                Toast.makeText(addActivity, "当前网络不可用",
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                Gson gson = new Gson();
+                                final AAQI aaqi = gson.fromJson(result,
+                                        AAQI.class);
+                                if (aaqi.getStatus().equals("success")) {
+                                    et_1.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            et_1.setText(aaqi.getMessage().getGOODS_NAME());
+                                        }
+                                    });
+                                    et_5.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            et_5.setText(aaqi.getMessage().getTRADEMARK());
+                                        }
+                                    });
+                                    et_8.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            et_8.setText(aaqi.getMessage().getSAMPLE_MODEL());
+                                        }
+                                    });
+                                } else {
+                                    Looper.prepare();
+                                    Toast.makeText(addActivity, "条码错误，请重试",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                    }.start();*/
+        } else {
+            Toast.makeText(addActivity, "当前无网络", Toast.LENGTH_SHORT)
+                    .show();
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.hzlf.sampletest.activity;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,17 +15,16 @@ import android.view.MenuItem;
 import com.google.gson.Gson;
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.db.DBManage;
-import com.hzlf.sampletest.entityclass.Info_add;
-import com.hzlf.sampletest.entityclass.Source;
+import com.hzlf.sampletest.model.Info_add;
+import com.hzlf.sampletest.model.Source;
 import com.hzlf.sampletest.fragment.fragment_add1;
 import com.hzlf.sampletest.fragment.fragment_add2;
 import com.hzlf.sampletest.fragment.fragment_add3;
 import com.hzlf.sampletest.http.HttpUtils;
 import com.hzlf.sampletest.http.NetworkUtil;
-import com.hzlf.sampletest.others.GsonTools;
+import com.hzlf.sampletest.http.eLab_API;
 import com.hzlf.sampletest.others.MyApplication;
 import com.hzlf.sampletest.others.MyViewPager;
-import com.hzlf.sampletest.others.UsedPath;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -33,9 +34,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AddActivity extends AppCompatActivity {
 
@@ -48,19 +51,17 @@ public class AddActivity extends AppCompatActivity {
     private fragment_add3 fm_add3;
 
     private Toolbar toolbar;
-    private String number;
+    private String number, token;
     private DBManage dbmanage = new DBManage(this);
     private Context _context;
-
-    public String getNumber() {
-        return number;
-    }
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_add);
+        sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
         _context = this;
         number = getIntent().getStringExtra("number");
         toolbar = findViewById(R.id.toolbar_add);
@@ -87,45 +88,64 @@ public class AddActivity extends AppCompatActivity {
         ((MyApplication) this.getApplication()).setAdd1(0);
         ((MyApplication) this.getApplication()).setAdd2(0);
         ((MyApplication) this.getApplication()).setAdd3(0);
-
-        UpdateTaskSource();//更新任务来源
+        attempGetAllSource();//更新任务来源
     }
 
-    public void UpdateTaskSource() {
-        if (NetworkUtil.checkedNetWork(_context)) {
-            Thread thread = new Thread(new Runnable() {
+    public void attempGetAllSource() {
+        if (NetworkUtil.isNetworkAvailable(_context)) {
+            eLab_API request = HttpUtils.GsonApi();
+            if (((MyApplication) getApplication()).getToken() == null) {
+                token = "Bearer " + sharedPreferences.getString("token", "");
+            } else {
+                token = "Bearer " + ((MyApplication) getApplication()).getToken();
+            }
+            Call<List<Source>> call = request.GetAllSource(token);
+            call.enqueue(new Callback<List<Source>>() {
                 @Override
-                public void run() {
-                    String result = HttpUtils
-                            .getAllSource(UsedPath.api_Sys_GetAllSource);
-                    if (result.equals("获取数据失败") || result.equals("")) {
-                        Log.d("source", "更新任务来源失败");
-                    } else {
-                        LinkedList<Source> source = GsonTools
-                                .getAllSource(result);
-                        if (source.size() != 0) {
-                            for (Iterator iterator = source.iterator(); iterator
-                                    .hasNext(); ) {
-                                Source newsource = (Source) iterator.next();
-                                Source oldsource = dbmanage.findTaskSource(newsource
-                                        .getSOURCE_NAME());
-                                if (oldsource != null) {
-                                    if (oldsource.getADDR() != newsource.getADDR()) {
-                                        dbmanage.updateTaskSource(newsource);
+                public void onResponse(Call<List<Source>> call, Response<List<Source>> response) {
+                    if (response.code() == 401) {
+                        Log.v("GetAllSource请求", "token过期");
+                        Intent intent_login = new Intent();
+                        intent_login.setClass(AddActivity.this,
+                                LoginActivity.class);
+                        intent_login.putExtra("login_type", 1);
+                        startActivity(intent_login);
+                    } else if (response.code() == 200) {
+                        if (response.body() != null) {
+                            if (response.body().size() != 0) {
+                                for (int i = 0; i < response.body().size(); i++) {
+                                    Source newsource = response.body().get(i);
+                                    Source oldsource = dbmanage.findTaskSource(newsource
+                                            .getSOURCE_NAME());
+                                    if (oldsource != null) {
+                                        if (oldsource.getADDR() != newsource.getADDR()) {
+                                            dbmanage.updateTaskSource(newsource);
+                                        }
+                                    } else {
+                                        dbmanage.addTaskSource(newsource);
                                     }
-                                } else {
-                                    dbmanage.addTaskSource(newsource);
                                 }
                             }
-                            Log.d("source", "更新任务来源成功");
+                        } else {
+                            Log.v("GetAllSource请求成功!", "response.code is null");
                         }
                     }
                 }
+
+                @Override
+                public void onFailure(Call<List<Source>> call, Throwable t) {
+                    Log.v("GetAllSource请求失败!", t.getMessage());
+                }
             });
-            thread.start();
+
+
         } else {
             Log.d("source", "更新任务来源时无网络");
         }
+    }
+
+    public String getNumber() {
+        return number;
     }
 
     public void nextFragment() {
@@ -195,9 +215,8 @@ public class AddActivity extends AppCompatActivity {
         return content.toString();
     }
 
-    /**
-     * 定义自己的ViewPager适配器。 也可以使用FragmentPagerAdapter。关于这两者之间的区别，可以自己去搜一下。
-     */
+    //定义自己的ViewPager适配器。 也可以使用FragmentPagerAdapter。关于这两者之间的区别，可以自己去搜一下。
+
     class MyFrageStatePagerAdapter extends FragmentStatePagerAdapter {
         Fragment currentFragment;
 

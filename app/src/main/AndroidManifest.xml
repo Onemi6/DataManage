@@ -3,40 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hzlf.sampletest"
     android:versionCode="1"
-    android:versionName="1.4">
+    android:versionName="1.5">
 
-    <!-- Required -->
-    <permission
-        android:name="com.hzlf.sampletest.permission.JPUSH_MESSAGE"
-        android:protectionLevel="signature" />
-    <!--安装权限-->
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
-    <!-- Required  一些系统要求的权限，如访问网络等 -->
-    <uses-permission android:name="com.hzlf.sampletest.permission.JPUSH_MESSAGE" />
-    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /><!-- 安装权限 -->
+    <uses-permission android:name="android.permission.INTERNET" /><!-- 网络 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /><!-- 使用Wi-Fi等WLAN无线网络-->
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 震动权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /><!-- 全局弹出对话框 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /><!-- 从SDCard读取数据权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /><!-- 往SDCard写入数据权限 -->
     <uses-permission
         android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- Optional for location -->
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <!-- 用于开启 debug 版本的应用在6.0 系统上 层叠窗口权限 -->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <!--<uses-permission android:name="android.permission.GET_TASKS" />-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.FLASHLIGHT" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+        tools:ignore="ProtectedPermissions" /><!-- 在SDCard中创建与删除文件权限 -->
 
     <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:name="android.hardware.camera.autofocus" /><!-- 自动聚焦 -->
 
     <application
         android:name=".others.MyApplication"
@@ -45,9 +28,8 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name=".activity.LoginActivity"
-            android:launchMode="singleInstance"
-            android:theme="@style/AppTheme.Light.NoActionBar">
+            android:name=".activity.MainActivity"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -55,8 +37,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.MainActivity"
-            android:launchMode="singleInstance" />
+            android:name=".activity.LoginActivity"
+            android:launchMode="singleInstance"
+            android:theme="@style/AppTheme.Light.NoActionBar" />
         <activity
             android:name=".activity.AddActivity"
             android:launchMode="singleInstance" />
@@ -67,10 +50,7 @@
             android:name=".activity.SignActivity"
             android:launchMode="singleInstance" />
         <activity
-            android:name=".activity.CaptureActivity"
-            android:launchMode="singleInstance" />
-        <activity
-            android:name=".activity.ApplyNumberActivity"
+            android:name=".activity.CodeActivity"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Light.NoActionBar" />
         <activity
@@ -83,121 +63,14 @@
         <activity
             android:name=".activity.testActivity"
             android:launchMode="singleInstance" />
+        <activity
+            android:name=".activity.ScanActivity"
+            android:launchMode="singleInstance" />
 
-        <!-- Image Selector Entry -->
         <activity
             android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"
             android:configChanges="orientation|screenSize"
             android:launchMode="singleInstance" />
-
-        <!-- For test only 测试状态通知栏，需要打开的Activity -->
-        <activity
-            android:name=".activity.ResultActivity"
-            android:exported="false"
-            android:launchMode="singleInstance"
-            android:theme="@style/AppTheme.Light.NoActionBar">
-            <intent-filter>
-                <action android:name="jpush.testAction" />
-
-                <category android:name="jpush.testCategory" />
-            </intent-filter>
-        </activity>
-
-        <!-- Rich push 核心功能 since 2.0.6 -->
-        <activity
-            android:name="cn.jpush.android.ui.PopWinActivity"
-            android:exported="false"
-            android:launchMode="singleInstance"
-            android:theme="@style/MyDialogStyle" />
-
-        <!-- Required SDK核心功能 -->
-        <activity
-            android:name="cn.jpush.android.ui.PushActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:exported="false"
-            android:launchMode="singleInstance"
-            android:theme="@android:style/Theme.NoTitleBar">
-            <intent-filter>
-                <action android:name="cn.jpush.android.ui.PushActivity" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="com.hzlf.sampletest" />
-            </intent-filter>
-        </activity>
-        <!-- Required  SDK核心功能 -->
-        <service
-            android:name="cn.jpush.android.service.DownloadService"
-            android:enabled="true"
-            android:exported="false" />
-
-        <!-- Required SDK 核心功能 -->
-        <!-- 可配置android:process参数将PushService放在其他进程中 -->
-        <service
-            android:name="cn.jpush.android.service.PushService"
-            android:process=":mult">
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTER" />
-                <action android:name="cn.jpush.android.intent.REPORT" />
-                <action android:name="cn.jpush.android.intent.PushService" />
-                <action android:name="cn.jpush.android.intent.PUSH_TIME" />
-            </intent-filter>
-        </service>
-
-        <!-- Required SDK核心功能 -->
-        <receiver
-            android:name="cn.jpush.android.service.PushReceiver"
-            android:enabled="true">
-            <intent-filter android:priority="1000">
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
-                <!-- Required  显示通知栏 -->
-                <category android:name="com.hzlf.sampletest" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.USER_PRESENT" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-            <!-- Optional -->
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
-
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
-
-        <!-- Required SDK核心功能 -->
-        <receiver
-            android:name="cn.jpush.android.service.AlarmReceiver"
-            android:exported="false" />
-
-        <!-- User defined.  For test only  用户自定义的广播接收器 -->
-        <receiver
-            android:name=".jpush.MyReceiver"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTRATION" />
-                <!-- Required  用户注册SDK的intent -->
-                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
-                <!-- Required  用户接收SDK消息的intent -->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
-                <!-- Required  用户接收SDK通知栏信息的intent -->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
-                <!-- Required  用户打开自定义通知栏的intent -->
-                <action android:name="cn.jpush.android.intent.CONNECTION" />
-                <!-- 接收网络变化 连接/断开 since 1.6.3 -->
-                <category android:name="com.hzlf.sampletest" />
-            </intent-filter>
-        </receiver>
-
-        <!-- Required  . Enable it you can get statistics data with channel -->
-        <meta-data
-            android:name="JPUSH_CHANNEL"
-            android:value="developer-default" />
-        <meta-data
-            android:name="JPUSH_APPKEY"
-            android:value="95fac76d5bcc86e52772c378" />
-        <!-- </>值来自开发者平台取得的AppKey -->
 
         <!-- 适配7.0 apk安装 -->
         <provider
@@ -205,7 +78,7 @@
             android:authorities="com.hzlf.sampletest.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
-            <!--元数据-->
+            <!-- 元数据 -->
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />

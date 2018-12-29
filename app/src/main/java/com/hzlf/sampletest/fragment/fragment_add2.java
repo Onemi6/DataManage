@@ -1,8 +1,10 @@
 package com.hzlf.sampletest.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,12 +22,14 @@ import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.activity.AddActivity;
-import com.hzlf.sampletest.activity.CaptureActivity;
+import com.hzlf.sampletest.activity.ScanActivity;
 import com.hzlf.sampletest.db.DBManage;
-import com.hzlf.sampletest.entityclass.Info_add;
-import com.hzlf.sampletest.entityclass.Info_add2;
+import com.hzlf.sampletest.model.Info_add;
+import com.hzlf.sampletest.model.Info_add2;
 import com.hzlf.sampletest.others.MyApplication;
 
 import java.util.regex.Matcher;
@@ -208,8 +212,17 @@ public class fragment_add2 extends Fragment implements OnClickListener, Compound
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_scanning_info:
-                Intent intent_scan = new Intent(addActivity, CaptureActivity.class);
-                startActivityForResult(intent_scan, 2);
+                IntentIntegrator integrator = new IntentIntegrator(getActivity());
+                integrator = integrator.forSupportFragment(fragment_add2.this);
+                // 设置要扫描的条码类型，ONE_D_CODE_TYPES：一维码，QR_CODE_TYPES-二维码
+                integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE);
+                integrator.setCaptureActivity(ScanActivity.class); //设置打开摄像头的Activity
+                integrator.setPrompt("请扫描二维码"); //底部的提示文字，设为""可以置空
+                integrator.setRequestCode(2);
+                //integrator.setCameraId(0); //前置或者后置摄像头
+                //integrator.setBeepEnabled(true); //扫描成功的「哔哔」声，默认开启
+                //integrator.setBarcodeImageEnabled(true);
+                integrator.initiateScan();
                 break;
             case R.id.btn_next2:
                 if (textview1.getText().toString().equals("")
@@ -357,33 +370,31 @@ public class fragment_add2 extends Fragment implements OnClickListener, Compound
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        //super.onActivityResult(requestCode, resultCode, data);
         // 这个super可不能落下，否则可能回调不了
-        if (requestCode == 2) {
-            if (data != null) {
-                Bundle bundle = data.getExtras();
-                String scanResult = bundle.getString("result");
-                Pattern pattern = Pattern.compile("-?[0-9]+.?[0-9]+");
-                Matcher isNum = pattern.matcher(scanResult);
-                if (!isNum.matches()) {
-                    String[] info = scanResult.split("\r\n");
-                    for (String oneinfo : info) {
-                        if (oneinfo.indexOf("企业名称") != -1) {
-                            textview1.setText(oneinfo.substring(5));
-                        } else if (oneinfo.indexOf("注册号") != -1) {
-                            textview3.setText(oneinfo.substring(4));
-                        } else if (oneinfo.indexOf("住所") != -1) {
-                            textview2.setText(oneinfo.substring(3));
-                        } else if (oneinfo.indexOf("法定代表人") != -1) {
-                            textview5.setText(oneinfo.substring(6));
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 2) {
+                IntentResult scanResult = IntentIntegrator.parseActivityResult(resultCode, data);
+                if (scanResult != null) {
+                    String result = scanResult.getContents();
+                    Pattern pattern = Pattern.compile("-?[0-9]+.?[0-9]+");
+                    Matcher isNum = pattern.matcher(result);
+                    if (!isNum.matches()) {
+                        String[] info = result.split("\r\n");
+                        for (String oneinfo : info) {
+                            if (oneinfo.indexOf("企业名称") != -1) {
+                                textview1.setText(oneinfo.substring(5));
+                            } else if (oneinfo.indexOf("注册号") != -1) {
+                                textview3.setText(oneinfo.substring(4));
+                            } else if (oneinfo.indexOf("住所") != -1) {
+                                textview2.setText(oneinfo.substring(3));
+                            } else if (oneinfo.indexOf("法定代表人") != -1) {
+                                textview5.setText(oneinfo.substring(6));
+                            }
                         }
                     }
                 } else {
-                    Toast.makeText(getActivity(), "扫描失败,重新扫描",
-                            Toast.LENGTH_SHORT).show();
-                    Intent intent_scan = new Intent(getActivity(),
-                            CaptureActivity.class);
-                    startActivityForResult(intent_scan, 2);
+                    Log.v("scanResult", "scanResult is null");
                 }
             }
         }

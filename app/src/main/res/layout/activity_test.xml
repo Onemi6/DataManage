@@ -12,10 +12,22 @@
         android:layout_height="wrap_content"
         android:text="测试" />
 
+    <Button
+        android:id="@+id/btn_test_scaner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="扫描" />
+
     <TextView
         android:id="@+id/tv_test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="内容：" />
+
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="结果：" />
 
 </LinearLayout>

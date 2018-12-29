@@ -81,11 +81,6 @@ public class SignActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Bitmap signatureBitmap = mSignaturePad.getSignatureBitmap();
                 if (toolbar.getTitle().equals("被抽样单位签字")) {
-                    /*
-                     * mark = ((MyApplication)
-                     * SignActivity.this.getApplication())
-                     * .getInfoAdd1().getValue1() + "_SUPPLIER";
-                     */
                     mark = sign_number + "_SUPPLIER";
                     if (addSignatureToGallery(signatureBitmap, mark)) {
                         Toast.makeText(SignActivity.this, "保存成功",
@@ -97,11 +92,6 @@ public class SignActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else if (toolbar.getTitle().equals("抽样人1签字")) {
-                    /*
-                     * mark = ((MyApplication)
-                     * SignActivity.this.getApplication())
-                     * .getInfoAdd1().getValue1() + "_DRAW_MAN_1";
-                     */
                     mark = sign_number + "_DRAW_MAN_1";
                     if (addSignatureToGallery(signatureBitmap, mark)) {
                         Toast.makeText(SignActivity.this, "保存成功",
@@ -113,11 +103,6 @@ public class SignActivity extends AppCompatActivity {
                                 Toast.LENGTH_SHORT).show();
                     }
                 } else if (toolbar.getTitle().equals("抽样人2签字")) {
-                    /*
-                     * mark = ((MyApplication)
-                     * SignActivity.this.getApplication())
-                     * .getInfoAdd1().getValue1() + "_DRAW_MAN_2";
-                     */
                     mark = sign_number + "_DRAW_MAN_2";
                     if (addSignatureToGallery(signatureBitmap, mark)) {
                         Toast.makeText(SignActivity.this, "保存成功",
@@ -150,7 +135,6 @@ public class SignActivity extends AppCompatActivity {
     }
 
     public File getAlbumStorageDir(String albumName) {
-        // Get the directory for the user's public pictures directory.
         File file = new File(
                 Environment
                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
