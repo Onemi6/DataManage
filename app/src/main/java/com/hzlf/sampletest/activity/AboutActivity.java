@@ -37,6 +37,11 @@ import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.db.DBManage;
 import com.hzlf.sampletest.http.HttpUtils;
 import com.hzlf.sampletest.http.eLab_API;
+import com.hzlf.sampletest.model.Apply;
+import com.hzlf.sampletest.model.Info_add;
+import com.hzlf.sampletest.model.Info_add1;
+import com.hzlf.sampletest.model.Info_add2;
+import com.hzlf.sampletest.model.Info_add3;
 import com.hzlf.sampletest.model.UpdateInfo;
 import com.hzlf.sampletest.model.User;
 import com.hzlf.sampletest.others.MyApplication;
@@ -58,9 +63,9 @@ public class AboutActivity extends AppCompatActivity {
     private static final int UPDATE_SUCCESS = 2;
     private static final int NUMBERFORMAT_ERROR = -6;
     // 更新版本要用到的一些信息
-    private static String versionname, TAG = "update", token;
+    private static String versionname, TAG = "update", token, no;
     private static UpdateInfo info;
-    private TextView version_update, tv_app_version, btn_tongbu;
+    private TextView version_update, tv_app_version, btn_tongbu_emp, btn_tongbu_apply;
     private ProgressBar progressbar_tongbu;
     private Toolbar toolbar;
     private PackageInfo packInfo;
@@ -80,7 +85,8 @@ public class AboutActivity extends AppCompatActivity {
         context = this;
         tv_app_version = findViewById(R.id.app_version);
         version_update = findViewById(R.id.version_update);
-        btn_tongbu = findViewById(R.id.btn_tongbu);
+        btn_tongbu_emp = findViewById(R.id.btn_tongbu_emp);
+        btn_tongbu_apply = findViewById(R.id.btn_tongbu_apply);
         progressbar_tongbu = findViewById(R.id.progressbar_tongbu);
         toolbar = findViewById(R.id.toolbar_about);
         toolbar.setTitle("设置");
@@ -150,10 +156,17 @@ public class AboutActivity extends AppCompatActivity {
             }
         });
 
-        btn_tongbu.setOnClickListener(new View.OnClickListener() {
+        btn_tongbu_emp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 attemptEmp();
+            }
+        });
+
+        btn_tongbu_apply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attemptApply();
             }
         });
     }
@@ -207,6 +220,181 @@ public class AboutActivity extends AppCompatActivity {
             public void onFailure(Call<List<User>> call, Throwable t) {
                 progressbar_tongbu.setVisibility(View.GONE);
                 Log.v("Emp请求失败!", t.getMessage());
+                Toast.makeText(AboutActivity.this, "同步失败，请稍后再试!", Toast.LENGTH_SHORT)
+                        .show();
+            }
+
+        });
+
+    }
+
+    public void attemptApply() {
+        progressbar_tongbu.setVisibility(View.VISIBLE);
+        eLab_API request = HttpUtils.GsonApi();
+        if (((MyApplication) getApplication()).getToken() == null) {
+            token = "Bearer " + sharedPreferences.getString("token", "");
+        } else {
+            token = "Bearer " + ((MyApplication) getApplication()).getToken();
+        }
+        Call<List<Apply>> call = request.Apply(token);
+        call.enqueue(new Callback<List<Apply>>() {
+            @Override
+            public void onResponse(Call<List<Apply>> call, Response<List<Apply>> response) {
+                if (response.code() == 401) {
+                    Log.v("Apply请求", "token过期");
+                    Intent intent_login = new Intent();
+                    intent_login.setClass(AboutActivity.this,
+                            LoginActivity.class);
+                    intent_login.putExtra("login_type", 1);
+                    startActivity(intent_login);
+                } else if (response.code() == 200) {
+                    if (response.body() != null) {
+                        if (response.body().size() != 0) {
+                            for (int i = 0; i < response.body().size(); i++) {
+                                Apply apply = response.body().get(i);
+                                if (dbmanage.checkApply(apply.getSAMPLING_NO()) == 0) {
+                                    Info_add1 info_add1 = new Info_add1();
+                                    Info_add2 info_add2 = new Info_add2();
+                                    Info_add3 info_add3 = new Info_add3();
+
+                                    info_add3.setValue1(apply.getGOODS_NAME());
+                                    info_add1.setValue2(apply.getBUSINESS_SOURCE());
+                                    info_add2.setValue16(apply.getMANU_COMPANY());
+                                    info_add3.setValue3(apply.getSAMPLE_SOURCE());
+                                    info_add3.setValue15(apply.getI_AND_O());
+                                    info_add2.setValue3(apply.getDOMESTIC_AREA());
+                                    info_add3.setValue19(apply.getSAMPLE_STATUS());
+                                    info_add3.setValue29(apply.getREMARK());
+                                    info_add3.setValue5(apply.getTRADEMARK());
+                                    info_add3.setValue20(apply.getPACK());
+                                    info_add3.setValue8(apply.getSAMPLE_CLASS());
+                                    info_add3.setValue7(apply.getSAMPLE_MODEL());
+                                    info_add1.setValue6(apply.getDRAW_ORG());
+                                    info_add3.setValue24(apply.getDRAW_NUM());
+
+                                    String[] str = apply.getDRAW_ADDR().split(":");
+                                    if (str.length == 1) {
+                                        info_add2.setValue4("生成环节");
+                                        info_add2.setValue2(str[0]);
+                                    } else {
+                                        info_add2.setValue4(str[0]);
+                                        info_add2.setValue2(str[1]);
+                                    }
+
+                                    info_add3.setValue11(apply.getDATE_PRODUCT());
+                                    info_add2.setValue5(apply.getSUPPLIER());
+                                    info_add1.setValue1(apply.getSAMPLING_NO());
+                                    info_add3.setValue12(apply.getEXPIRATIONDATE());
+                                    info_add2
+                                            .setValue19(apply.getMANU_COMPANY_PHONE());
+                                    info_add2.setValue13(apply.getSUPPLIER_PHONE());
+                                    info_add3.setValue21(apply.getSAVE_MODE());
+                                    info_add2
+                                            .setValue17(apply.getMANU_COMPANY_ADDR());
+                                    info_add3.setValue25(apply.getSTORAGESITE());
+                                    info_add2.setValue12
+                                            (apply.getSUPPLIER_PERSON());
+                                    info_add2.setValue6(apply.getSUPPLIER_ADDR());
+                                    info_add2.setValue10(apply.getSUPPLIER_LEGAL());
+                                    info_add2.setValue14(apply.getSUPPLIER_FAX());
+                                    info_add1.setValue4(apply.getSAMPLE_TYPE());
+                                    info_add2.setValue11(apply.getANNUAL_SALES());
+                                    info_add2.setValue7(apply.getBUSINESS_LICENCE());
+                                    info_add2.setValue8(apply.getPERMIT_TYPE());
+                                    info_add2.setValue9(apply.getPERMIT_NUM());
+                                    info_add2
+                                            .setValue15(apply.getSUPPLIER_ZIPCODE());
+                                    info_add3.setValue4(apply.getSAMPLE_PROPERTY());
+                                    info_add3.setValue2(apply.getSAMPLE_STYLE());
+                                    info_add3.setValue13(apply.getSAMPLE_NUMBER());
+                                    info_add3
+                                            .setValue28(apply.getPRODUCTION_CERTIFICATE());
+                                    info_add3.setValue14(apply.getUNIVALENT());
+                                    info_add3.setValue6(apply.getPACK_TYPE());
+                                    info_add2
+                                            .setValue20(apply.getSAMPLE_CLOSE_DATE());
+                                    info_add3.setValue18(apply.getDRAW_METHOD());
+                                    info_add1.setValue8(apply.getDRAW_PERSON());
+                                    info_add1.setValue9(apply.getDRAW_PHONE());
+                                    info_add1.setValue10(apply.getDRAW_FAX());
+                                    info_add1.setValue11(apply.getDRAW_ZIPCODE());
+                                    info_add1.setValue7(apply.getDRAW_ORG_ADDR());
+                                    info_add3.setValue26(apply.getDRAW_AMOUNT());
+                                    info_add3.setValue22(apply.getTEST_FILE_NO());
+                                    info_add3
+                                            .setValue10(apply.getDATE_PRODUCT_TYPE());
+                                    info_add3.setValue27(apply.getDRAW_MAN());
+                                    info_add3.setValue17(apply.getDRAW_DATE());
+                                    info_add1.setValue3(apply.getCLIENT_ADDR());
+                                    info_add1.setValue5(apply.getTASK_REMARK());
+                                    info_add2.setValue1(apply.getC_ADDR());
+                                    info_add3.setValue9(apply.getSAMPLE_CODE());
+                                    info_add3.setValue16(apply.getS_ADDR());
+                                    info_add2.setValue18(apply.getSAMPLE_ADDR());
+
+                                    if (info_add2.getValue1() == null) {
+                                        info_add2.setValue1("浙江宁波海曙区");
+                                    }
+                                    if (info_add2.getValue21() == null) {
+                                        info_add2.setValue21("/");
+                                    }
+                                    if (info_add2.getValue20() == null) {
+                                        info_add2.setValue20("/");
+                                    }
+                                    if (info_add2.getValue19() == null) {
+                                        info_add2.setValue19("/");
+                                    }
+                                    if (info_add2.getValue18() == null) {
+                                        info_add2.setValue18("/");
+                                    }
+                                    if (info_add3.getValue9() == null) {
+                                        info_add3.setValue9("/");
+                                    }
+                                    if (info_add3.getValue16() == null) {
+                                        info_add3.setValue16("中国");
+                                    }
+                                    if (((MyApplication) getApplication()).getNo() == null) {
+                                        no = sharedPreferences.getString("NO", null);
+                                    } else {
+                                        no = ((MyApplication) getApplication()).getNo();
+                                    }
+                                    dbmanage.addInfo(no, info_add1, info_add2
+                                            , info_add3);
+                                    if (dbmanage.checkNumber(apply.getSAMPLING_NO()) == 0) {
+                                        dbmanage.addSampleNumber(apply.getSAMPLING_NO());
+                                        dbmanage.updateNumber(apply.getSAMPLING_NO(), 1, 1, 1);
+                                        //dbmanage.updateSign(apply.getSAMPLING_NO(), 0);
+                                    }
+                                    if (i == response.body().size()) {
+                                        AddActivity addActivity = new AddActivity();
+                                        Info_add info = new Info_add();
+                                        info.setNO(((MyApplication) getApplication()).getNo());
+                                        info.setID("" + apply.getID());
+                                        info.setInfo_add1(info_add1);
+                                        info.setInfo_add2(info_add2);
+                                        info.setInfo_add3(info_add3);
+                                        addActivity.save(info);
+                                    }
+                                    Log.v("apply.getSAMPLING_NO()", apply.getSAMPLING_NO() +
+                                            "插入成功!");
+                                }
+                            }
+                            Toast.makeText(AboutActivity.this, "同步成功", Toast.LENGTH_SHORT)
+                                    .show();
+                        }
+                    } else {
+                        Log.v("Apply请求成功!", "response.body is null");
+                        Toast.makeText(AboutActivity.this, "同步失败，请稍后再试!", Toast.LENGTH_SHORT)
+                                .show();
+                    }
+                }
+                progressbar_tongbu.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<List<Apply>> call, Throwable t) {
+                progressbar_tongbu.setVisibility(View.GONE);
+                Log.v("Apply请求失败!", t.getMessage());
                 Toast.makeText(AboutActivity.this, "同步失败，请稍后再试!", Toast.LENGTH_SHORT)
                         .show();
             }

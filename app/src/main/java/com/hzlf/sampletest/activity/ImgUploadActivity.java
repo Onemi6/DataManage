@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.BitmapFactory.Options;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -62,7 +63,7 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
     private ImgAdapter adapter_img;
     private Context _context;
     private int fail_num = 0, pos;
-    private String img_type = null, number = null, picPath, token, name;
+    private String img_type = null, number = null, picPath, token;
     private SharedPreferences sharedPreferences;
     private ProgressDialog mypDialog;
 
@@ -76,7 +77,7 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
 
     private void initView() {
         sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
-        number = ((MyApplication) getApplication()).getNumber();
+
         _context = this;
 
         selectButton = findViewById(R.id.selectImage);
@@ -225,6 +226,12 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
                                     .show();
                         }
                     }
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            finish();
+                        }
+                    }, 1500); // 延时1s执行
                 } else if (adapter_img.getImgList().size() == 0) {
                     mypDialog.dismiss();
                     Toast.makeText(this, "至少选择一张图片", Toast.LENGTH_LONG).show();
@@ -270,15 +277,10 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
             } else {
                 token = "Bearer " + ((MyApplication) getApplication()).getToken();
             }
-            if (((MyApplication) getApplication()).getName() == null) {
-                name = sharedPreferences.getString("token", null);
-            } else {
-                name = ((MyApplication) getApplication()).getName();
-            }
+            number = ((MyApplication) getApplication()).getNumber();
             Map<String, String> params = new HashMap<>();
             params.put("id", number);
             params.put("type", img_type);
-            params.put("name", name);
 
             File file = new File(picPath);
             RequestBody requestFile = RequestBody.create(MediaType.parse("image/png"), file);

@@ -152,6 +152,9 @@ com/hzlf/sampletest/model/Info_add1.class
 com/hzlf/sampletest/model/Info_add2.class
 com/hzlf/sampletest/model/Info_add3.class
 com/hzlf/sampletest/others/MyApplication.class
+com/tencent/bugly/BuglyStrategy.class
+com/tencent/bugly/crashreport/CrashReport$UserStrategy.class
+com/tencent/bugly/crashreport/CrashReport.class
 okhttp3/Address.class
 okhttp3/Authenticator.class
 okhttp3/Cache$2.class

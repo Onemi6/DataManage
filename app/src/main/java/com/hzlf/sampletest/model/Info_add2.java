@@ -5,6 +5,9 @@ public class Info_add2 {
             value10, value11, value12,
             value13, value14, value15, value16, value17, value18, value19, value20, value21;
 
+    public Info_add2() {
+    }
+
     public Info_add2(String value1, String value2, String value3, String value4, String value5,
                      String value6, String
                              value7, String value8, String value9, String value10, String

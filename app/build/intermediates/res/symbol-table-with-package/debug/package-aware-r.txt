@@ -1223,7 +1223,8 @@ id btn_scanning_info
 id btn_sign
 id btn_test
 id btn_test_scaner
-id btn_tongbu
+id btn_tongbu_apply
+id btn_tongbu_emp
 id btn_update1
 id btn_update2
 id btn_update3
@@ -1792,7 +1793,8 @@ string appbar_scrolling_view_behavior
 string applynumber
 string bottom_sheet_behavior
 string btn_denglu
-string btn_tongbu
+string btn_tongbu_apply
+string btn_tongbu_emp
 string btn_upload_data
 string btn_upload_img
 string changeaccount

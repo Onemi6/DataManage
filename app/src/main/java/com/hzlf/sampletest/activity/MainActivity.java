@@ -116,6 +116,7 @@ public class MainActivity extends AppCompatActivity
             Intent intent_login = new Intent();
             intent_login.setClass(MainActivity.this, LoginActivity.class);
             intent_login.putExtra("login_type", -1);
+            finish();
             startActivity(intent_login);
         } else {
             setSupportActionBar(toolbar);
@@ -264,7 +265,9 @@ public class MainActivity extends AppCompatActivity
             }
             maininfolist.add(info_main);
         }
-        adapter_maininfo.notifyDataSetChanged();
+        if (maininfolist.size() > 0) {
+            adapter_maininfo.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -345,7 +348,7 @@ public class MainActivity extends AppCompatActivity
                                 .parseDouble(versionname)) {
                             Log.i(TAG_UPDATE, "无需升级");
                         }
-                    } catch (Exception e) {
+                    } catch (PackageManager.NameNotFoundException e) {
                         Log.i(TAG_UPDATE, "获取APP版本出错");
                         e.printStackTrace();
                     }
@@ -471,7 +474,7 @@ public class MainActivity extends AppCompatActivity
 
     public class MyContentObserver extends ContentObserver {
 
-        public MyContentObserver(Handler handler) {
+        private MyContentObserver(Handler handler) {
             super(handler);
         }
 
@@ -511,6 +514,8 @@ public class MainActivity extends AppCompatActivity
         permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
         permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         permissionList.add(Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS);
+        permissionList.add(Manifest.permission.READ_PHONE_STATE);
+        permissionList.add(Manifest.permission.READ_LOGS);
         checkAndRequestPermissions(permissionList);
     }
 

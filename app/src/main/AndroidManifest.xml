@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hzlf.sampletest"
     android:versionCode="1"
-    android:versionName="1.5">
+    android:versionName="1.4">
 
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /><!-- 安装权限 -->
     <uses-permission android:name="android.permission.INTERNET" /><!-- 网络 -->
@@ -14,6 +14,8 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /><!-- 全局弹出对话框 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /><!-- 从SDCard读取数据权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /><!-- 往SDCard写入数据权限 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" /><!-- 获取手机信息 -->
+    <uses-permission android:name="android.permission.READ_LOGS" /><!-- 获取日志 -->
     <uses-permission
         android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
         tools:ignore="ProtectedPermissions" /><!-- 在SDCard中创建与删除文件权限 -->

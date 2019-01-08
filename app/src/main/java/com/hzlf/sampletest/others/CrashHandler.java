@@ -37,8 +37,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     /**
      * 格式化时间
      */
-    private SimpleDateFormat format = new SimpleDateFormat(
-            "yyyy-MM-dd-HH-mm-ss");
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     private String TAG = "TEST";// this.getClass().getSimpleName();
 
     private CrashHandler() {
@@ -162,9 +161,9 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
         String result = writer.toString();
         sb.append(result);
         try {
-            long timestamp = System.currentTimeMillis();
+            //long timestamp = System.currentTimeMillis();
             String time = format.format(new Date());
-            String fileName = "crash-" + time + "-" + timestamp + ".log";
+            String fileName = "Datamanage-crash-" + time + "-" + ".log";
             if (Environment.getExternalStorageState().equals(
                     Environment.MEDIA_MOUNTED)) {
                 String path = Environment.getExternalStorageDirectory()

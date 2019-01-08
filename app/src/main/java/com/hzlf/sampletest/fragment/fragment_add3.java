@@ -30,12 +30,12 @@ import com.hzlf.sampletest.activity.LoginActivity;
 import com.hzlf.sampletest.activity.MainActivity;
 import com.hzlf.sampletest.activity.ScanActivity;
 import com.hzlf.sampletest.db.DBManage;
-import com.hzlf.sampletest.model.AAQI;
-import com.hzlf.sampletest.model.Info_add;
-import com.hzlf.sampletest.model.Info_add3;
 import com.hzlf.sampletest.http.HttpUtils;
 import com.hzlf.sampletest.http.NetworkUtil;
 import com.hzlf.sampletest.http.eLab_API;
+import com.hzlf.sampletest.model.AAQI;
+import com.hzlf.sampletest.model.Info_add;
+import com.hzlf.sampletest.model.Info_add3;
 import com.hzlf.sampletest.others.DatePickerDialog;
 import com.hzlf.sampletest.others.MyApplication;
 
@@ -244,11 +244,9 @@ public class fragment_add3 extends Fragment {
                         || et_5.getText().toString().equals("")
                         || et_7.getText().toString().equals("")
                         || et_8.getText().toString().equals("")
-                        || et_9.getText().toString().equals("")
                         || et_12.getText().toString().equals("")
                         || et_14.getText().toString().equals("")
                         || et_22.getText().toString().equals("")
-                        || et_23.getText().toString().equals("")
                         || et_24.getText().toString().equals("")
                         || et_25.getText().toString().equals("")
                         || et_26.getText().toString().equals("")
@@ -266,6 +264,9 @@ public class fragment_add3 extends Fragment {
                     }
                     if (et_16.getText().toString().equals("")) {
                         et_16.setText("/");
+                    }
+                    if (et_23.getText().toString().equals("")) {
+                        et_23.setText("/");
                     }
                     if (et_29.getText().toString().equals("")) {
                         et_29.setText("/");

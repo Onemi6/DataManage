@@ -1,2 +1,2 @@
-# Referenced at E:\Android\code\DataManage\app\build\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:36
+# Referenced at E:\Android\code\DataManage\app\build\intermediates\merged_manifests\debug\processDebugManifest\merged\AndroidManifest.xml:38
 -keep class com.hzlf.sampletest.others.MyApplication { <init>(...); }

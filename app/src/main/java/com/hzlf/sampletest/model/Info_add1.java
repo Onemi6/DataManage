@@ -4,6 +4,9 @@ public class Info_add1 {
     private String value1, value2, value3, value4, value5, value6, value7, value8, value9,
             value10, value11;
 
+    public Info_add1() {
+    }
+
     public Info_add1(String value1, String value2, String value3, String value4, String value5,
                      String value6, String
                              value7, String value8, String value9, String value10, String value11) {

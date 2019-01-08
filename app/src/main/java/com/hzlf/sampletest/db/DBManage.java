@@ -18,13 +18,13 @@ import java.util.List;
 public class DBManage {
     private MyDatabaseHelper dbHelper;
     private SQLiteDatabase db;
-    private Context _context;
+    //private Context _context;
 
     public DBManage(Context context) {
         // TODO 自动生成的构造函数存根
+        //_context = context;
         dbHelper = new MyDatabaseHelper(context, "DataManage.db", null, 1);
-        // db = dbHelper.getWritableDatabase();
-        _context = context;
+        //db = dbHelper.getWritableDatabase();
     }
 
     // 插入用户
@@ -50,8 +50,8 @@ public class DBManage {
                         + "danweidizhi2,yingyezhizhao,xukezhengleixing,xukezhenghao,danweifaren," +
                         "nianxiaoshoue,"
                         + "lianxiren2,dianhua2,chuanzhen2,youbian2,shengchanzhemingcheng," +
-                        "shengchanzhedizhi,dianhua3,"
-                        + "shengchanzhelianxiren,jiezhiriqi,jisongdizhi,"
+                        "shengchanzhedizhi,shengchanzhelianxiren,dianhua3,"
+                        + "jiezhiriqi,jisongdizhi,"
                         + "yangpinmingcheng,yangpinleixing,yangpinlaiyuan,yangpinshuxing,"
                         + "yangpinshangbiao,baozhuangfenlei,guigexinghao,zhiliangdengji," +
                         "yangpintiaoma,riqileixing,riqi,"
@@ -128,7 +128,7 @@ public class DBManage {
 
     // 修改用户信息
     public void updateuser(User user) {
-        db = dbHelper.getWritableDatabase();
+        // db = dbHelper.getWritableDatabase();
         db.execSQL(
                 "update User set login_name=?,name=?,password=?,time_stamp=? where no=?",
                 new Object[]{user.getLOGIN_NAME(), user.getNAME(),
@@ -269,6 +269,19 @@ public class DBManage {
         }
         return null;
     }
+
+    // 判断是否已存在单号
+    public int checkNumber(String number) {
+        db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery(
+                "select number from SampleNumber where number=?",
+                new String[]{String.valueOf(number)});
+        if (cursor.moveToNext()) {
+            return 1;
+        }
+        return 0;
+    }
+
 
     // 得到no , name
     public String getSomeInfo(String login_name) {
@@ -441,6 +454,18 @@ public class DBManage {
         return null;
     }
 
+    // 判断是否已存在抽检信息
+    public int checkApply(String SAMPLING_NO) {
+        db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery(
+                "select num from Details_Info where chouyangdanbianhao=?",
+                new String[]{String.valueOf(SAMPLING_NO)});
+        if (cursor.moveToNext()) {
+            return 1;
+        }
+        return 0;
+    }
+
     // 查询主要信息
     public Cursor findInfo_main() {
         db = dbHelper.getWritableDatabase();
@@ -471,7 +496,7 @@ public class DBManage {
         // 查询未使用的
         if (type == 1) {
             cursor = db.rawQuery(
-                    "select number from SampleNumber where used=0 ", null);
+                    "select distinct number from SampleNumber where used=0 ", null);
             /* "select number from SampleNumber where used=0 order by id DESC" */
         } else if (type == 2) {// 查询打印过的
             cursor = db
@@ -490,7 +515,7 @@ public class DBManage {
     }
 
     public List<String> findList_Number(int type) {
-        ArrayList<String> list_number = new ArrayList<String>();
+        ArrayList<String> list_number = new ArrayList<>();
         Cursor cursor = findNumber(type);
         while (cursor.moveToNext()) {
             String number = cursor.getString(cursor.getColumnIndex("number"));

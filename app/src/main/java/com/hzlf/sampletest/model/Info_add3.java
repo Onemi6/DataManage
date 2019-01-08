@@ -7,6 +7,9 @@ public class Info_add3 {
             value22, value23,
             value24, value25, value26, value27, value28, value29, value30;
 
+    public Info_add3() {
+    }
+
     public Info_add3(String value1, String value2, String value3, String value4, String value5,
                      String value6, String
                              value7, String value8, String value9, String value10, String

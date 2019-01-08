@@ -14,9 +14,9 @@ public class HttpUtils {
 
     //private  static String serverurl = "http://www.3tpi.com:8016/update.xml";
     private static String serverurl = "http://111.2.23.176:8083/";
-    //private  static String ip = "http://www.3tpi.com:8016/api/";
-    //private  static String ip = "http://111.2.23.176:8083/api/";
-    private static String ip = "http://111.2.23.176:8085/api/";
+    //private  static String ip = "http://www.3tpi.com:8016/";
+    //private  static String ip = "http://111.2.23.176:8083/";
+    private static String ip = "http://111.2.23.176:8085/";
 
     public static eLab_API GsonApi() {
         OkHttpClient client = new OkHttpClient.Builder()

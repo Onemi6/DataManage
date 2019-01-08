@@ -1,6 +1,7 @@
 package com.hzlf.sampletest.http;
 
 import com.hzlf.sampletest.model.AAQI;
+import com.hzlf.sampletest.model.Apply;
 import com.hzlf.sampletest.model.Codes;
 import com.hzlf.sampletest.model.Source;
 import com.hzlf.sampletest.model.Status;
@@ -27,30 +28,30 @@ import retrofit2.http.QueryMap;
 
 public interface eLab_API {
 
-    @GET("Emp")
+    @GET("api/Emp")
     Call<List<User>> Emp(@Header("Authorization") String token);
 
-    @GET("Code")
-    Call<Codes> Code(@Header("Authorization") String token, @Query("no") String no, @Query("num")
+    @GET("api/Code")
+    Call<Codes> Code(@Header("Authorization") String token, @Query("num")
             String num);
 
-    @GET("Sys/GetAllSource")
+    @GET("api/Sys/GetAllSource")
     Call<List<Source>> GetAllSource(@Header("Authorization") String token);
 
-    @GET("AAQI")
+    @GET("api/AAQI")
     Call<AAQI> AAQI(@Header("Authorization") String token, @Query("id") String id);
 
-    @Headers({
-            "accept: application/json",
-            "Content-Type: application/json"})
-    @POST("Login")
+    @GET("api/Apply")
+    Call<List<Apply>> Apply(@Header("Authorization") String token);
+
+    @POST("api/Login")
     Call<Status> Login(@Body RequestBody body);
 
-    @POST("Apply")
+    @POST("api/Apply")
     Call<Upload> Apply(@Header("Authorization") String token, @Body RequestBody body);
 
     @Multipart
-    @POST("Apply/ImgUpload")
+    @POST("api/Apply/ImgUpload")
     Call<UploadImg> ApplyImgUpload(@Header("Authorization") String token, @QueryMap Map<String,
             String> params, @Part MultipartBody.Part file);
 

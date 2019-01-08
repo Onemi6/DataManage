@@ -43,11 +43,11 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.db.DBManage;
-import com.hzlf.sampletest.model.Info_add;
-import com.hzlf.sampletest.model.Upload;
 import com.hzlf.sampletest.http.HttpUtils;
 import com.hzlf.sampletest.http.NetworkUtil;
 import com.hzlf.sampletest.http.eLab_API;
+import com.hzlf.sampletest.model.Info_add;
+import com.hzlf.sampletest.model.Upload;
 import com.hzlf.sampletest.others.DatePickerDialog;
 import com.hzlf.sampletest.others.ImgAdapter;
 import com.hzlf.sampletest.others.MyApplication;
@@ -406,6 +406,14 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         btn_sign.setOnClickListener(this);
         btn_upload_data.setOnClickListener(this);
         btn_upload_img.setOnClickListener(this);
+    }
+
+    // 刷新图片
+    @Override
+    protected void onResume() {
+        super.onResume();
+        list_paths = dbmanage.findList_UploadImage(number);
+        ada_upload_img.changList_add(list_paths);
     }
 
     public void initdata() {
@@ -958,7 +966,6 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         startActivity(intent_uplod_img);
     }
 
-
     private void doScan() {
         Map<String, Object> map = new HashMap<String, Object>();
         // 3委托单位地址 5任务属性
@@ -1119,7 +1126,7 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
     public void attemptApply() {
         Info_add info_add_upload = dbmanage.findInfo_details(number);
         Map<String, String> map = new HashMap<>();
-        //ID NO LAB_NO DATE_RECORD  SAMPLE_ADDR
+        //ID NO LAB_NO DATE_RECORD  SAMPLE_ADDR  APPLY_KIND
         //CHECKER DATE_CHECK STATE APPLY_KIND_NO CHECK_INFO
         map.put("GOODS_NAME", info_add_upload.getInfo_add3().getValue1());
         map.put("BUSINESS_SOURCE", info_add_upload.getInfo_add1().getValue2());
@@ -1143,17 +1150,13 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         map.put("SUPPLIER", info_add_upload.getInfo_add2().getValue5());
         map.put("SAMPLING_NO", info_add_upload.getInfo_add1().getValue1());
         map.put("EXPIRATIONDATE", info_add_upload.getInfo_add3().getValue12());
-        map.put("MANU_COMPANY_PHONE", info_add_upload.getInfo_add2()
-                .getValue19());
+        map.put("MANU_COMPANY_PHONE", info_add_upload.getInfo_add2().getValue19());
         map.put("SUPPLIER_PHONE", info_add_upload.getInfo_add2().getValue13());
         map.put("SAVE_MODE", info_add_upload.getInfo_add3().getValue21());
-        map.put("MANU_COMPANY_ADDR", info_add_upload.getInfo_add2()
-                .getValue17());
+        map.put("MANU_COMPANY_ADDR", info_add_upload.getInfo_add2().getValue17());
         map.put("STORAGESITE", info_add_upload.getInfo_add3().getValue25() +
-                info_add_upload
-                        .getInfo_add3().getValue23());
-        map.put("SUPPLIER_PERSON", info_add_upload.getInfo_add2().getValue12
-                ());
+                info_add_upload.getInfo_add3().getValue23());
+        map.put("SUPPLIER_PERSON", info_add_upload.getInfo_add2().getValue12());
         map.put("SUPPLIER_ADDR", info_add_upload.getInfo_add2().getValue6());
         map.put("SUPPLIER_LEGAL", info_add_upload.getInfo_add2().getValue10());
         map.put("SUPPLIER_FAX", info_add_upload.getInfo_add2().getValue14());
@@ -1162,13 +1165,11 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         map.put("BUSINESS_LICENCE", info_add_upload.getInfo_add2().getValue7());
         map.put("PERMIT_TYPE", info_add_upload.getInfo_add2().getValue8());
         map.put("PERMIT_NUM", info_add_upload.getInfo_add2().getValue9());
-        map.put("SUPPLIER_ZIPCODE", info_add_upload.getInfo_add2()
-                .getValue15());
+        map.put("SUPPLIER_ZIPCODE", info_add_upload.getInfo_add2().getValue15());
         map.put("SAMPLE_PROPERTY", info_add_upload.getInfo_add3().getValue4());
         map.put("SAMPLE_STYLE", info_add_upload.getInfo_add3().getValue2());
         map.put("SAMPLE_NUMBER", info_add_upload.getInfo_add3().getValue13());
-        map.put("PRODUCTION_CERTIFICATE", info_add_upload.getInfo_add3()
-                .getValue28());
+        map.put("PRODUCTION_CERTIFICATE", info_add_upload.getInfo_add3().getValue28());
         map.put("UNIVALENT", info_add_upload.getInfo_add3().getValue14());
         map.put("PACK_TYPE", info_add_upload.getInfo_add3().getValue6());
         map.put("SAMPLE_CLOSE_DATE", info_add_upload.getInfo_add2()
@@ -1180,16 +1181,18 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         map.put("DRAW_ZIPCODE", info_add_upload.getInfo_add1().getValue11());
         map.put("DRAW_ORG_ADDR", info_add_upload.getInfo_add1().getValue7());
         map.put("DRAW_AMOUNT", info_add_upload.getInfo_add3().getValue26() +
-                info_add_upload
-                        .getInfo_add3().getValue23());
+                info_add_upload.getInfo_add3().getValue23());
         map.put("TEST_FILE_NO", info_add_upload.getInfo_add3().getValue22());
-        map.put("DATE_PRODUCT_TYPE", info_add_upload.getInfo_add3()
-                .getValue10());
-        map.put("APPLY_KIND", info_add_upload.getInfo_add1().getValue4());
+        map.put("DATE_PRODUCT_TYPE", info_add_upload.getInfo_add3().getValue10());
         map.put("DRAW_MAN", info_add_upload.getInfo_add3().getValue27());
         map.put("DRAW_DATE", info_add_upload.getInfo_add3().getValue17());
         map.put("CLIENT_ADDR", info_add_upload.getInfo_add1().getValue3());
         map.put("TASK_REMARK", info_add_upload.getInfo_add1().getValue5());
+        map.put("C_ADDR", info_add_upload.getInfo_add2().getValue1());
+        map.put("SAMPLE_CODE", info_add_upload.getInfo_add3().getValue9());
+        map.put("S_ADDR", info_add_upload.getInfo_add3().getValue16());
+
+        map.put("SAMPLE_ADDR", info_add_upload.getInfo_add2().getValue18());
 
         String obj = new Gson().toJson(map);
         //eLab_API request = HttpUtils.GsonApi();

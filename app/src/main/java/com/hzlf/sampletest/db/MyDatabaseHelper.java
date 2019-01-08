@@ -6,84 +6,85 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class MyDatabaseHelper extends SQLiteOpenHelper {
+    private Context mContext;
 
     // 创建user表
-    public static final String CREATE_USER = "create table User("
+    private static final String CREATE_USER = "create table User("
             + "id integer primary key autoincrement," + "no text not null,"
             + "name text not null," + "login_name text not null,"
             + "password text not null," + "time_stamp text not null)";
 
     // 创建详细 表
-    public static final String CREATE_INFO_DETAILS = "create table Details_Info("
+    private static final String CREATE_INFO_DETAILS = "create table Details_Info("
             + "num integer primary key autoincrement,"
-            + "no text not null,"
-            + "chouyangdanbianhao text not null,"
-            + "renwulaiyuan text not null,"
+            + "no text ,"
+            + "chouyangdanbianhao text ,"
+            + "renwulaiyuan text ,"
             + "weituodanweidizhi text,"
-            + "renwuleibie text not null,"
+            + "renwuleibie text ,"
             + "renwushuxing text ,"
-            + "danweimingcheng1 text not null,"
-            + "danweidizhi1 text not null,"
+            + "danweimingcheng1 text ,"
+            + "danweidizhi1 text ,"
             + "lianxiren1 text ,"
             + "dianhau1 text ,"
             + "chuanzhen1 text ,"
             + "youbian1 text,"
 
-            + "suozaidi text not null,"
-            + "chouyangdidian text not null,"
-            + "quyuleixing text not null ,"
-            + "chouyanghuanjie text not null,"
-            + "danweimingcheng2 text not null,"
-            + "danweidizhi2 text not null,"
-            + "yingyezhizhao text not null,"
-            + "xukezhengleixing text not null,"
-            + "xukezhenghao text not null,"
-            + "danweifaren text not null,"
+            + "suozaidi text ,"
+            + "chouyangdidian text ,"
+            + "quyuleixing text  ,"
+            + "chouyanghuanjie text ,"
+            + "danweimingcheng2 text ,"
+            + "danweidizhi2 text ,"
+            + "yingyezhizhao text ,"
+            + "xukezhengleixing text ,"
+            + "xukezhenghao text ,"
+            + "danweifaren text ,"
             + "nianxiaoshoue text,"
-            + "lianxiren2 text not null,"
-            + "dianhua2 text not null,"
+            + "lianxiren2 text ,"
+            + "dianhua2 text ,"
             + "chuanzhen2 text ,"
             + "youbian2 text,"
-            + "shengchanzhemingcheng text not null,"
-            + "shengchanzhedizhi text not null,"
-            + "shengchanzhelianxiren text not null,"
-            + "dianhua3 text not null,"
-            + "jiezhiriqi text not null,"
-            + "jisongdizhi text not null,"
+            + "shengchanzhemingcheng text ,"
+            + "shengchanzhedizhi text ,"
+            + "shengchanzhelianxiren text ,"
+            + "dianhua3 text ,"
+            + "jiezhiriqi text ,"
+            + "jisongdizhi text ,"
 
-            + "yangpinmingcheng text not null,"
-            + "yangpinleixing text not null,"
-            + "yangpinlaiyuan text not null,"
-            + "yangpinshuxing text not null,"
-            + "yangpinshangbiao text not null,"
-            + "baozhuangfenlei text not null,"
-            + "guigexinghao text not null,"
-            + "zhiliangdengji text not null,"
-            + "yangpintiaoma text not null,"
-            + "riqileixing text not null,"
-            + "riqi text not null,"
-            + "baozhiqi text not null,"
-            + "chanpinpihao text not null ,"
-            + "yangpindanjia text not null,"
-            + "chukou text not null,"
-            + "yuanchandi text not null,"
-            + "chouyangriqi text not null,"
-            + "chouyangfangshi text not null,"
+            + "yangpinmingcheng text ,"
+            + "yangpinleixing text ,"
+            + "yangpinlaiyuan text ,"
+            + "yangpinshuxing text ,"
+            + "yangpinshangbiao text ,"
+            + "baozhuangfenlei text ,"
+            + "guigexinghao text ,"
+            + "zhiliangdengji text ,"
+            + "yangpintiaoma text ,"
+            + "riqileixing text ,"
+            + "riqi text ,"
+            + "baozhiqi text ,"
+            + "chanpinpihao text  ,"
+            + "yangpindanjia text ,"
+            + "chukou text ,"
+            + "yuanchandi text ,"
+            + "chouyangriqi text ,"
+            + "chouyangfangshi text ,"
             + "chouyangxingtai text,"
-            + "yangpinbaozhuang text not null,"
-            + "chucuntiaojian text not null,"
-            + "zhixingbiaozhun text not null,"
+            + "yangpinbaozhuang text ,"
+            + "chucuntiaojian text ,"
+            + "zhixingbiaozhun text ,"
             + "chouyangshuliangdanwei text,"
-            + "chouyangjishu text not null,"
-            + "beiyangshuliang text not null,"
-            + "chouyangshuliang text not null,"
-            + "chouyangren text not null,"
+            + "chouyangjishu text ,"
+            + "beiyangshuliang text ,"
+            + "chouyangshuliang text ,"
+            + "chouyangren text ,"
             + "yangpinxukezheng text,"
             + "beizhu text,"
             + "dayinriqi text," + "id text)";
 
     // 创建抽样单编号表
-    public static final String CREATE_SAMPLENUMBER = "create table SampleNumber("
+    private static final String CREATE_SAMPLENUMBER = "create table SampleNumber("
             + "id integer primary key autoincrement,"
             + "number text not null,"
             + "used text not null,"
@@ -91,12 +92,12 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             + "upload text not null," + "sign text not null)";
 
     // 创建上传图片表
-    public static final String CREATE_UPLOAD_IMG = "create table UploadImg("
+    private static final String CREATE_UPLOAD_IMG = "create table UploadImg("
             + "id integer primary key autoincrement," + "number text not null,"
             + "imagepath text not null)";
 
     // 创建任务来源表
-    public static final String CREATE_TASK_SOURCE = "create table TaskSource("
+    private static final String CREATE_TASK_SOURCE = "create table TaskSource("
             + "id integer primary key autoincrement," + "name text not null,"
             + "addr text)";
 
@@ -106,7 +107,6 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     public static final String DROP_UPLOAD_IMG = "drop table if exists UploadImg";
     public static final String DROP_TASK_SOURCE = "drop table if exists TaskSource";*/
 
-    private Context mContext;
 
     public MyDatabaseHelper(Context context, String name,
                             CursorFactory factory, int version) {

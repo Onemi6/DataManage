@@ -3,6 +3,8 @@ package com.hzlf.sampletest.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -19,10 +21,10 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.db.DBManage;
-import com.hzlf.sampletest.model.Status;
 import com.hzlf.sampletest.http.HttpUtils;
 import com.hzlf.sampletest.http.NetworkUtil;
 import com.hzlf.sampletest.http.eLab_API;
+import com.hzlf.sampletest.model.Status;
 import com.hzlf.sampletest.others.MyApplication;
 
 import java.util.HashMap;
@@ -113,86 +115,97 @@ public class LoginActivity extends AppCompatActivity {
 
     //有网时登录
     public void attempLogin() {
-        progressbar_login.setVisibility(View.VISIBLE);
-        Map<String, Object> map = new HashMap<>();
-        map.put("loginName", account);
-        map.put("passWord", password);
-        String obj = new Gson().toJson(map);
-        //eLab_API request = HttpUtils.GsonApi();
-        RequestBody body = RequestBody.create(MediaType.parse("application/json; " +
-                        "charset=utf-8"),
-                obj);
-        eLab_API request = HttpUtils.GsonApi();
-        Call<Status> call = request.Login(body);
-        call.enqueue(new Callback<Status>() {
-            @Override
-            public void onResponse(Call<Status> call, Response<Status> response) {
-                if (response.code() == 200) {
-                    if (response.body() != null) {
-                        if (response.body().getStatus().equals("success")) {
-                            editor = sharedPreferences.edit();
-                            if (remember_mima.isChecked()) {
-                                editor.putBoolean("remember_mima", true);
-                                editor.putString("ZHANGHAO", account);
-                                editor.putString("MIMA", password);
-                                editor.putString("NO", response.body().getNo());
-                                editor.putString("NAME", response.body().getName());
-                                editor.putString("token", response.body().getToken());
-                            } else {
-                                editor.putBoolean("remember_mima", false);
-                                editor.putString("ZHANGHAO", account);
-                                editor.putString("MIMA", password);
-                                editor.putString("NO", response.body().getNo());
-                                editor.putString("NAME", response.body().getName());
-                                editor.putString("token", response.body().getToken());
-                            }
-                            editor.apply();
-                            ((MyApplication) getApplication()).setNo(response.body()
-                                    .getNo());
-                            ((MyApplication) getApplication()).setName(response.body()
-                                    .getName());
-                            ((MyApplication) getApplication()).setToken(response.body()
-                                    .getToken());
-                            if (login_type == 1) {
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        finish();
-                                    }
-                                }, 500); // 延时1s执行
-                            } else if (login_type == -1) {
-                                Toast.makeText(LoginActivity.this, "登录成功", Toast
-                                        .LENGTH_SHORT)
+        try {
+            progressbar_login.setVisibility(View.VISIBLE);
+            PackageManager packageManager = getPackageManager();
+            /* getPackageName()是你当前类的包名，0代表是获取版本信息*/
+            PackageInfo packInfo = packageManager.getPackageInfo(getPackageName(), 0);
+            String versionname = packInfo.versionName;
+            Map<String, Object> map = new HashMap<>();
+            map.put("loginName", account);
+            map.put("passWord", password);
+            map.put("version", versionname);
+            String obj = new Gson().toJson(map);
+            //eLab_API request = HttpUtils.GsonApi();
+            RequestBody body = RequestBody.create(MediaType.parse("application/json; " +
+                            "charset=utf-8"),
+                    obj);
+            eLab_API request = HttpUtils.GsonApi();
+            Call<Status> call = request.Login(body);
+            call.enqueue(new Callback<Status>() {
+                @Override
+                public void onResponse(Call<Status> call, Response<Status> response) {
+                    if (response.code() == 200) {
+                        if (response.body() != null) {
+                            if (response.body().getStatus().equals("success")) {
+                                editor = sharedPreferences.edit();
+                                if (remember_mima.isChecked()) {
+                                    editor.putBoolean("remember_mima", true);
+                                    editor.putString("ZHANGHAO", account);
+                                    editor.putString("MIMA", password);
+                                    editor.putString("NO", response.body().getNo());
+                                    editor.putString("NAME", response.body().getName());
+                                    editor.putString("token", response.body().getToken());
+                                } else {
+                                    editor.putBoolean("remember_mima", false);
+                                    editor.putString("ZHANGHAO", account);
+                                    editor.putString("MIMA", password);
+                                    editor.putString("NO", response.body().getNo());
+                                    editor.putString("NAME", response.body().getName());
+                                    editor.putString("token", response.body().getToken());
+                                }
+                                editor.apply();
+                                ((MyApplication) getApplication()).setNo(response.body()
+                                        .getNo());
+                                ((MyApplication) getApplication()).setName(response.body()
+                                        .getName());
+                                ((MyApplication) getApplication()).setToken(response.body()
+                                        .getToken());
+                                if (login_type == 1) {
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            finish();
+                                        }
+                                    }, 500); // 延时1s执行
+                                } else if (login_type == -1) {
+                                    Toast.makeText(LoginActivity.this, "登录成功", Toast
+                                            .LENGTH_SHORT)
+                                            .show();
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            startActivity(new Intent(LoginActivity.this,
+                                                    MainActivity
+                                                            .class));
+                                            finish();
+                                        }
+                                    }, 1000); /* 延时1s执行*/
+                                }
+                            } else if (response.body().getStatus().equals("error")) {
+                                Toast.makeText(LoginActivity.this, response.body().getMessage(),
+                                        Toast
+                                                .LENGTH_SHORT)
                                         .show();
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        startActivity(new Intent(LoginActivity.this,
-                                                MainActivity
-                                                        .class));
-                                        finish();
-                                    }
-                                }, 1000); /* 延时1s执行*/
                             }
-                        } else if (response.body().getStatus().equals("error")) {
-                            Toast.makeText(LoginActivity.this, response.body().getMessage(), Toast
-                                    .LENGTH_SHORT)
-                                    .show();
                         }
                     }
+                    progressbar_login.setVisibility(View.GONE);
                 }
-                progressbar_login.setVisibility(View.GONE);
-            }
 
-            @Override
-            public void onFailure(Call<Status> call, Throwable t) {
-                progressbar_login.setVisibility(View.GONE);
-                Log.v("Login请求失败", t.getMessage());
-                if (login_type == -1) {
-                    localLogin();
+                @Override
+                public void onFailure(Call<Status> call, Throwable t) {
+                    progressbar_login.setVisibility(View.GONE);
+                    Log.v("Login请求失败", t.getMessage());
+                    if (login_type == -1) {
+                        localLogin();
+                    }
                 }
-            }
-        });
+            });
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.i("version", "获取APP版本出错");
+            e.printStackTrace();
+        }
     }
 
     //没网、网络不可用 本地登录
