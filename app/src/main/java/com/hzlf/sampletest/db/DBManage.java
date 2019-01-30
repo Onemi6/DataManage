@@ -467,17 +467,17 @@ public class DBManage {
     }
 
     // 查询主要信息
-    public Cursor findInfo_main() {
+    public Cursor findInfo_main(String no) {
         db = dbHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery(
-                "select no,chouyangdanbianhao,chouyangriqi from Details_Info ",
-                null);
+                "select no,chouyangdanbianhao,chouyangriqi from Details_Info where no=?",
+                new String[]{String.valueOf(no)});
         return cursor;
     }
 
-    public List<MainInfo> findList_Info_main() {
+    public List<MainInfo> findList_Info_main(String no) {
         ArrayList<MainInfo> list_main_info = new ArrayList<MainInfo>();
-        Cursor cursor = findInfo_main();
+        Cursor cursor = findInfo_main(no);
         while (cursor.moveToNext()) {
             MainInfo maininfo = new MainInfo("未上传", cursor.getString(cursor
                     .getColumnIndex("no")), cursor.getString(cursor

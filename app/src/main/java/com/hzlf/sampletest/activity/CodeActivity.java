@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -164,12 +165,12 @@ public class CodeActivity extends Activity {
                         }
                     }
                     adapter.notifyDataSetChanged();
-                    Toast.makeText(CodeActivity.this, "申请编号成功",
-                            Toast.LENGTH_SHORT).show();
+                    Snackbar.make(btn_apply, "申请编号成功",
+                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     break;
                 case CODE_FLASE:
-                    Toast.makeText(CodeActivity.this, (String) msg.obj,
-                            Toast.LENGTH_SHORT).show();
+                    Snackbar.make(btn_apply, (String) msg.obj,
+                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     break;
             }
         }

@@ -796,10 +796,6 @@
         "source": "C:\\Users\\yy\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-28.0.0.aar\\bcdfb2bb1f8087afe9967c5e99f58f21\\res\\drawable-xxhdpi-v4\\abc_ic_star_black_36dp.png"
     },
     {
-        "merged": "E:\\Android\\code\\DataManage\\app\\build\\intermediates\\res\\merged\\release\\layout_activity_sign.xml.flat",
-        "source": "E:\\Android\\code\\DataManage\\app\\src\\main\\res\\layout\\activity_sign.xml"
-    },
-    {
         "merged": "E:\\Android\\code\\DataManage\\app\\build\\intermediates\\res\\merged\\release\\drawable-ldpi_ic_chevron_left_white.png.flat",
         "source": "E:\\Android\\code\\DataManage\\app\\build\\generated\\res\\pngs\\release\\drawable-ldpi\\ic_chevron_left_white.png"
     },

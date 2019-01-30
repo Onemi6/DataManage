@@ -13,7 +13,7 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 public class HttpUtils {
 
     //private  static String serverurl = "http://www.3tpi.com:8016/update.xml";
-    private static String serverurl = "http://111.2.23.176:8083/";
+    //private static String serverurl = "http://111.2.23.176:8083/";
     //private  static String ip = "http://www.3tpi.com:8016/";
     //private  static String ip = "http://111.2.23.176:8083/";
     private static String ip = "http://111.2.23.176:8085/";
@@ -42,8 +42,23 @@ public class HttpUtils {
                 .writeTimeout(200, TimeUnit.SECONDS)
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(serverurl)
+                .baseUrl(ip)
                 .addConverterFactory(SimpleXmlConverterFactory.create()) //设置使用SimpleXml解析
+                .client(client)
+                .build();
+        //创建 网络请求接口 的实例
+        return retrofit.create(eLab_API.class);
+    }
+
+    public static eLab_API StreamApi() {
+        OkHttpClient client = new OkHttpClient.Builder()
+                .retryOnConnectionFailure(true)//默认重试一次，若需要重试N次，则要实现拦截器。
+                .connectTimeout(1000, TimeUnit.SECONDS)
+                .readTimeout(2000, TimeUnit.SECONDS)
+                .writeTimeout(2000, TimeUnit.SECONDS)
+                .build();
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(ip)
                 .client(client)
                 .build();
         //创建 网络请求接口 的实例

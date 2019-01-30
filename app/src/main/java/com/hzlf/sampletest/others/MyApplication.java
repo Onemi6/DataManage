@@ -22,14 +22,13 @@ public class MyApplication extends Application {
     private Info_add1 info_add1;
     private Info_add2 info_add2;
     private Info_add3 info_add3;
-    private boolean isDebug;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         //增加上报进程控制,只在主进程下上报数据
-        isDebug = true;
+        boolean isDebug = false;
         Context context = getApplicationContext();
         // 获取当前包名
         String packageName = context.getPackageName();

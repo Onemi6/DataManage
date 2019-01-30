@@ -23,6 +23,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -44,7 +45,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.db.DBManage;
@@ -68,15 +68,16 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private long mExitTime;
-    private String ALBUM_PATH, versionname, TAG_UPDATE = "update";
+    private long mExitTime, mId;
+    private int num = 0;
+    private String ALBUM_PATH, MODEL_PATH, versionname, TAG_UPDATE = "AppUpdate";
     private UpdateInfo info;
     private boolean sdCardExist;
     private Context _context;
     private DBManage dbmanage = new DBManage(this);
-    private List<MainInfo> maininfolist = new ArrayList<MainInfo>();
+    private List<MainInfo> maininfolist = new ArrayList<>(), alllist = new ArrayList<>();
     private MaininfoAdapter adapter_maininfo;
-    private TextView tv_maininfo_empty, tv_user_name;
+    private TextView tv_maininfo_empty, tv_user_name, btn_getmoredata;
     private ListView listview;
     private Toolbar toolbar;
     private FloatingActionButton data_add;
@@ -91,7 +92,6 @@ public class MainActivity extends AppCompatActivity
     private static final int MY_PERMISSIONS_REQUEST = 3000;
     private ProgressDialog pd;
     private DownloadManager mDownloadManager;
-    private long mId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity
         sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
 
         toolbar = findViewById(R.id.toolbar_main);
+        //btn_getmoredata = findViewById(R.id.btn_getmoredata);
         data_add = findViewById(R.id.data_add);
         drawer = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
@@ -178,13 +179,15 @@ public class MainActivity extends AppCompatActivity
                                         dbmanage.deteleinfo(item.getNumber());
                                         maininfolist.remove(position);
                                         adapter_maininfo.notifyDataSetChanged();
-                                        Toast.makeText(MainActivity.this, "删除成功",
-                                                Toast.LENGTH_LONG).show();
+                                        Snackbar.make(listview, "删除成功",
+                                                Snackbar.LENGTH_LONG).setAction("Action", null)
+                                                .show();
                                     } catch (Exception e) {
                                         // TODO 自动生成的 catch 块
                                         e.printStackTrace();
-                                        Toast.makeText(MainActivity.this, "删除失败",
-                                                Toast.LENGTH_LONG).show();
+                                        Snackbar.make(listview, "删除失败",
+                                                Snackbar.LENGTH_LONG).setAction("Action", null)
+                                                .show();
                                     }
                                 }
                             });
@@ -201,6 +204,19 @@ public class MainActivity extends AppCompatActivity
                     return true;
                 }
             });
+            /*btn_getmoredata.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (alllist.size() >= 10) {
+                        List<MainInfo> getlist = alllist.subList(num * 10, (num + 1) * 10);
+                        maininfolist.addAll(getlist);
+                        num++;
+                        btn_getmoredata.setVisibility(View.VISIBLE);
+                    } else {
+                        maininfolist.addAll(alllist);
+                    }
+                }
+            });*/
             data_add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -215,13 +231,28 @@ public class MainActivity extends AppCompatActivity
 
     private void initMaininfo() {
         // TODO 自动生成的方法存根
-        List<MainInfo> list_info_main = dbmanage.findList_Info_main();
-        for (MainInfo info_main : list_info_main) {
-            if (dbmanage.findUpload(info_main.getNumber()).equals("1")) {
-                info_main.setStatus("已上传");
-            }
-            maininfolist.add(info_main);
+        if (((MyApplication) getApplication()).getNo() == null) {
+            ((MyApplication) getApplication()).setNo(sharedPreferences.getString("NO", null));
         }
+        alllist = dbmanage.findList_Info_main(((MyApplication) getApplication()).getNo());
+        for (int i = 0; i < alllist.size(); i++) {
+            if (dbmanage.findUpload(alllist.get(i).getNumber()).equals("1")) {
+                alllist.get(i).setStatus("已上传");
+            }
+        }
+        maininfolist.addAll(alllist);
+        if (maininfolist.size() > 0) {
+            adapter_maininfo.notifyDataSetChanged();
+        }
+        /*if (alllist.size() >= (10*num)) {
+            List<MainInfo> getlist = alllist.subList(num * 10, (num + 1) * 10);
+            maininfolist.addAll(getlist);
+            num++;
+            btn_getmoredata.setVisibility(View.VISIBLE);
+        } else {
+            maininfolist.addAll(alllist);
+        }*/
+        //adapter_maininfo.notifyDataSetChanged();
     }
 
     public void Filedir() {
@@ -229,13 +260,19 @@ public class MainActivity extends AppCompatActivity
                 .Environment
                 .MEDIA_MOUNTED);
         if (sdCardExist) {
-            ALBUM_PATH = Environment.getExternalStorageDirectory() + "/doc/";
+            ALBUM_PATH = Environment.getExternalStorageDirectory() + "/Rpt/doc/";
+            MODEL_PATH = Environment.getExternalStorageDirectory() + "/Rpt/model/";
         } else {
             ALBUM_PATH = this.getCacheDir().toString() + "/";
+            MODEL_PATH = this.getCacheDir().toString() + "/";
         }
-        File dir = new File(ALBUM_PATH);
-        if (!dir.exists()) {
-            dir.mkdirs();
+        File album = new File(ALBUM_PATH);
+        File model = new File(MODEL_PATH);
+        if (!album.exists()) {
+            album.mkdirs();
+        }
+        if (!model.exists()) {
+            model.mkdirs();
         }
     }
 
@@ -244,7 +281,8 @@ public class MainActivity extends AppCompatActivity
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if ((System.currentTimeMillis() - mExitTime) > 2000) {
                 // Object mHelperUtils;
-                Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                Snackbar.make(listview, "再按一次退出程序",
+                        Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 mExitTime = System.currentTimeMillis();
             } else {
                 finish();
@@ -258,13 +296,13 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         maininfolist.clear();
-        List<MainInfo> list_info_main = dbmanage.findList_Info_main();
-        for (MainInfo info_main : list_info_main) {
-            if (dbmanage.findUpload(info_main.getNumber()).equals("1")) {
-                info_main.setStatus("已上传");
+        alllist = dbmanage.findList_Info_main(((MyApplication) getApplication()).getNo());
+        for (int i = 0; i < alllist.size(); i++) {
+            if (dbmanage.findUpload(alllist.get(i).getNumber()).equals("1")) {
+                alllist.get(i).setStatus("已上传");
             }
-            maininfolist.add(info_main);
         }
+        maininfolist.addAll(alllist);
         if (maininfolist.size() > 0) {
             adapter_maininfo.notifyDataSetChanged();
         }
@@ -302,9 +340,8 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.nav_send:
                 //startActivity(new Intent(this, testActivity.class));
-                Toast.makeText(MainActivity.this, "暂无此功能", Toast
-                        .LENGTH_SHORT)
-                        .show();
+                Snackbar.make(listview, "暂无此功能",
+                        Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 break;
             default:
                 break;

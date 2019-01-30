@@ -137,8 +137,6 @@ public class AddActivity extends AppCompatActivity {
                     Log.v("GetAllSource请求失败!", t.getMessage());
                 }
             });
-
-
         } else {
             Log.d("source", "更新任务来源时无网络");
         }

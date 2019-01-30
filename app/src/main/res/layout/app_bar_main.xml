@@ -42,12 +42,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
+        <!--<TextView
+            android:id="@+id/btn_getmoredata"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/getmoredata"
+            android:textSize="35sp"
+            android:visibility="gone" />-->
+
         <TextView
             android:id="@+id/tv_maininfo_empty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="无任何数据"
+            android:text="@string/nodata"
             android:textSize="35sp" />
     </LinearLayout>
 

@@ -1,6 +1,5 @@
 package com.hzlf.sampletest.activity;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -13,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -20,7 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.Message;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,7 +31,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.db.DBManage;
@@ -47,7 +46,6 @@ import com.hzlf.sampletest.model.User;
 import com.hzlf.sampletest.others.MyApplication;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -56,16 +54,10 @@ import retrofit2.Response;
 
 public class AboutActivity extends AppCompatActivity {
 
-    private static final int UPDATE_CLIENT = 4;
-    private static final int GET_UNDATAINFO_ERROR = -4;
-    private static final int DOWN_ERROR = -5;
-    private static final int UPDATE_NO = -3;
-    private static final int UPDATE_SUCCESS = 2;
-    private static final int NUMBERFORMAT_ERROR = -6;
-    // 更新版本要用到的一些信息
-    private static String versionname, TAG = "update", token, no;
+    private static String versionname, TAG_UPDATE = "AppUpdate", token, no;
     private static UpdateInfo info;
-    private TextView version_update, tv_app_version, btn_tongbu_emp, btn_tongbu_apply;
+    private TextView tv_app_version;
+    private Button version_update, btn_tongbu_emp, btn_tongbu_apply;
     private ProgressBar progressbar_tongbu;
     private Toolbar toolbar;
     private PackageInfo packInfo;
@@ -115,42 +107,6 @@ public class AboutActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         attempUpdate();
-                        /*try {
-                            // 从资源文件获取服务器 地址
-                            String path = UsedPath.serverurl;
-                            // 包装成url的对象
-                            URL url = new URL(path);
-                            HttpURLConnection conn = (HttpURLConnection) url
-                                    .openConnection();
-                            conn.setConnectTimeout(5000);
-                            InputStream is = conn.getInputStream();
-                            info = HttpUtils.getUpdataInfo(is);
-                            if (Double.parseDouble(info.getVersion()) > Double
-                                    .parseDouble(versionname)) {
-                                // if (info.getVersion().equals(versionname)) {
-                                Log.i(TAG, "服务器版本号大于本地 ,提示用户升级 ");
-                                Message msg = new Message();
-                                msg.what = UPDATE_CLIENT;
-                                handler.sendMessage(msg);
-                            } else if (Double.parseDouble(info.getVersion()) == Double
-                                    .parseDouble(versionname)) {
-                                Log.i(TAG, "版本号相同无需升级");
-                                Message msg = new Message();
-                                msg.what = UPDATE_NO;
-                                handler.sendMessage(msg);
-                            }
-                        } catch (NumberFormatException e) {
-                            Message msg = new Message();
-                            msg.what = NUMBERFORMAT_ERROR;
-                            handler.sendMessage(msg);
-                            e.printStackTrace();
-                        } catch (Exception e) {
-                            // 待处理
-                            Message msg = new Message();
-                            msg.what = GET_UNDATAINFO_ERROR;
-                            handler.sendMessage(msg);
-                            e.printStackTrace();
-                        }*/
                     }
                 }).start();
             }
@@ -204,13 +160,13 @@ public class AboutActivity extends AppCompatActivity {
                                     dbmanage.adduser(user);
                                 }
                             }
-                            Toast.makeText(AboutActivity.this, "同步成功", Toast.LENGTH_SHORT)
-                                    .show();
+                            Snackbar.make(btn_tongbu_emp, "同步成功",
+                                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
                         }
                     } else {
                         Log.v("Emp请求成功!", "response.body is null");
-                        Toast.makeText(AboutActivity.this, "同步失败，请稍后再试!", Toast.LENGTH_SHORT)
-                                .show();
+                        Snackbar.make(btn_tongbu_emp, "同步失败，请稍后再试!",
+                                Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     }
                 }
                 progressbar_tongbu.setVisibility(View.GONE);
@@ -220,8 +176,8 @@ public class AboutActivity extends AppCompatActivity {
             public void onFailure(Call<List<User>> call, Throwable t) {
                 progressbar_tongbu.setVisibility(View.GONE);
                 Log.v("Emp请求失败!", t.getMessage());
-                Toast.makeText(AboutActivity.this, "同步失败，请稍后再试!", Toast.LENGTH_SHORT)
-                        .show();
+                Snackbar.make(btn_tongbu_emp, "同步失败，请稍后再试!",
+                        Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
 
         });
@@ -375,17 +331,17 @@ public class AboutActivity extends AppCompatActivity {
                                         info.setInfo_add3(info_add3);
                                         addActivity.save(info);
                                     }
-                                    Log.v("apply.getSAMPLING_NO()", apply.getSAMPLING_NO() +
-                                            "插入成功!");
+                                    /*Log.v("apply.getSAMPLING_NO()", apply.getSAMPLING_NO() +
+                                            "插入成功!");*/
                                 }
                             }
-                            Toast.makeText(AboutActivity.this, "同步成功", Toast.LENGTH_SHORT)
-                                    .show();
+                            Snackbar.make(btn_tongbu_apply, "同步成功",
+                                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
                         }
                     } else {
                         Log.v("Apply请求成功!", "response.body is null");
-                        Toast.makeText(AboutActivity.this, "同步失败，请稍后再试!", Toast.LENGTH_SHORT)
-                                .show();
+                        Snackbar.make(btn_tongbu_apply, "同步失败，请稍后再试!",
+                                Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     }
                 }
                 progressbar_tongbu.setVisibility(View.GONE);
@@ -395,8 +351,8 @@ public class AboutActivity extends AppCompatActivity {
             public void onFailure(Call<List<Apply>> call, Throwable t) {
                 progressbar_tongbu.setVisibility(View.GONE);
                 Log.v("Apply请求失败!", t.getMessage());
-                Toast.makeText(AboutActivity.this, "同步失败，请稍后再试!", Toast.LENGTH_SHORT)
-                        .show();
+                Snackbar.make(btn_tongbu_apply, "同步失败，请稍后再试!",
+                        Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
 
         });
@@ -413,65 +369,43 @@ public class AboutActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            // TODO Auto-generated method stub
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case UPDATE_CLIENT:
-                    // 对话框通知用户升级程序
-                    showUpdataDialog();
-                    break;
-                case GET_UNDATAINFO_ERROR:
-                    // 服务器超时
-                    Toast.makeText(getApplicationContext(), "获取服务器更新信息失败", Toast.LENGTH_SHORT)
-                            .show();
-                    break;
-                case DOWN_ERROR:
-                    // 下载apk失败
-                    Toast.makeText(getApplicationContext(), "下载新版本失败", Toast.LENGTH_SHORT).show();
-                    break;
-                case UPDATE_NO:
-                    // 已是最新版本
-                    Toast.makeText(getApplicationContext(), "已是最新版本", Toast.LENGTH_SHORT).show();
-                    break;
-                case UPDATE_SUCCESS:
-                    Toast.makeText(getApplicationContext(), "更新成功", Toast.LENGTH_SHORT).show();
-                    break;
-                case NUMBERFORMAT_ERROR:
-                    Log.i(TAG, "版本号转换出错 ");
-                    Toast.makeText(getApplicationContext(), "更新出错，请稍后再试", Toast.LENGTH_SHORT)
-                            .show();
-                    break;
-            }
-        }
-    };
-
     public void attempUpdate() {
         //创建 网络请求接口 的实例
         eLab_API request = HttpUtils.XmlApi();
         Call<UpdateInfo> call = request.UpdateXML();
-        try {
-            //同步
-            info = call.execute().body();
-            if (Double.parseDouble(info.getVersion()) > Double
-                    .parseDouble(versionname)) {
-                Log.i(TAG, "服务器版本号大于本地 ,提示用户升级 ");
-                Message msg = new Message();
-                msg.what = UPDATE_CLIENT;
-                handler.sendMessage(msg);
-            } else if (Double.parseDouble(info.getVersion()) == Double
-                    .parseDouble(versionname)) {
-                Log.i(TAG, "版本号相同无需升级");
-                Message msg = new Message();
-                msg.what = UPDATE_NO;
-                handler.sendMessage(msg);
+        call.enqueue(new Callback<UpdateInfo>() {
+            @Override
+            public void onResponse(Call<UpdateInfo> call, Response<UpdateInfo> response) {
+                if (response.body() != null) {
+                    try {
+                        /* 获取packagemanager的实例*/
+                        PackageManager packageManager = getPackageManager();
+                        /* getPackageName()是你当前类的包名，0代表是获取版本信息*/
+                        PackageInfo packInfo = packageManager.getPackageInfo(getPackageName(), 0);
+                        versionname = packInfo.versionName;
+                        info = response.body();
+                        if (Double.parseDouble(info.getVersion()) > Double
+                                .parseDouble(versionname)) {
+                            Log.i(TAG_UPDATE, "服务器版本号大于本地 ,提示用户升级 ");
+                            showUpdataDialog();
+                        } else if (Double.parseDouble(info.getVersion()) == Double
+                                .parseDouble(versionname)) {
+                            Log.i(TAG_UPDATE, "无需升级");
+                        }
+                    } catch (PackageManager.NameNotFoundException e) {
+                        Log.i(TAG_UPDATE, "获取APP版本出错");
+                        e.printStackTrace();
+                    }
+                } else {
+                    Log.v("update请求成功!", "response.body is null");
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+            @Override
+            public void onFailure(Call<UpdateInfo> call, Throwable t) {
+                Log.v("update请求失败!", t.getMessage());
+            }
+        });
     }
 
     /* 获取当前程序的版本号*/
@@ -481,9 +415,7 @@ public class AboutActivity extends AppCompatActivity {
         return getPackageManager().getPackageInfo(getPackageName(), 0);
     }
 
-    /* 弹出对话框通知用户更新程序
-     * 弹出对话框的步骤： 1.创建alertDialog的builder. 2.要给builder设置属性, 对话框的内容,样式,按钮
-     * 3.通过builder 创建一个对话框 4.对话框show()出来*/
+    // 弹出对话框通知用户更新程序
     public void showUpdataDialog() {
         AlertDialog.Builder builder = new Builder(context, R.style.dialog_update);
         LayoutInflater inflater = LayoutInflater.from(context);

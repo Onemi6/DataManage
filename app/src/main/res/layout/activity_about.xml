@@ -44,34 +44,49 @@
             android:layout_width="match_parent"
             android:layout_height="12sp" />
 
-        <TextView
+        <Button
             android:id="@+id/btn_tongbu_emp"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/my_button"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:paddingLeft="@dimen/activity_vertical_margin3"
+            android:paddingRight="@dimen/activity_vertical_margin3"
             android:text="@string/btn_tongbu_emp"
-            android:textSize="16sp" />
+            android:textColor="#fff" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="12sp" />
 
-        <TextView
+        <Button
             android:id="@+id/btn_tongbu_apply"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/my_button"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:paddingLeft="@dimen/activity_vertical_margin3"
+            android:paddingRight="@dimen/activity_vertical_margin3"
             android:text="@string/btn_tongbu_apply"
-            android:textSize="16sp" />
+            android:textColor="#fff" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="12sp" />
 
-        <TextView
+        <Button
             android:id="@+id/version_update"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/my_button"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:paddingLeft="@dimen/activity_vertical_margin3"
+            android:paddingRight="@dimen/activity_vertical_margin3"
             android:text="@string/version_update"
-            android:textSize="16sp" />
+            android:textColor="#fff" />
 
         <View
             android:layout_width="match_parent"

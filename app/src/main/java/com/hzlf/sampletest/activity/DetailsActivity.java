@@ -38,7 +38,6 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.hzlf.sampletest.R;
@@ -47,6 +46,10 @@ import com.hzlf.sampletest.http.HttpUtils;
 import com.hzlf.sampletest.http.NetworkUtil;
 import com.hzlf.sampletest.http.eLab_API;
 import com.hzlf.sampletest.model.Info_add;
+import com.hzlf.sampletest.model.Info_add1;
+import com.hzlf.sampletest.model.Info_add2;
+import com.hzlf.sampletest.model.Info_add3;
+import com.hzlf.sampletest.model.Template;
 import com.hzlf.sampletest.model.Upload;
 import com.hzlf.sampletest.others.DatePickerDialog;
 import com.hzlf.sampletest.others.ImgAdapter;
@@ -57,10 +60,15 @@ import org.apache.poi.hwpf.usermodel.Picture;
 import org.apache.poi.hwpf.usermodel.Range;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -69,19 +77,23 @@ import java.util.List;
 import java.util.Map;
 
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DetailsActivity extends AppCompatActivity implements OnClickListener {
     private DBManage dbmanage = new DBManage(this);
-    private Button btn_update1, btn_update2, btn_update3, btn_preview, btn_print, btn_sign,
+    private Button btn_update1, btn_update2, btn_update3, btn_makeRpt, btn_getSignModel,
             btn_upload_data, btn_upload_img;
     private Context _context;
     private Info_add info_add;
-    private String number, str_dayinriqi, str_filename, str_outfilepath, token;
-    private int mYear, mMonth, mDay, sign = 0;
+    private String number, str_dayinriqi, str_filename, str_outfilepath,
+            resultfilepath, token;
+    private int mYear, mMonth, mDay;
+    private boolean isupdate;
     private EditText et_0, et_1_1, et_1_2, et_1_3, et_1_5, et_1_6, et_1_7, et_1_8, et_1_9,
             et_1_10, et_1_11, et_2_5,
             et_2_6, et_2_7, et_2_9, et_2_10, et_2_11, et_2_12, et_2_13, et_2_14, et_2_15,
@@ -100,7 +112,6 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
     private ArrayAdapter adapter1_4, adapter2_1, adapter2_2, adapter2_3, adapter2_4, adapter2_8,
             adapter3_2, adapter3_3, adapter3_4, adapter3_6, adapter3_10, adapter3_15, adapter3_18,
             adapter3_19, adapter3_20, adapter3_21;
-    private View view;
     private ProgressDialog mypDialog;
     private Toolbar toolbar;
     private RecyclerView rv_upload_img;
@@ -130,14 +141,11 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
             case R.id.btn_update3:
                 update3();
                 break;
-            case R.id.btn_preview:
-                preview();
+            case R.id.btn_getSignModel:
+                getSignModel();
                 break;
-            case R.id.btn_print:
-                print();
-                break;
-            case R.id.btn_sign:
-                sign();
+            case R.id.btn_makeRpt:
+                makeRpt();
                 break;
             case R.id.btn_upload_data:
                 upload_data();
@@ -164,14 +172,13 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
         _context = this;
         number = ((MyApplication) getApplication()).getNumber();
-        if (dbmanage.findSign(number) == null) {
+        /*if (dbmanage.findSign(number) == null) {
             dbmanage.updateSign(number, 0);
         } else if (dbmanage.findSign(number).equals("1")) {
             sign = 1;
-        }
+        }*/
         info_add = dbmanage.findInfo_details(number);
-        str_filename = info_add.getInfo_add1().getValue1() + ".doc";
-        str_outfilepath = Environment.getExternalStorageDirectory() + "/doc/" + str_filename;
+
         list_paths = dbmanage.findList_UploadImage(number);
         rv_upload_img = this.findViewById(R.id.rv_upload_img);
         /*GridLayoutManager 对象 这里使用
@@ -392,38 +399,40 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         btn_update1 = findViewById(R.id.btn_update1);
         btn_update2 = findViewById(R.id.btn_update2);
         btn_update3 = findViewById(R.id.btn_update3);
-        btn_preview = findViewById(R.id.btn_preview);
-        btn_print = findViewById(R.id.btn_print);
-        btn_sign = findViewById(R.id.btn_sign);
+        btn_getSignModel = findViewById(R.id.btn_getSignModel);
+        btn_makeRpt = findViewById(R.id.btn_makeRpt);
         btn_upload_data = findViewById(R.id.btn_upload_data);
         btn_upload_img = findViewById(R.id.btn_upload_img);
 
         btn_update1.setOnClickListener(this);
         btn_update2.setOnClickListener(this);
         btn_update3.setOnClickListener(this);
-        btn_preview.setOnClickListener(this);
-        btn_print.setOnClickListener(this);
-        btn_sign.setOnClickListener(this);
+        btn_getSignModel.setOnClickListener(this);
+        btn_makeRpt.setOnClickListener(this);
         btn_upload_data.setOnClickListener(this);
         btn_upload_img.setOnClickListener(this);
     }
 
-    // 刷新图片
-    @Override
-    protected void onResume() {
-        super.onResume();
-        list_paths = dbmanage.findList_UploadImage(number);
-        ada_upload_img.changList_add(list_paths);
-    }
-
     public void initdata() {
+        try {
+            FormatData();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+            Log.v("FormatData()", "NoSuchMethodException");
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+            Log.v("FormatData()", "InvocationTargetException");
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            Log.v("FormatData()", "IllegalAccessException");
+        }
         et_0.setText(info_add.getNO());
         et_1_1.setText(info_add.getInfo_add1().getValue1());
         et_1_2.setText(info_add.getInfo_add1().getValue2());
         et_1_3.setText(info_add.getInfo_add1().getValue3());
         SpinnerAdapter adapter1_4 = spinner1_4.getAdapter();
         for (int i = 0; i < adapter1_4.getCount(); i++)
-            if (info_add.getInfo_add1().getValue3().equals(adapter1_4.getItem(i).toString())) {
+            if (info_add.getInfo_add1().getValue4().equals(adapter1_4.getItem(i).toString())) {
                 spinner1_4.setSelection(i, true);
                 break;
             }
@@ -628,6 +637,10 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         et_3_28.setEnabled(false);
         et_3_29.setEnabled(false);
         tv_dayinriqi.setEnabled(false);
+        isupdate = false;
+        str_filename = info_add.getInfo_add1().getValue1() + ".doc";
+        str_outfilepath = Environment.getExternalStorageDirectory() + "/Rpt/doc/" + str_filename;
+        resultfilepath = Environment.getExternalStorageDirectory() + "/Rpt/model/" + str_filename;
     }
 
     public void update1() {
@@ -660,6 +673,7 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
             info_add.getInfo_add1().setValue10(et_1_10.getText().toString());
             info_add.getInfo_add1().setValue11(et_1_11.getText().toString());
             dbmanage.updateinfo(info_add);
+            isupdate = true;
         }
     }
 
@@ -732,6 +746,7 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
             info_add.getInfo_add2().setValue20(et_2_20.getText().toString());
             info_add.getInfo_add2().setValue21(et_2_21.getText().toString());
             dbmanage.updateinfo(info_add);
+            isupdate = true;
         }
     }
 
@@ -831,116 +846,71 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
             info_add.getInfo_add3().setValue29(et_3_29.getText().toString());
             info_add.getInfo_add3().setValue30(tv_dayinriqi.getText().toString());
             dbmanage.updateinfo(info_add);
+            isupdate = true;
         }
     }
 
-    public void preview() {
+    public void getSignModel() {
+        File file = new File(resultfilepath);
+        file.delete();
+        file = copyFile("model.doc", resultfilepath);
+        if (file != null) {
+            attempTemplate(file);
+        } else {
+            Snackbar.make(btn_getSignModel, "copy model is error!",
+                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+    }
+
+    public void makeRpt() {
         if (btn_update1.getText().toString().equals("修改") && btn_update2.getText()
                 .toString().equals("修改") &&
                 btn_update3.getText().toString().equals("修改")) {
-            if (str_outfilepath != null) {
-                if (!new File(str_outfilepath).exists()) {
-                    doScan();
-                    doOpenWord();
-                } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(
-                            _context);
-                    // 设置Title的图标
-                    builder.setIcon(R.drawable.ic_launcher);
-                    // 设置Title的内容
-                    builder.setTitle("提示");
-                    // 设置Content来显示一个信息
-                    builder.setMessage("文档已存在");
-                    // 设置一个PositiveButton
-                    builder.setPositiveButton("直接预览",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    //dialog.dismiss();
-                                    doOpenWord();
-                                }
-                            });
-                    // 设置一个NegativeButton
-                    builder.setNegativeButton("重新生成/覆盖并预览",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    //dialog.dismiss();
-                                    doScan();
-                                    doOpenWord();
-                                }
-                            });
-                    // 显示出该对话框
-                    builder.show();
+            if (resultfilepath != null && new File(resultfilepath).exists()) {
+                File file = new File(resultfilepath);
+                if (isupdate) {
+                    file.delete();
+                    isupdate = false;
                 }
+                doScan();
+                AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+                // 设置Title的图标
+                builder.setIcon(R.drawable.ic_launcher);
+                // 设置Title的内容
+                builder.setTitle("提示");
+                // 设置Content来显示一个信息
+                builder.setMessage("报告已生成");
+                // 设置一个PositiveButton
+                builder.setPositiveButton("打印",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                //dialog.dismiss();
+                                doPrintword();
+                            }
+                        });
+                // 设置一个NegativeButton
+                builder.setNegativeButton("预览",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                //dialog.dismiss();
+                                doOpenWord();
+                            }
+                        });
+                // 显示出该对话框
+                builder.show();
+            } else {
+                Snackbar.make(btn_makeRpt, "请先获取签名模板",
+                        Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         } else {
-            Snackbar.make(view, "部分修改未确认",
+            Snackbar.make(btn_makeRpt, "部分修改未确认",
                     Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
-    }
 
-    public void print() {
-        if (btn_update1.getText().toString().equals("修改") && btn_update2.getText()
-                .toString().equals("修改") &&
-                btn_update3.getText().toString().equals("修改")) {
-            //info_add_new = dbmanage.findInfo_details(number);
-            if (str_outfilepath != null) {
-                if (!new File(str_outfilepath).exists()) {
-                    doScan();
-                    doPrintword();
-                } else {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(
-                            _context);
-                    // 设置Title的图标
-                    builder.setIcon(R.drawable.ic_launcher);
-                    // 设置Title的内容
-                    builder.setTitle("提示");
-                    // 设置Content来显示一个信息
-                    builder.setMessage("文档已存在");
-                    // 设置一个PositiveButton
-                    builder.setPositiveButton("直接打印",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    //dialog.dismiss();
-                                    doPrintword();
-                                }
-                            });
-                    // 设置一个NegativeButton
-                    builder.setNegativeButton("重新生成/覆盖并打印",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    //dialog.dismiss();
-                                    doScan();
-                                    doPrintword();
-                                }
-                            });
-                    // 显示出该对话框
-                    builder.show();
-                }
-            }
-        } else {
-            Snackbar.make(view, "部分修改未确认",
-                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
-        }
-    }
-
-    public void sign() {
-        if (sign == 0) {
-            Intent intent_sign = new Intent();
-            intent_sign.setClass(DetailsActivity.this, SignActivity.class);
-            // finish(); //结束当前活动
-            startActivity(intent_sign);
-        } else {
-            Snackbar.make(view, "已经签名",
-                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
-        }
     }
 
     public void upload_data() {
@@ -954,7 +924,7 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
             attemptApply();
             mypDialog.dismiss();
         } else {
-            Snackbar.make(view, "当前网络不可用,请稍后再上传",
+            Snackbar.make(btn_upload_data, "当前网络不可用,请稍后再上传",
                     Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
     }
@@ -1029,14 +999,16 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         map.put("$BZ$", info_add.getInfo_add3().getValue29());
         map.put("$DYRQ$", info_add.getInfo_add3().getValue30());
         /* android无法插入图片*/
-        writeDoc("yuan.doc", str_outfilepath, map);
+        //writeDoc("model1.doc", str_outfilepath, map);
+        writeDoc(resultfilepath, str_outfilepath, map);
         /* 查看 doOpenWord();*/
     }
 
     //demoFile 模板文件 newFile 生成文件 map 要填充的数据
-    public void writeDoc(String demopath, String outfilepath, Map<String, Object> map) {
+    public void writeDoc(String modelpath, String outfilepath, Map<String, Object> map) {
         try {
-            InputStream in = getClass().getResourceAsStream("/assets/" + demopath);
+            InputStream in = new FileInputStream(modelpath);
+            //InputStream in = getClass().getResourceAsStream("/assets/" + demopath);
             HWPFDocument hdt = new HWPFDocument(in);
             Range range = hdt.getRange();/* 替换文本内容*/
             for (Map.Entry<String, Object> entry : map.entrySet())
@@ -1044,22 +1016,22 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
                     // 替换文本
                     range.replaceText(entry.getKey(), entry.getValue().toString());
                 }
+            /*//获取doc中的书签
+            Bookmarks bookmarks = hdt.getBookmarks();
+            Log.v("书签数量：", "" + bookmarks.getBookmarksCount());*/
+
             //获取doc中的图片数
             List<Picture> pics = hdt.getPicturesTable().getAllPictures();
             System.out.printf(pics.size() + "\n");
-            /* for (Picture pic : pics) { // 图片在doc文件中的位置,分析Doc 转化成其他文本时需要用到
-            int start = pic.getStartOffset(); int width = pic.getWidth(); int height = pic
-            .getHeight(); String
-            mimeType = pic.getMimeType(); System.out.printf("开始位置%d\t图片大小度%d,高%d,\t图片类型%s\r\n",
-            start, width, height,
-             mimeType); } */
+
             OutputStream os = new FileOutputStream(outfilepath);
             /* ByteArrayOutputStream ostream = new
             ByteArrayOutputStream(); FileOutputStream out = new FileOutputStream(newFile, true);*/
-            hdt.write(os);/* 1.通过Picture的writeImageContent方法 写文件 2.获取Picture的byte 自己写*/
+            hdt.write(os);
+            /* 1.通过Picture的writeImageContent方法 写文件 2.获取Picture的byte 自己写*/
             copyPic2Disk(pics, os);
-            this.closeStream(os);
-            this.closeStream(in);
+            os.close();
+            in.close();
             /* 输出字节流 out.write(ostream.toByteArray()); out.close(); ostream.close();*/
         } catch (IOException e) {
             e.printStackTrace();
@@ -1077,14 +1049,16 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
                 intent.setAction("android.intent.action.VIEW");
                 intent.addCategory("android.intent.category.DEFAULT");
                 String fileMimeType = "application/msword";
-                intent.setDataAndType(Uri.fromFile(new File("/mnt/sdcard/doc/" + str_filename)),
-                        fileMimeType);
+                intent.setDataAndType(Uri.fromFile(new File(str_outfilepath)), fileMimeType);
+                /*intent.setDataAndType(Uri.fromFile(new File("/mnt/sdcard/Rpt/doc/" +
+                                str_filename)),
+                        fileMimeType);*/
                 try {
                     DetailsActivity.this.startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     /* 检测到系统尚未安装OliveOffice的apk程序*/
-                    Toast.makeText(DetailsActivity.this, "未找到软件", Toast.LENGTH_LONG).show();
-                    /* 请先到www.olivephone.com/e.apk下载并安装*/
+                    Snackbar.make(btn_makeRpt, "未找到可用软件",
+                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             }
         }, 1500);
@@ -1095,7 +1069,6 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                /* do something*/
                 if (appIsInstalled(_context, "com.dynamixsoftware.printershare")) {
                     Intent intent = new Intent();
                     ComponentName comp = new ComponentName("com.dynamixsoftware" +
@@ -1104,14 +1077,15 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
                     intent.setComponent(comp);
                     intent.setAction("android.intent.action.VIEW");
                     intent.setType("application/doc");
-                    intent.setData(Uri.fromFile(new File(Environment
+                    intent.setData(Uri.fromFile(new File(str_outfilepath)));
+                    /*intent.setData(Uri.fromFile(new File(Environment
                             .getExternalStorageDirectory() +
-                            "/doc/" + str_filename)));
+                            "/doc/" + str_filename)));*/
                     dbmanage.updateNumber(number, 1, 1, 0);
                     startActivity(intent);
                 } else {
-                    Toast.makeText(DetailsActivity.this, "未找到PrinterShare软件", Toast
-                            .LENGTH_LONG).show();
+                    Snackbar.make(btn_makeRpt, "未找到PrinterShare软件",
+                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     /* 安装apk*/
                     Intent intent = new Intent(Intent.ACTION_VIEW);
                     File file = getAssetFileToCacheDir(_context, "PrinterShare.apk");
@@ -1222,27 +1196,129 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
                             dbmanage.updateId(response.body().getId(), number);
                             dbmanage.updateNumber(number, 1, 1, 1);
                             //mypDialog.dismiss();
-                            Toast.makeText(_context, "上传" + number + response.body()
-                                    .getMessage(), Toast
-                                    .LENGTH_SHORT).show();
+                            Snackbar.make(btn_upload_data, "上传" + number + response.body()
+                                            .getMessage(),
+                                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
                         } else {
-                            Toast.makeText(_context, "该" + response.body().getMessage(),
-                                    Toast.LENGTH_SHORT).show();
+                            Snackbar.make(btn_upload_data, "该" + response.body().getMessage(),
+                                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
                         }
                     } else {
                         Log.v("Apply请求成功!", "response.code is null");
+                        Snackbar.make(btn_upload_data, "上传出现错误response.code is null",
+                                Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     }
                 } else if (response.code() == 500) {
-                    Toast.makeText(_context, "数据已经上传",
-                            Toast.LENGTH_SHORT).show();
+                    Snackbar.make(btn_upload_data, "数据已经上传",
+                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             }
 
             @Override
             public void onFailure(Call<Upload> call, Throwable t) {
                 Log.v("Apply请求失败!", t.getMessage());
+                Snackbar.make(btn_upload_data, "Apply请求失败!",
+                        Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
+    }
+
+    public void attempTemplate(File file) {
+        String[] names = info_add.getInfo_add3().getValue27().split(" ");
+        if (names.length == 2) {
+            eLab_API request = HttpUtils.StreamApi();
+            Map<String, String> params = new HashMap<>();
+            params.put("name1", names[0]);
+            params.put("name2", names[1]);
+            if (((MyApplication) getApplication()).getToken() == null) {
+                token = "Bearer " + sharedPreferences.getString("token", "");
+            } else {
+                token = "Bearer " + ((MyApplication) getApplication()).getToken();
+            }
+            RequestBody requestFile = RequestBody.create(MediaType.parse
+                    ("application/msword"), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("file",
+                    str_filename,
+                    requestFile);
+            Call<ResponseBody> call = request.Template(token, params, body);
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody>
+                        response) {
+                    Log.v("Template请求", "成功!" + response.code());
+                    if (response.code() == 401) {
+                        Log.v("Template请求", "token过期");
+                        Intent intent_login = new Intent();
+                        intent_login.setClass(DetailsActivity.this,
+                                LoginActivity.class);
+                        intent_login.putExtra("login_type", 1);
+                        startActivity(intent_login);
+                    } else if (response.code() == 200) {
+                        String type = response.body().contentType().toString();
+                        //MediaType type1 = response.body().contentType();
+                        //Log.v("Content-Type", type);
+                        if (type.equals("application/octet-stream")) {
+                            try {
+                                        /*resultfilepath = Environment
+                                        .getExternalStorageDirectory() +
+                                                "/Rpt/sign/" + str_filename;*/
+                                // 创建指定路径的文件
+                                File resultfile = new File(resultfilepath);
+                                if (resultfile.exists()) {
+                                    resultfile.delete();
+                                }
+                                // 获取文件的输出流对象
+                                FileOutputStream outStream = new FileOutputStream
+                                        (resultfile);
+                                // 获取字符串对象的byte数组并写入文件流
+                                outStream.write(response.body().bytes());
+                                // 最后关闭文件输出流
+                                outStream.close();
+                                Snackbar.make(btn_getSignModel, "获取模板成功!",
+                                        Snackbar.LENGTH_LONG).setAction("Action", null)
+                                        .show();
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                                Log.v("ResponseBody", "FileNotFoundException");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                                Log.v("ResponseBody", "ee.IOException");
+                            }
+                        } else if (type.equals("application/json; charset=utf-8")) {
+                            try {
+                                Gson gson = new Gson();
+                                Template template = gson.fromJson(response.body().string
+                                        (), Template.class);
+                                if (template != null && template.getStatus().equals
+                                        ("error")) {
+                                    Snackbar.make(btn_getSignModel, template.getMessage(),
+                                            Snackbar.LENGTH_LONG).setAction("Action", null)
+                                            .show();
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } else {
+                        Log.v("" + response.code(), response.message());
+                        Snackbar.make(btn_getSignModel, response.message(),
+                                Snackbar.LENGTH_LONG).setAction("Action", null)
+                                .show();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.v("Template请求失败!", t.getMessage());
+                    Snackbar.make(btn_getSignModel, "获取模板失败!",
+                            Snackbar.LENGTH_LONG).setAction("Action", null)
+                            .show();
+                }
+            });
+        } else {
+            Snackbar.make(btn_getSignModel, "抽样人格式错误",
+                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
     }
 
     // 通过Picture 自己类中的读写方法 <p> pics path
@@ -1253,15 +1329,25 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
             if(!path.exists() ){ path.mkdirs(); } */
         try {
             for (Picture pic : pics) {/* 写出数据，我们使用的是Poi类中，Picture自己所带的函数*/
-                pic.writeImageContent(os); /* byte [] picBytes = pic.getContent();
+                // 图片在doc文件中的位置,分析Doc 转化成其他文本时需要用到
+                /*int start = pic.getStartOffset();
+                int width = pic.getWidth();
+                int height = pic.getHeight();
+                String mimeType = pic.getMimeType();
+                System.out.printf("开始位置%d\t图片大小度%d,高%d,\t图片类型%s\r\n",
+                        start, width, height, mimeType);*/
+
+                pic.writeImageContent(os);
+                /* byte [] picBytes = pic.getContent();
                 //获取字节流，也可以自己写入数据 copyByteToFile
                 (picBytes); */
             }
         } catch (Exception e) {/* TODO Auto-generated catch block*/
             e.printStackTrace();
         }
-    }/* 判断apk是否安装*/
+    }
 
+    // 判断apk是否安装
     public static boolean appIsInstalled(Context context, String pageName) {
         try {
             context.getPackageManager().getPackageInfo(pageName, 0);
@@ -1269,9 +1355,10 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         } catch (NameNotFoundException e) {
             return false;
         }
-    }/* 把Asset下的apk拷贝到sdcard下 /Android/data/你的包名/cache 目录下*/
+    }
 
-    public static File getAssetFileToCacheDir(Context context, String fileName) {
+    // 把Asset下的apk拷贝到sdcard下 /Android/data/你的包名/cache 目录下
+    public File getAssetFileToCacheDir(Context context, String fileName) {
         try {
             File cacheDir = getCacheDir(context);
             final String cachePath = cacheDir.getAbsolutePath() + File.separator + fileName;
@@ -1289,8 +1376,9 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
             e.printStackTrace();
         }
         return null;
-    }/* 获取sdcard中的缓存目录*/
+    }
 
+    // 获取sdcard中的缓存目录
     public static File getCacheDir(Context context) {
         String APP_DIR_NAME = Environment.getExternalStorageDirectory().getAbsolutePath() +
                 "/Android/data/";
@@ -1299,21 +1387,102 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         return dir;
     }
 
-    //关闭输入流 @param is
-    private void closeStream(InputStream is) {
-        if (is != null) try {
+    public File copyFile(String oldPath$Name, String newPath$Name) {
+        try {
+            InputStream is = _context.getAssets().open(oldPath$Name);
+            File file = new File(newPath$Name);
+            file.createNewFile();
+            FileOutputStream fos = new FileOutputStream(file);
+            byte[] temp = new byte[1024];
+            int i;
+            while ((i = is.read(temp)) > 0) fos.write(temp, 0, i);
+            fos.close();
             is.close();
+            return file;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
-    //关闭输出流 @param os
-    private void closeStream(OutputStream os) {
-        if (os != null) try {
-            os.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void FormatData() throws NoSuchMethodException, InvocationTargetException,
+            IllegalAccessException {
+        Info_add1 info_add1 = info_add.getInfo_add1();
+        Info_add2 info_add2 = info_add.getInfo_add2();
+        Info_add3 info_add3 = info_add.getInfo_add3();
+
+        Field[] fields_1 = info_add1.getClass().getDeclaredFields();
+        String name;
+        Field f;
+        Object value;
+        for (int i = 0; i < fields_1.length; i++) {
+            f = fields_1[i];
+            f.setAccessible(true);
+            // 获取属性的名字
+            name = f.getName();
+            // 获取属性类型
+            //type = f.getGenericType().toString();
+            // 将属性的首字母大写
+            name = name.replaceFirst(name.substring(0, 1), name.substring(0, 1)
+                    .toUpperCase());
+            Method getMethod = info_add1.getClass().getMethod("get" + name);
+            //Log.v("getMethod", getMethod.getName().toString());
+            value = getMethod.invoke(info_add1);
+            if (value == null) {
+                Method setMethod = info_add1.getClass().getMethod("set" + name, String.class);
+                setMethod.invoke(info_add1, "");
+            }
         }
+
+        Field[] fields_2 = info_add2.getClass().getDeclaredFields();
+        for (int i = 0; i < fields_2.length; i++) {
+            f = fields_2[i];
+            f.setAccessible(true);
+            // 获取属性的名字
+            name = f.getName();
+            // 获取属性类型
+            //type = f.getGenericType().toString();
+            // 将属性的首字母大写
+            name = name.replaceFirst(name.substring(0, 1), name.substring(0, 1)
+                    .toUpperCase());
+            Method getMethod = info_add2.getClass().getMethod("get" + name);
+            //Log.v("getMethod", getMethod.getName().toString());
+            value = getMethod.invoke(info_add2);
+            if (value == null) {
+                Method setMethod = info_add2.getClass().getMethod("set" + name, String.class);
+                setMethod.invoke(info_add2, "");
+            }
+        }
+
+        Field[] fields_3 = info_add3.getClass().getDeclaredFields();
+        for (int i = 0; i < fields_3.length; i++) {
+            f = fields_3[i];
+            f.setAccessible(true);
+            // 获取属性的名字
+            name = f.getName();
+            // 获取属性类型
+            //type = f.getGenericType().toString();
+            // 将属性的首字母大写
+            name = name.replaceFirst(name.substring(0, 1), name.substring(0, 1)
+                    .toUpperCase());
+            Method getMethod = info_add3.getClass().getMethod("get" + name);
+            //Log.v("getMethod", getMethod.getName().toString());
+            value = getMethod.invoke(info_add3);
+            if (value == null) {
+                Method setMethod = info_add3.getClass().getMethod("set" + name, String.class);
+                setMethod.invoke(info_add3, "");
+            }
+        }
+        info_add.setInfo_add1(info_add1);
+        info_add.setInfo_add2(info_add2);
+        info_add.setInfo_add3(info_add3);
+    }
+
+    // 刷新图片
+    @Override
+    protected void onResume() {
+        super.onResume();
+        list_paths = dbmanage.findList_UploadImage(number);
+        ada_upload_img.changList_add(list_paths);
     }
 }

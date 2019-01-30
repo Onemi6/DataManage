@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory.Options;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,7 +25,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.db.DBManage;
@@ -162,13 +162,13 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
                                 //dialog.dismiss();
                                 try {
                                     adapter_img.removeItem(pos);
-                                    Toast.makeText(_context, "删除图片成功",
-                                            Toast.LENGTH_LONG).show();
+                                    Snackbar.make(rv_add_img, "图片删除成功",
+                                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
                                 } catch (Exception e) {
                                     // TODO 自动生成的 catch 块
                                     e.printStackTrace();
-                                    Toast.makeText(_context, "删除图片失败",
-                                            Toast.LENGTH_LONG).show();
+                                    Snackbar.make(rv_add_img, "图片删除失败",
+                                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
                                 }
                             }
                         });
@@ -222,8 +222,8 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
                         if (picPath != null) {
                             attempImgUpload();
                         } else {
-                            Toast.makeText(this, "上传的文件路径出错", Toast.LENGTH_LONG)
-                                    .show();
+                            Snackbar.make(uploadButton, "上传的文件路径出错",
+                                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
                         }
                     }
                     new Handler().postDelayed(new Runnable() {
@@ -234,7 +234,8 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
                     }, 1500); // 延时1s执行
                 } else if (adapter_img.getImgList().size() == 0) {
                     mypDialog.dismiss();
-                    Toast.makeText(this, "至少选择一张图片", Toast.LENGTH_LONG).show();
+                    Snackbar.make(rv_add_img, "至少选择一张图片",
+                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
                 break;
             default:
@@ -312,11 +313,9 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
                         }
                         if (status.size() >= picList.size()) {
                             mypDialog.dismiss();
-                            Toast.makeText(
-                                    ImgUploadActivity.this,
-                                    "共上传" + picList.size() + "张图片,其中失败"
-                                            + fail_num + "张",
-                                    Toast.LENGTH_SHORT).show();
+                            Snackbar.make(uploadButton, "共上传" + picList.size() + "张图片,其中失败" +
+                                            fail_num + "张",
+                                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
                             for (int i = 0; i < picList.size(); i++) {
                                 if (status.get(i).equals("1")) {
                                     dbmanage.addImagePath(number,
@@ -333,8 +332,8 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
                 }
             });
         } else {
-            Toast.makeText(ImgUploadActivity.this, "当前无网络", Toast.LENGTH_SHORT)
-                    .show();
+            Snackbar.make(uploadButton, "当前无网络",
+                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
     }
 }

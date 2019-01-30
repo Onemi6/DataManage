@@ -1254,7 +1254,7 @@
                     android:orientation="horizontal">
 
                     <Button
-                        android:id="@+id/btn_preview"
+                        android:id="@+id/btn_getSignModel"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -1263,11 +1263,11 @@
                         android:minWidth="0dp"
                         android:paddingLeft="@dimen/activity_vertical_margin3"
                         android:paddingRight="@dimen/activity_vertical_margin3"
-                        android:text="@string/preview"
+                        android:text="@string/getSignModel"
                         android:textColor="#fff" />
 
                     <Button
-                        android:id="@+id/btn_print"
+                        android:id="@+id/btn_makeRpt"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -1276,21 +1276,9 @@
                         android:minWidth="0dp"
                         android:paddingLeft="@dimen/activity_vertical_margin3"
                         android:paddingRight="@dimen/activity_vertical_margin3"
-                        android:text="@string/printf"
+                        android:text="@string/makeRpt"
                         android:textColor="#fff" />
 
-                    <Button
-                        android:id="@+id/btn_sign"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/my_button"
-                        android:minHeight="0dp"
-                        android:minWidth="0dp"
-                        android:paddingLeft="@dimen/activity_vertical_margin3"
-                        android:paddingRight="@dimen/activity_vertical_margin3"
-                        android:text="@string/sign"
-                        android:textColor="#fff" />
                 </LinearLayout>
             </LinearLayout>
 

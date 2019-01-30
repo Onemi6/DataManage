@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -62,7 +63,6 @@ public class LoginActivity extends AppCompatActivity {
         if (login_type == 1) {
             account = sharedPreferences.getString("ZHANGHAO", null);
             password = sharedPreferences.getString("MIMA", null);
-            Log.v("", account + "," + password);
             attempLogin();
         }
         // 登录
@@ -169,9 +169,8 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     }, 500); // 延时1s执行
                                 } else if (login_type == -1) {
-                                    Toast.makeText(LoginActivity.this, "登录成功", Toast
-                                            .LENGTH_SHORT)
-                                            .show();
+                                    Snackbar.make(btn_denglu, "登录成功",
+                                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
                                     new Handler().postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
@@ -183,10 +182,8 @@ public class LoginActivity extends AppCompatActivity {
                                     }, 1000); /* 延时1s执行*/
                                 }
                             } else if (response.body().getStatus().equals("error")) {
-                                Toast.makeText(LoginActivity.this, response.body().getMessage(),
-                                        Toast
-                                                .LENGTH_SHORT)
-                                        .show();
+                                Snackbar.make(btn_denglu, response.body().getMessage(),
+                                        Snackbar.LENGTH_LONG).setAction("Action", null).show();
                             }
                         }
                     }
@@ -231,9 +228,8 @@ public class LoginActivity extends AppCompatActivity {
                 editor.apply();
                 ((MyApplication) getApplication()).setNo(info[0]);
                 ((MyApplication) getApplication()).setName(info[1]);
-                Toast.makeText(LoginActivity.this, "登录成功", Toast
-                        .LENGTH_SHORT)
-                        .show();
+                Snackbar.make(btn_denglu, "登录成功",
+                        Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {/* do something*/
@@ -252,9 +248,8 @@ public class LoginActivity extends AppCompatActivity {
                 input_mima.setError("密码不正确");
             }
         } else {
-            Toast.makeText(LoginActivity.this, "请到网络良好的地方再进行尝试!", Toast
-                    .LENGTH_SHORT)
-                    .show();
+            Snackbar.make(btn_denglu, "请到网络良好的地方再进行尝试!",
+                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
         progressbar_login.setVisibility(View.GONE);
     }

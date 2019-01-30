@@ -25,9 +25,8 @@
     <string name="queding">确定</string>
     <string name="details">详细情况</string>
     <string name="update">修改</string>
-    <string name="preview">预览</string>
-    <string name="printf">打印</string>
-    <string name="sign">签名</string>
+    <string name="getSignModel">获取签名模板</string>
+    <string name="makeRpt">生成报告</string>
     <string name="oldnumber">已有抽样单编号</string>
     <string name="applynumber">申请抽样单编号</string>
     <string name="result">审核结果</string>
@@ -47,5 +46,7 @@
     <string name="update_content">更新内容</string>
     <string name="update_btn">马上升级</string>
     <string name="app_version">抽样检测 V%1$s</string>
+    <string name="nodata">无任何数据</string>
+    <string name="getmoredata">加载更多数据</string>
 
 </resources>
