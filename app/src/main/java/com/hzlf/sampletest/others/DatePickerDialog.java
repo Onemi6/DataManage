@@ -53,7 +53,7 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.date_picker, null);
         setView(view);
-        mDatePicker = (DatePicker) view.findViewById(R.id.datePicker);
+        mDatePicker = view.findViewById(R.id.datePicker);
         mDatePicker.init(year, monthOfYear, dayOfMonth, this);
         // updateTitle(year, monthOfYear, dayOfMonth);
 

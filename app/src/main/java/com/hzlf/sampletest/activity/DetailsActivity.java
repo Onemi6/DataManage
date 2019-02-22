@@ -989,12 +989,19 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         map.put("$YPBZ$", info_add.getInfo_add3().getValue20());
         map.put("$CCTJ$", info_add.getInfo_add3().getValue21());
         map.put("$ZXBZ$", info_add.getInfo_add3().getValue22());
-        map.put("$CYJS$", info_add.getInfo_add3().getValue24() + info_add.getInfo_add3()
-                .getValue23());
-        map.put("$BYSL$", info_add.getInfo_add3().getValue25() + info_add.getInfo_add3()
-                .getValue23());
-        map.put("$CYSL$", info_add.getInfo_add3().getValue26() + info_add.getInfo_add3()
-                .getValue23());
+        if (info_add.getInfo_add3().getValue23() == null) {
+            map.put("$CYJS$", info_add.getInfo_add3().getValue24());
+            map.put("$BYSL$", info_add.getInfo_add3().getValue25());
+            map.put("$CYSL$", info_add.getInfo_add3().getValue26());
+        } else {
+            map.put("$CYJS$", info_add.getInfo_add3().getValue24() + info_add.getInfo_add3()
+                    .getValue23());
+            map.put("$BYSL$", info_add.getInfo_add3().getValue25() + info_add.getInfo_add3()
+                    .getValue23());
+            map.put("$CYSL$", info_add.getInfo_add3().getValue26() + info_add.getInfo_add3()
+                    .getValue23());
+        }
+
         map.put("$YPXKZ$", info_add.getInfo_add3().getValue28());
         map.put("$BZ$", info_add.getInfo_add3().getValue29());
         map.put("$DYRQ$", info_add.getInfo_add3().getValue30());

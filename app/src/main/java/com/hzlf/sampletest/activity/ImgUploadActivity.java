@@ -220,7 +220,13 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
                     for (String onepath : picList) {
                         picPath = onepath;
                         if (picPath != null) {
-                            attempImgUpload();
+                            try {
+                                Thread.sleep(300);
+                                attempImgUpload();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            //attempImgUpload();
                         } else {
                             Snackbar.make(uploadButton, "上传的文件路径出错",
                                     Snackbar.LENGTH_LONG).setAction("Action", null).show();

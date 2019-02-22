@@ -1,0 +1,11 @@
+#Internal package file, do not edit.
+#Fri Feb 22 17:12:35 CST 2019
+1.base=E\:\\code\\Android\\DataManage\\app\\build\\intermediates\\merged_assets\\debug\\mergeDebugAssets\\out
+0.baseType=DIRECTORY
+1.baseType=DIRECTORY
+count=2
+1.set=ASSET
+0.path=model.doc
+0.set=ASSET
+0.base=E\:\\code\\Android\\DataManage\\app\\build\\intermediates\\merged_assets\\debug\\mergeDebugAssets\\out
+1.path=PrinterShare.apk

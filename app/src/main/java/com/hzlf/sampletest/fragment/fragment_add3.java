@@ -41,6 +41,7 @@ import com.hzlf.sampletest.others.MyApplication;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -167,7 +168,7 @@ public class fragment_add3 extends Fragment {
         mMonth = calendar.get(Calendar.MONTH);
         mDay = calendar.get(Calendar.DAY_OF_MONTH);
         str_chouyangriqi = str_shengchanriqi = new SimpleDateFormat(
-                "yyyy-MM-dd").format(Calendar.getInstance().getTime());
+                "yyyy-MM-dd", Locale.getDefault()).format(Calendar.getInstance().getTime());
 
         tv_11.setText(str_shengchanriqi);
         tv_11.setOnClickListener(new OnClickListener() {
@@ -180,11 +181,13 @@ public class fragment_add3 extends Fragment {
                             @Override
                             public void onDateSet(DatePicker DatePicker,
                                                   int Year, int MonthOfYear, int DayOfMonth) {
-                                str_shengchanriqi = Year
+                                /*str_shengchanriqi = Year
                                         + "-"
                                         + String.format("%02d",
                                         (MonthOfYear + 1)) + "-"
-                                        + String.format("%02d", DayOfMonth);
+                                        + String.format("%02d", DayOfMonth);*/
+                                str_shengchanriqi = String.format(Locale.CHINA, "%02d-%02d-%02d",
+                                        Year, (MonthOfYear + 1), DayOfMonth);
                                 tv_11.setText(str_shengchanriqi);
                             }
                         }, mYear, mMonth, mDay, true).show();
@@ -203,11 +206,14 @@ public class fragment_add3 extends Fragment {
                             @Override
                             public void onDateSet(DatePicker DatePicker,
                                                   int Year, int MonthOfYear, int DayOfMonth) {
-                                str_chouyangriqi = Year
+                                /*str_chouyangriqi = Year
                                         + "-"
                                         + String.format("%02d",
                                         (MonthOfYear + 1)) + "-"
-                                        + String.format("%02d", DayOfMonth);
+                                        + String.format("%02d", DayOfMonth);*/
+
+                                str_chouyangriqi = String.format(Locale.CHINA, "%02d-%02d-%02d",
+                                        Year, (MonthOfYear + 1), DayOfMonth);
                                 tv_17.setText(str_chouyangriqi);
                             }
                         }, mYear, mMonth, mDay, true).show();

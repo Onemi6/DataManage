@@ -388,8 +388,8 @@ public class DBManage {
                                     .getColumnIndex("shengchanzhemingcheng")),
                             cursor.getString(cursor
                                     .getColumnIndex("shengchanzhedizhi")),
-                            cursor.getString(cursor.getColumnIndex("dianhua3")),
                             cursor.getString(cursor.getColumnIndex("shengchanzhelianxiren")),
+                            cursor.getString(cursor.getColumnIndex("dianhua3")),
                             cursor.getString(cursor.getColumnIndex("jiezhiriqi")),
                             cursor.getString(cursor.getColumnIndex("jisongdizhi"))),
                     new Info_add3(
