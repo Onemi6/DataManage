@@ -1,5 +1,5 @@
 #Internal package file, do not edit.
-#Fri Feb 22 17:08:12 CST 2019
+#Fri Mar 15 00:49:00 CST 2019
 4.path=lib/armeabi-v7a/libBugly.so
 13.baseType=DIRECTORY
 8.set=NATIVE_RESOURCE

@@ -5370,7 +5370,7 @@ public final class R {
     public static final int beginning=0x7f090027;
     public static final int blocking=0x7f090028;
     public static final int bottom=0x7f090029;
-    public static final int btn_applynumber=0x7f09002a;
+    public static final int btn_applyNumber=0x7f09002a;
     public static final int btn_back=0x7f09002b;
     public static final int btn_back2=0x7f09002c;
     public static final int btn_back3=0x7f09002d;
@@ -5909,7 +5909,7 @@ public final class R {
     public static final int zxing_capture=0x7f0c005d;
   }
   public static final class menu {
-    public static final int activity_main_drawer=0x7f0d0000;
+    public static final int main_drawer=0x7f0d0000;
   }
   public static final class raw {
     public static final int beep=0x7f0e0000;
@@ -5961,7 +5961,7 @@ public final class R {
     public static final int app_name=0x7f0f0029;
     public static final int app_version=0x7f0f002a;
     public static final int appbar_scrolling_view_behavior=0x7f0f002b;
-    public static final int applynumber=0x7f0f002c;
+    public static final int applyNumber=0x7f0f002c;
     public static final int bottom_sheet_behavior=0x7f0f002d;
     public static final int btn_denglu=0x7f0f002e;
     public static final int btn_tongbu_apply=0x7f0f002f;
@@ -6008,7 +6008,7 @@ public final class R {
     public static final int navigation_drawer_open=0x7f0f0058;
     public static final int no_result=0x7f0f0059;
     public static final int nodata=0x7f0f005a;
-    public static final int oldnumber=0x7f0f005b;
+    public static final int oldNumber=0x7f0f005b;
     public static final int password_toggle_content_description=0x7f0f005c;
     public static final int path_password_eye=0x7f0f005d;
     public static final int path_password_eye_mask_strike_through=0x7f0f005e;
@@ -20898,5 +20898,6 @@ public final class R {
   }
   public static final class xml {
     public static final int file_paths=0x7f120000;
+    public static final int network_security_config=0x7f120001;
   }
 }

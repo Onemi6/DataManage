@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.hzlf.sampletest"
     android:versionCode="1"
-    android:versionName="1.6" >
+    android:versionName="1.8" >
 
     <uses-sdk
         android:minSdkVersion="18"
@@ -42,10 +42,10 @@
         android:debuggable="true"
         android:icon="@drawable/logo"
         android:label="@string/app_name"
-        android:testOnly="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/AppTheme.NoActionBar" >
         <activity
-            android:name="com.hzlf.sampletest.activity.MainActivity"
+            android:name="com.hzlf.sampletest.view.MainActivity"
             android:launchMode="singleInstance" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,31 +54,31 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.hzlf.sampletest.activity.LoginActivity"
+            android:name="com.hzlf.sampletest.view.LoginActivity"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Light.NoActionBar" />
         <activity
-            android:name="com.hzlf.sampletest.activity.AddActivity"
+            android:name="com.hzlf.sampletest.view.AddActivity"
             android:launchMode="singleInstance" />
         <activity
-            android:name="com.hzlf.sampletest.activity.DetailsActivity"
+            android:name="com.hzlf.sampletest.view.DetailsActivity"
             android:launchMode="singleInstance" />
         <activity
-            android:name="com.hzlf.sampletest.activity.CodeActivity"
+            android:name="com.hzlf.sampletest.view.CodeActivity"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Light.NoActionBar" />
         <activity
-            android:name="com.hzlf.sampletest.activity.ImgUploadActivity"
+            android:name="com.hzlf.sampletest.view.ImgUploadActivity"
             android:launchMode="singleInstance"
             android:theme="@style/AppTheme.Light.NoActionBar" />
         <activity
-            android:name="com.hzlf.sampletest.activity.AboutActivity"
+            android:name="com.hzlf.sampletest.view.AboutActivity"
             android:launchMode="singleInstance" />
         <activity
-            android:name="com.hzlf.sampletest.activity.testActivity"
+            android:name="com.hzlf.sampletest.view.testActivity"
             android:launchMode="singleInstance" />
         <activity
-            android:name="com.hzlf.sampletest.activity.ScanActivity"
+            android:name="com.hzlf.sampletest.view.ScanActivity"
             android:launchMode="singleInstance" />
         <activity
             android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity"

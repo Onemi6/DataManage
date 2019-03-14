@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-88:12
-INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-88:12
-INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-88:12
-INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-88:12
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-89:12
+INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-89:12
+INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-89:12
+INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-89:12
 MERGED from [com.android.support:multidex:1.0.3] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\multidex-1.0.3.aar\b7cc6aaf10eb9c03d8151b93711dfe8b\AndroidManifest.xml:17:1-22:12
 MERGED from [com.android.support:design:28.0.0] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\design-28.0.0.aar\72dfb8b1f008d388616ffc6c0d79d30c\AndroidManifest.xml:17:1-24:12
 MERGED from [com.github.lovetuzitong:MultiImageSelector:1.2] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\MultiImageSelector-1.2.aar\f2c6fee42d038a60c23f1dba332ed85e\AndroidManifest.xml:2:1-20:12
@@ -42,9 +42,9 @@ MERGED from [com.android.support:interpolator:28.0.0] C:\Users\yy\.gradle\caches
 MERGED from [android.arch.lifecycle:livedata:1.1.1] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\livedata-1.1.1.aar\14208023e99979e9154b16f7899bc438\AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.lifecycle:livedata-core:1.1.1] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.1.aar\4d9d5f153d109ae83c97cc5ba9210b9c\AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.core:runtime:1.1.1] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\runtime-1.1.1.aar\7c2c2accb41f2e27b84b8fe45a0ddee2\AndroidManifest.xml:17:1-22:12
-INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-88:12
-INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-88:12
-INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-88:12
+INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-89:12
+INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-89:12
+INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-89:12
 	package
 		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:4:5-34
 		INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml
@@ -130,7 +130,7 @@ MERGED from [com.journeyapps:zxing-android-embedded:3.6.0] C:\Users\yy\.gradle\c
 	android:name
 		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:24:19-67
 application
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:26:5-86:19
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:26:5-87:19
 MERGED from [com.android.support:design:28.0.0] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\design-28.0.0.aar\72dfb8b1f008d388616ffc6c0d79d30c\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:design:28.0.0] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\design-28.0.0.aar\72dfb8b1f008d388616ffc6c0d79d30c\AndroidManifest.xml:22:5-20
 MERGED from [com.github.lovetuzitong:MultiImageSelector:1.2] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\MultiImageSelector-1.2.aar\f2c6fee42d038a60c23f1dba332ed85e\AndroidManifest.xml:14:5-18:19
@@ -152,105 +152,107 @@ MERGED from [com.android.support:versionedparcelable:28.0.0] C:\Users\yy\.gradle
 	android:allowBackup
 		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:28:9-35
 	android:theme
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:31:9-52
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:32:9-52
+	android:networkSecurityConfig
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:31:9-69
 	android:name
 		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:27:9-45
-activity#com.hzlf.sampletest.activity.MainActivity
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:32:9-40:20
+activity#com.hzlf.sampletest.view.MainActivity
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:33:9-41:20
 	android:launchMode
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:34:13-48
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:35:13-48
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:33:13-50
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:34:13-46
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:35:13-39:29
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:36:13-40:29
 action#android.intent.action.MAIN
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:36:17-69
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:37:17-69
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:36:25-66
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:37:25-66
 category#android.intent.category.LAUNCHER
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:38:17-77
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:39:17-77
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:38:27-74
-activity#com.hzlf.sampletest.activity.LoginActivity
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:41:9-44:65
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:39:27-74
+activity#com.hzlf.sampletest.view.LoginActivity
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:42:9-45:65
 	android:launchMode
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:43:13-48
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:44:13-48
 	android:theme
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:44:13-62
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:45:13-62
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:42:13-51
-activity#com.hzlf.sampletest.activity.AddActivity
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:45:9-47:51
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:43:13-47
+activity#com.hzlf.sampletest.view.AddActivity
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:46:9-48:51
 	android:launchMode
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:47:13-48
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:48:13-48
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:46:13-49
-activity#com.hzlf.sampletest.activity.DetailsActivity
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:48:9-50:51
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:47:13-45
+activity#com.hzlf.sampletest.view.DetailsActivity
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:49:9-51:51
 	android:launchMode
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:50:13-48
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:51:13-48
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:49:13-53
-activity#com.hzlf.sampletest.activity.CodeActivity
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:51:9-54:65
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:50:13-49
+activity#com.hzlf.sampletest.view.CodeActivity
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:52:9-55:65
 	android:launchMode
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:53:13-48
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:54:13-48
 	android:theme
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:54:13-62
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:55:13-62
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:52:13-50
-activity#com.hzlf.sampletest.activity.ImgUploadActivity
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:55:9-58:65
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:53:13-46
+activity#com.hzlf.sampletest.view.ImgUploadActivity
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:56:9-59:65
 	android:launchMode
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:57:13-48
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:58:13-48
 	android:theme
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:58:13-62
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:59:13-62
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:56:13-55
-activity#com.hzlf.sampletest.activity.AboutActivity
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:59:9-61:51
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:57:13-51
+activity#com.hzlf.sampletest.view.AboutActivity
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:60:9-62:51
 	android:launchMode
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:61:13-48
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:62:13-48
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:60:13-51
-activity#com.hzlf.sampletest.activity.testActivity
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:62:9-64:51
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:61:13-47
+activity#com.hzlf.sampletest.view.testActivity
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:63:9-65:51
 	android:launchMode
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:64:13-48
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:65:13-48
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:63:13-50
-activity#com.hzlf.sampletest.activity.ScanActivity
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:65:9-67:51
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:64:13-46
+activity#com.hzlf.sampletest.view.ScanActivity
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:66:9-68:51
 	android:launchMode
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:67:13-48
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:68:13-48
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:66:13-50
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:67:13-46
 activity#me.nereo.multi_image_selector.MultiImageSelectorActivity
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:69:9-72:51
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:70:9-73:51
 MERGED from [com.github.lovetuzitong:MultiImageSelector:1.2] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\MultiImageSelector-1.2.aar\f2c6fee42d038a60c23f1dba332ed85e\AndroidManifest.xml:15:9-17:62
 MERGED from [com.github.lovetuzitong:MultiImageSelector:1.2] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\MultiImageSelector-1.2.aar\f2c6fee42d038a60c23f1dba332ed85e\AndroidManifest.xml:15:9-17:62
 	android:launchMode
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:72:13-48
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:73:13-48
 	android:configChanges
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:71:13-59
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:72:13-59
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:70:13-84
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:71:13-84
 provider#android.support.v4.content.FileProvider
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:75:9-84:20
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:76:9-85:20
 	android:grantUriPermissions
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:79:13-47
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:80:13-47
 	android:authorities
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:77:13-67
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:78:13-67
 	android:exported
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:78:13-37
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:79:13-37
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:76:13-67
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:77:13-67
 meta-data#android.support.FILE_PROVIDER_PATHS
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:81:13-83:54
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:82:13-84:54
 	android:resource
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:83:17-51
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:84:17-51
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:82:17-67
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:83:17-67
 uses-sdk
 INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml

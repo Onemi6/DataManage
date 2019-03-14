@@ -1202,7 +1202,7 @@ int id barrier 0x7f090026
 int id beginning 0x7f090027
 int id blocking 0x7f090028
 int id bottom 0x7f090029
-int id btn_applynumber 0x7f09002a
+int id btn_applyNumber 0x7f09002a
 int id btn_back 0x7f09002b
 int id btn_back2 0x7f09002c
 int id btn_back3 0x7f09002d
@@ -1733,7 +1733,7 @@ int layout select_dialog_singlechoice_material 0x7f0c005a
 int layout support_simple_spinner_dropdown_item 0x7f0c005b
 int layout zxing_barcode_scanner 0x7f0c005c
 int layout zxing_capture 0x7f0c005d
-int menu activity_main_drawer 0x7f0d0000
+int menu main_drawer 0x7f0d0000
 int raw beep 0x7f0e0000
 int raw realm_properties 0x7f0e0001
 int raw zxing_beep 0x7f0e0002
@@ -1781,7 +1781,7 @@ int string action_settings 0x7f0f0028
 int string app_name 0x7f0f0029
 int string app_version 0x7f0f002a
 int string appbar_scrolling_view_behavior 0x7f0f002b
-int string applynumber 0x7f0f002c
+int string applyNumber 0x7f0f002c
 int string bottom_sheet_behavior 0x7f0f002d
 int string btn_denglu 0x7f0f002e
 int string btn_tongbu_apply 0x7f0f002f
@@ -1828,7 +1828,7 @@ int string navigation_drawer_close 0x7f0f0057
 int string navigation_drawer_open 0x7f0f0058
 int string no_result 0x7f0f0059
 int string nodata 0x7f0f005a
-int string oldnumber 0x7f0f005b
+int string oldNumber 0x7f0f005b
 int string password_toggle_content_description 0x7f0f005c
 int string path_password_eye 0x7f0f005d
 int string path_password_eye_mask_strike_through 0x7f0f005e
@@ -3282,3 +3282,4 @@ int styleable zxing_finder_zxing_viewfinder_mask 3
 int[] styleable zxing_view { 0x7f04021f }
 int styleable zxing_view_zxing_scanner_layout 0
 int xml file_paths 0x7f120000
+int xml network_security_config 0x7f120001

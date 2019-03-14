@@ -274,6 +274,7 @@ retrofit2/Retrofit$Builder.class
 retrofit2/Retrofit.class
 retrofit2/ServiceMethod.class
 retrofit2/Utils.class
+retrofit2/converter/gson/package-info.class
 retrofit2/http/Body.class
 retrofit2/http/DELETE.class
 retrofit2/http/Field.class

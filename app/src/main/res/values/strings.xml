@@ -27,8 +27,8 @@
     <string name="update">修改</string>
     <string name="getSignModel">获取签名模板</string>
     <string name="makeRpt">生成报告</string>
-    <string name="oldnumber">已有抽样单编号</string>
-    <string name="applynumber">申请抽样单编号</string>
+    <string name="oldNumber">已有抽样单编号</string>
+    <string name="applyNumber">申请抽样单编号</string>
     <string name="result">审核结果</string>
     <string name="no_result">没有审核结果</string>
     <string name="action_settings">Settings</string>
