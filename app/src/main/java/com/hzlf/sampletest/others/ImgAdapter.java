@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.hzlf.sampletest.R;
 
 import java.util.List;
@@ -22,13 +23,13 @@ public class ImgAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> im
         .OnClickListener, View.OnLongClickListener {
     private static final int VIEW_TYPE = -1;
     private List<String> imgList;
-    private Activity mactivity;
+    private Activity mActivity;
     private ImgAdapter.OnClickListener mOnClickListener = null;
     private ImgAdapter.OnLongClickListener mOnLongClickListener = null;
     private int defItem = -1;
 
     public ImgAdapter(Activity activity, List<String> imgList) {
-        this.mactivity = activity;
+        this.mActivity = activity;
         this.imgList = imgList;
     }
 
@@ -36,10 +37,10 @@ public class ImgAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> im
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View emptyview = LayoutInflater.from(mactivity).inflate(R.layout.rv_empty, parent, false);
-        View view = LayoutInflater.from(mactivity).inflate(R.layout.img_item, parent, false);
+        View emptyView = LayoutInflater.from(mActivity).inflate(R.layout.rv_empty, parent, false);
+        View view = LayoutInflater.from(mActivity).inflate(R.layout.img_item, parent, false);
         if (VIEW_TYPE == viewType) {
-            return new ImgAdapter.EmptyViewHolder(emptyview);
+            return new ImgAdapter.EmptyViewHolder(emptyView);
         }
         view.setOnClickListener(this);
         view.setOnLongClickListener(this);
@@ -52,35 +53,11 @@ public class ImgAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> im
 
         if (holder instanceof ImgAdapter.ViewHolder) {
             String picPath = imgList.get(position);
-
             if (!TextUtils.isEmpty(picPath)) {
-                Options opt = new Options();
-                opt.inJustDecodeBounds = true;
-                BitmapFactory.decodeFile(picPath, opt);
-                int imageHeight = opt.outHeight;
-                int imageWidth = opt.outWidth;
-
-                Display display = mactivity.getWindowManager().getDefaultDisplay();
-                Point point = new Point();
-                // 该方法已过时，使用getRealSize()方法替代。也可以使用getSize()，但是不能准确的获取到分辨率
-                // int screenHeight = display.getHeight();
-                // int screenWidth = display.getWidth();
-                display.getRealSize(point);
-                int screenHeight = point.y;
-                int screenWidth = point.x;
-
-                int scale = 1;
-                int scaleWidth = imageWidth / screenWidth / 3;
-                int scaleHeigh = imageHeight / screenHeight;
-                if (scaleWidth >= scaleHeigh && scaleWidth > 1) {
-                    scale = scaleWidth;
-                } else if (scaleWidth < scaleHeigh && scaleHeigh > 1) {
-                    scale = scaleHeigh;
-                }
-                opt.inSampleSize = scale;
-                opt.inJustDecodeBounds = false;
-                Bitmap bm = BitmapFactory.decodeFile(picPath, opt);
-                ((ViewHolder) holder).img_add.setImageBitmap(bm);
+                Glide.with(mActivity).load(picPath)
+                        .placeholder(R.drawable.logo)
+                        .error(R.drawable.error)
+                        .into(((ViewHolder) holder).img_add);
                 ((ViewHolder) holder).itemView.setTag(position);
             }
         } else if (holder instanceof ImgAdapter.EmptyViewHolder) {

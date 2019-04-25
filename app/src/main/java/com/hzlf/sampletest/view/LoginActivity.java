@@ -1,13 +1,17 @@
 package com.hzlf.sampletest.view;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,6 +22,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.dou361.dialogui.DialogUIUtils;
+import com.dou361.dialogui.bean.BuildBean;
 import com.google.gson.Gson;
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.db.DBManage;
@@ -27,7 +33,10 @@ import com.hzlf.sampletest.http.eLab_API;
 import com.hzlf.sampletest.model.Status;
 import com.hzlf.sampletest.others.MyApplication;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import okhttp3.MediaType;
@@ -42,12 +51,14 @@ public class LoginActivity extends AppCompatActivity {
     private EditText input_zhanghao, input_mima;
     private Button btn_denglu;
     private CheckBox remember_mima;
-    private ProgressBar progressbar_login;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private int login_type;
     private String account, password;
     private DBManage dbmanage = new DBManage(this);
+    /*定义一个list，用于存储需要申请的权限*/
+    private ArrayList<String> permissionList = new ArrayList<>();
+    private static final int MY_PERMISSIONS_REQUEST = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +70,8 @@ public class LoginActivity extends AppCompatActivity {
         _context = this;
         sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
         initView();
+        FileDir();
+        getPermission();
         if (login_type == 1) {
             account = sharedPreferences.getString("ZHANGHAO", null);
             password = sharedPreferences.getString("MIMA", null);
@@ -97,7 +110,6 @@ public class LoginActivity extends AppCompatActivity {
         input_mima = findViewById(R.id.input_mima);
         remember_mima = findViewById(R.id.remember_mima);
         btn_denglu = findViewById(R.id.btn_denglu);
-        progressbar_login = findViewById(R.id.progressbar_login);
         if (sharedPreferences != null) {
             boolean isremember = sharedPreferences.getBoolean("remember_mima", false);
             if (isremember) {
@@ -114,8 +126,11 @@ public class LoginActivity extends AppCompatActivity {
 
     //有网时登录
     public void attemptLogin() {
+        final BuildBean dialog_login = DialogUIUtils.showLoading(_context, "登录中...", false,
+                true, false,
+                false);
+        dialog_login.show();
         try {
-            progressbar_login.setVisibility(View.VISIBLE);
             PackageManager packageManager = getPackageManager();
             /* getPackageName()是你当前类的包名，0代表是获取版本信息*/
             PackageInfo packInfo = packageManager.getPackageInfo(getPackageName(), 0);
@@ -127,8 +142,7 @@ public class LoginActivity extends AppCompatActivity {
             String obj = new Gson().toJson(map);
             //eLab_API request = HttpUtils.GsonApi();
             RequestBody body = RequestBody.create(MediaType.parse("application/json; " +
-                            "charset=utf-8"),
-                    obj);
+                    "charset=utf-8"), obj);
             eLab_API request = HttpUtils.GsonApi();
             Call<Status> call = request.Login(body);
             call.enqueue(new Callback<Status>() {
@@ -178,24 +192,30 @@ public class LoginActivity extends AppCompatActivity {
                                                             .class));
                                             finish();
                                         }
-                                    }, 1000); /* 延时1s执行*/
+                                    }, 300); /* 延时1s执行*/
                                 }
                             } else if (response.body().getStatus().equals("error")) {
                                 Snackbar.make(btn_denglu, response.body().getMessage(),
                                         Snackbar.LENGTH_LONG).setAction("Action", null).show();
                             }
+                        } else {
+                            Snackbar.make(btn_denglu, "登录失败(请求成功)",
+                                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
                         }
+                    } else {
+                        Snackbar.make(btn_denglu, "登录失败(code:" + response.code() + ")",
+                                Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     }
-                    progressbar_login.setVisibility(View.GONE);
+                    DialogUIUtils.dismiss(dialog_login);
                 }
 
                 @Override
                 public void onFailure(Call<Status> call, Throwable t) {
-                    progressbar_login.setVisibility(View.GONE);
                     Log.v("Login请求失败", t.getMessage());
                     if (login_type == -1) {
                         localLogin();
                     }
+                    DialogUIUtils.dismiss(dialog_login);
                 }
             });
         } catch (PackageManager.NameNotFoundException e) {
@@ -206,7 +226,6 @@ public class LoginActivity extends AppCompatActivity {
 
     //没网、网络不可用 本地登录
     public void localLogin() {
-        progressbar_login.setVisibility(View.VISIBLE);
         if (login_type == -1) {
             if ((dbmanage.check(account) != null) && (dbmanage.check(account).equals(password))) {
                 editor = sharedPreferences.edit();
@@ -232,7 +251,6 @@ public class LoginActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {/* do something*/
-                        progressbar_login.setVisibility(View.GONE);
                         startActivity(new Intent(LoginActivity.this,
                                 MainActivity
                                         .class));
@@ -250,6 +268,67 @@ public class LoginActivity extends AppCompatActivity {
             Snackbar.make(btn_denglu, "请到网络良好的地方再进行尝试!",
                     Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
-        progressbar_login.setVisibility(View.GONE);
+    }
+
+    public void getPermission() {
+        permissionList.add(Manifest.permission.REQUEST_INSTALL_PACKAGES);
+        permissionList.add(Manifest.permission.INTERNET);
+        permissionList.add(Manifest.permission.ACCESS_NETWORK_STATE);
+        permissionList.add(Manifest.permission.ACCESS_WIFI_STATE);
+        permissionList.add(Manifest.permission.VIBRATE);
+        permissionList.add(Manifest.permission.CAMERA);
+        permissionList.add(Manifest.permission.SYSTEM_ALERT_WINDOW);
+        permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+        permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        permissionList.add(Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS);
+        permissionList.add(Manifest.permission.READ_PHONE_STATE);
+        permissionList.add(Manifest.permission.READ_LOGS);
+        checkAndRequestPermissions(permissionList);
+    }
+
+    private void checkAndRequestPermissions(ArrayList<String> permissionList) {
+        ArrayList<String> list = new ArrayList<>(permissionList);
+        Iterator<String> it = list.iterator();
+        while (it.hasNext()) {
+            String permission = it.next();/*检查权限是否已经申请*/
+            int hasPermission = ContextCompat.checkSelfPermission(this, permission);
+            if (hasPermission == PackageManager.PERMISSION_GRANTED) it.remove();
+        }
+        /**
+         *补充说明：ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission
+         * .RECORD_AUDIO);
+         *对于原生Android，如果用户选择了“不再提示”，那么shouldShowRequestPermissionRationale就会为true。
+         *此时，用户可以弹出一个对话框，向用户解释为什么需要这项权限。
+         *对于一些深度定制的系统，如果用户选择了“不再提示”，那么shouldShowRequestPermissionRationale永远为false
+         */
+        if (list.size() == 0) {
+            return;
+        }
+        String[] permissions = list.toArray(new String[0]);
+        //正式请求权限
+        ActivityCompat.requestPermissions(this, permissions, MY_PERMISSIONS_REQUEST);
+    }
+
+    public void FileDir() {
+        boolean sdCardExist = android.os.Environment.getExternalStorageState().equals(android.os
+                .Environment.MEDIA_MOUNTED);
+        String DOC_PATH, MODEL_PATH, CRASH_PATH;
+        if (sdCardExist) {
+            DOC_PATH = Environment.getExternalStorageDirectory() + "/DataManage/doc/";
+            MODEL_PATH = Environment.getExternalStorageDirectory() + "/DataManage/model/";
+            CRASH_PATH = Environment.getExternalStorageDirectory() + "/DataManage/crash/";
+        } else {
+            DOC_PATH = MODEL_PATH = CRASH_PATH = this.getCacheDir().toString() + "/";
+        }
+        File doc = new File(DOC_PATH), model = new File(MODEL_PATH), crash = new File(CRASH_PATH);
+        if (!doc.exists()) {
+            doc.mkdirs();
+        }
+        if (!model.exists()) {
+            model.mkdirs();
+        }
+        if (!crash.exists()) {
+            crash.mkdirs();
+        }
     }
 }

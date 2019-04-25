@@ -32,6 +32,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.dou361.dialogui.DialogUIUtils;
+import com.dou361.dialogui.bean.BuildBean;
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.db.DBManage;
 import com.hzlf.sampletest.http.HttpUtils;
@@ -56,17 +58,13 @@ public class AboutActivity extends AppCompatActivity {
 
     private static String versionName, TAG_UPDATE = "AppUpdate", token, no;
     private static UpdateInfo info;
-    private TextView tv_app_version;
-    private Button version_update, btn_tongbu_emp, btn_tongbu_apply;
-    private ProgressBar progressbar_tongbu;
-    private Toolbar toolbar;
-    private PackageInfo packInfo;
+    private Button btn_tongbu_emp, btn_tongbu_apply;
     private Context context;
     private DBManage dbmanage = new DBManage(this);
     private SharedPreferences sharedPreferences;
     private ProgressDialog pd;
-    private DownloadManager mDownloadManager;
     private long mId;
+    private BuildBean dialog_loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +73,11 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about);
         sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
         context = this;
-        tv_app_version = findViewById(R.id.app_version);
-        version_update = findViewById(R.id.version_update);
+        TextView tv_app_version = findViewById(R.id.app_version);
+        Button version_update = findViewById(R.id.version_update);
         btn_tongbu_emp = findViewById(R.id.btn_tongbu_emp);
         btn_tongbu_apply = findViewById(R.id.btn_tongbu_apply);
-        progressbar_tongbu = findViewById(R.id.progressbar_tongbu);
-        toolbar = findViewById(R.id.toolbar_about);
+        Toolbar toolbar = findViewById(R.id.toolbar_about);
         toolbar.setTitle("设置");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         //设置toolbar
@@ -90,7 +87,7 @@ public class AboutActivity extends AppCompatActivity {
         //菜单点击事件（注意需要在setSupportActionBar(toolbar)之后才有效果）
         //toolbar.setOnMenuItemClickListener(onMenuItemClick);
         try {
-            packInfo = getPackageInfo();
+            PackageInfo packInfo = getPackageInfo();
             versionName = packInfo.versionName;
             tv_app_version.setText(String.format(getResources().getString(R.string.app_version),
                     versionName));
@@ -111,7 +108,8 @@ public class AboutActivity extends AppCompatActivity {
                 }).start();
             }
         });
-
+        dialog_loading = DialogUIUtils.showLoading(context, "同步中...", false,
+                true, false, false);
         btn_tongbu_emp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +126,7 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     public void attemptEmp() {
-        progressbar_tongbu.setVisibility(View.VISIBLE);
+        dialog_loading.show();
         eLab_API request = HttpUtils.GsonApi();
         if (((MyApplication) getApplication()).getToken() == null) {
             token = "Bearer " + sharedPreferences.getString("token", "");
@@ -169,13 +167,13 @@ public class AboutActivity extends AppCompatActivity {
                                 Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     }
                 }
-                progressbar_tongbu.setVisibility(View.GONE);
+                DialogUIUtils.dismiss(dialog_loading);
             }
 
             @Override
             public void onFailure(Call<List<User>> call, Throwable t) {
-                progressbar_tongbu.setVisibility(View.GONE);
                 Log.v("Emp请求失败!", t.getMessage());
+                DialogUIUtils.dismiss(dialog_loading);
                 Snackbar.make(btn_tongbu_emp, "同步失败，请稍后再试!",
                         Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
@@ -185,7 +183,7 @@ public class AboutActivity extends AppCompatActivity {
     }
 
     public void attemptApply() {
-        progressbar_tongbu.setVisibility(View.VISIBLE);
+        dialog_loading.show();
         eLab_API request = HttpUtils.GsonApi();
         if (((MyApplication) getApplication()).getToken() == null) {
             token = "Bearer " + sharedPreferences.getString("token", "");
@@ -314,13 +312,13 @@ public class AboutActivity extends AppCompatActivity {
                                     } else {
                                         no = ((MyApplication) getApplication()).getNo();
                                     }
-                                    dbmanage.addInfo(no, info_add1, info_add2
-                                            , info_add3);
+                                    dbmanage.addInfo(no, info_add1, info_add2, info_add3);
                                     if (dbmanage.checkNumber(apply.getSAMPLING_NO()) == 0) {
                                         dbmanage.addSampleNumber(apply.getSAMPLING_NO());
-                                        dbmanage.updateNumber(apply.getSAMPLING_NO(), 1, 1, 1);
+                                        //dbmanage.updateNumber(apply.getSAMPLING_NO(), 1, 1, 1);
                                         //dbmanage.updateSign(apply.getSAMPLING_NO(), 0);
                                     }
+                                    dbmanage.updateNumber(apply.getSAMPLING_NO(), 1, 1, 1);
                                     if (i == response.body().size()) {
                                         AddActivity addActivity = new AddActivity();
                                         Info_add info = new Info_add();
@@ -331,8 +329,6 @@ public class AboutActivity extends AppCompatActivity {
                                         info.setInfo_add3(info_add3);
                                         addActivity.save(info);
                                     }
-                                    /*Log.v("apply.getSAMPLING_NO()", apply.getSAMPLING_NO() +
-                                            "插入成功!");*/
                                 }
                             }
                             Snackbar.make(btn_tongbu_apply, "同步成功",
@@ -344,13 +340,13 @@ public class AboutActivity extends AppCompatActivity {
                                 Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     }
                 }
-                progressbar_tongbu.setVisibility(View.GONE);
+                DialogUIUtils.dismiss(dialog_loading);
             }
 
             @Override
             public void onFailure(Call<List<Apply>> call, Throwable t) {
-                progressbar_tongbu.setVisibility(View.GONE);
                 Log.v("Apply请求失败!", t.getMessage());
+                DialogUIUtils.dismiss(dialog_loading);
                 Snackbar.make(btn_tongbu_apply, "同步失败，请稍后再试!",
                         Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
@@ -437,6 +433,10 @@ public class AboutActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                File apkFile = getExternalFilesDir("DownLoad/datamanage.apk");
+                if (apkFile.exists()) {
+                    apkFile.delete();
+                }
                 downloadApp();
             }
         });
@@ -444,7 +444,7 @@ public class AboutActivity extends AppCompatActivity {
 
     public void downloadApp() {
         //此处使用DownLoadManager开启下载任务
-        mDownloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        DownloadManager mDownloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(info.getUrl()));
         // 下载过程和下载完成后通知栏有通知消息。
         request.setNotificationVisibility(DownloadManager.Request

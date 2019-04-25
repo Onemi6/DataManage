@@ -1199,7 +1199,7 @@
                         android:layout_marginRight="5dip"
                         android:text="打印日期:" />
 
-                    <TextView
+                    <EditText
                         android:id="@+id/details_dayinriqi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
@@ -1246,25 +1246,6 @@
                         android:paddingRight="@dimen/activity_vertical_margin3"
                         android:text="@string/btn_upload_img"
                         android:textColor="#fff" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/btn_getSignModel"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/my_button"
-                        android:minHeight="0dp"
-                        android:minWidth="0dp"
-                        android:paddingLeft="@dimen/activity_vertical_margin3"
-                        android:paddingRight="@dimen/activity_vertical_margin3"
-                        android:text="@string/getSignModel"
-                        android:textColor="#fff" />
 
                     <Button
                         android:id="@+id/btn_makeRpt"
@@ -1278,8 +1259,8 @@
                         android:paddingRight="@dimen/activity_vertical_margin3"
                         android:text="@string/makeRpt"
                         android:textColor="#fff" />
-
                 </LinearLayout>
+
             </LinearLayout>
 
             <TextView

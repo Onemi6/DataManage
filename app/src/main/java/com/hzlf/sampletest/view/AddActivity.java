@@ -40,15 +40,9 @@ import retrofit2.Response;
 public class AddActivity extends AppCompatActivity {
 
     private MyViewPager viewpager;
-
     // 页面集合
     private List<Fragment> fmList;
-    private fragment_add1 fm_add1;
-    private fragment_add2 fm_add2;
-    private fragment_add3 fm_add3;
-
-    private Toolbar toolbar;
-    private String number, token;
+    private String number;
     private DBManage dbmanage = new DBManage(this);
     private Context _context;
     private SharedPreferences sharedPreferences;
@@ -61,7 +55,7 @@ public class AddActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
         _context = this;
         number = getIntent().getStringExtra("number");
-        toolbar = findViewById(R.id.toolbar_add);
+        Toolbar toolbar = findViewById(R.id.toolbar_add);
         toolbar.setTitle("抽样信息填报");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         //设置toolbar
@@ -74,9 +68,9 @@ public class AddActivity extends AppCompatActivity {
         // 设置限制页面数
         viewpager.setOffscreenPageLimit(3);
         fmList = new ArrayList<>();
-        fm_add1 = new fragment_add1();
-        fm_add2 = new fragment_add2();
-        fm_add3 = new fragment_add3();
+        fragment_add1 fm_add1 = new fragment_add1();
+        fragment_add2 fm_add2 = new fragment_add2();
+        fragment_add3 fm_add3 = new fragment_add3();
         fmList.add(fm_add1);
         fmList.add(fm_add2);
         fmList.add(fm_add3);
@@ -90,6 +84,7 @@ public class AddActivity extends AppCompatActivity {
 
     public void attemptGetAllSource() {
         if (NetworkUtil.isNetworkAvailable(_context)) {
+            String token;
             eLab_API request = HttpUtils.GsonApi();
             if (((MyApplication) getApplication()).getToken() == null) {
                 token = "Bearer " + sharedPreferences.getString("token", "");
@@ -164,7 +159,7 @@ public class AddActivity extends AppCompatActivity {
     public void save(Info_add info) {
         Gson info_add_gson = new Gson();
         String str = info_add_gson.toJson(info);
-        FileOutputStream out = null;
+        FileOutputStream out;
         BufferedWriter writer = null;
         try {
             // MODE_PRIVATE 覆盖内容
@@ -192,7 +187,7 @@ public class AddActivity extends AppCompatActivity {
         try {
             in = openFileInput("data.txt");
             reader = new BufferedReader(new InputStreamReader(in));
-            String line = "";
+            String line;
             while ((line = reader.readLine()) != null) {
                 content.append(line);
             }
@@ -209,8 +204,6 @@ public class AddActivity extends AppCompatActivity {
         }
         return content.toString();
     }
-
-    //定义自己的ViewPager适配器。 也可以使用FragmentPagerAdapter。关于这两者之间的区别，可以自己去搜一下。
 
     class MyFragStatePagerAdapter extends FragmentStatePagerAdapter {
         Fragment currentFragment;

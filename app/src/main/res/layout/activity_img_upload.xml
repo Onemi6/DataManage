@@ -27,7 +27,8 @@
             android:id="@+id/spinner_img_type"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:overlapAnchor="false" />
 
         <Button
             android:id="@+id/uploadImage"

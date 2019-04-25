@@ -28,6 +28,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.db.DBManage;
 import com.hzlf.sampletest.http.HttpUtils;
@@ -54,18 +55,15 @@ import retrofit2.Response;
 public class ImgUploadActivity extends Activity implements OnClickListener {
 
     private static final int REQUEST_IMAGE = 2;
-    private Button selectButton, uploadButton;
+    private Button uploadButton;
     private DBManage dbmanage = new DBManage(this);
     private Spinner sp_img_type;
-    private List<String> selectPaths = new ArrayList<>(), picList = new ArrayList<>(),
-            status = new ArrayList<>();
-    private ArrayAdapter ada_img_type;
+    private List<String> picList = new ArrayList<>(), status = new ArrayList<>();
     private RecyclerView rv_add_img;
-    private GridLayoutManager layoutmanager;
     private ImgAdapter adapter_img;
     private Context _context;
-    private int fail_num = 0, pos;
-    private String img_type = null, number = null, picPath, token;
+    private int fail_num = 0;
+    private String img_type = null, number = null, picPath;
     private SharedPreferences sharedPreferences;
     private ProgressDialog mypDialog;
 
@@ -80,22 +78,23 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
     private void initView() {
         sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
         _context = this;
-        selectButton = findViewById(R.id.selectImage);
+        Button selectButton = findViewById(R.id.selectImage);
         uploadButton = findViewById(R.id.uploadImage);
         sp_img_type = findViewById(R.id.spinner_img_type);
         rv_add_img = findViewById(R.id.rv_img_add);
         selectButton.setOnClickListener(this);
         uploadButton.setOnClickListener(this);
 
-        ada_img_type = ArrayAdapter.createFromResource(_context, R.array.IMG_TYPE, android.R
-                .layout.simple_spinner_dropdown_item);
+        ArrayAdapter ada_img_type = ArrayAdapter.createFromResource(_context, R.array.IMG_TYPE,
+                android.R
+                        .layout.simple_spinner_dropdown_item);
         sp_img_type.setAdapter(ada_img_type);
 
         //GridLayoutManager 对象 这里使用 GridLayoutManager 是网格布局的意思
-        layoutmanager = new GridLayoutManager(this, 3);
-        layoutmanager.setOrientation(GridLayoutManager.VERTICAL);
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 3);
+        layoutManager.setOrientation(GridLayoutManager.VERTICAL);
         //设置RecyclerView 布局
-        rv_add_img.setLayoutManager(layoutmanager);
+        rv_add_img.setLayoutManager(layoutManager);
         //设置Adapter
         adapter_img = new ImgAdapter(this, picList);
         rv_add_img.setAdapter(adapter_img);
@@ -130,46 +129,7 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
                         .start(ImgUploadActivity.this, REQUEST_IMAGE);
                 break;
             case R.id.uploadImage:
-                mypDialog = new ProgressDialog(ImgUploadActivity.this);
-                // 实例化
-                mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                // 设置进度条风格，风格为圆形，旋转的
-                mypDialog.setTitle("上传图片中...");
-                // 设置ProgressDialog 标题
-                mypDialog.setIndeterminate(false);
-                // 设置ProgressDialog 的进度条是否不明确
-                mypDialog.setCancelable(false);
-                // 设置ProgressDialog 是否可以按退回按键取消
-                mypDialog.show();
-                // 让ProgressDialog显示
-                img_type = sp_img_type.getSelectedItem().toString();
-                if (adapter_img.getImgList().size() > 0) {
-                    picList = adapter_img.getImgList();
-                    for (String onepath : picList) {
-                        picPath = onepath;
-                        if (picPath != null) {
-                            try {
-                                Thread.sleep(300);
-                                attemptImgUpload();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        } else {
-                            Snackbar.make(uploadButton, "上传的文件路径出错",
-                                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                        }
-                    }
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            finish();
-                        }
-                    }, 1500); // 延时1s执行
-                } else if (adapter_img.getImgList().size() == 0) {
-                    mypDialog.dismiss();
-                    Snackbar.make(rv_add_img, "至少选择一张图片",
-                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                }
+                uploadImage();
                 break;
             default:
                 break;
@@ -180,11 +140,12 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE) {
+            List<String> selectPaths;
             if (resultCode == RESULT_OK) {
                 selectPaths = data.getStringArrayListExtra(MultiImageSelector.EXTRA_RESULT);
                 picList.addAll(selectPaths);
             }
-            selectPaths = null;
+            //selectPaths = null;
         }
     }
 
@@ -206,6 +167,7 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
     public void attemptImgUpload() {
         if (NetworkUtil.isNetworkAvailable(_context)) {
             eLab_API request = HttpUtils.GsonApi();
+            String token;
             if (((MyApplication) getApplication()).getToken() == null) {
                 token = "Bearer " + sharedPreferences.getString("token", "");
             } else {
@@ -270,49 +232,9 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
         }
     }
 
-    public Bitmap getBM(String path) {
-        if (path != null) {
-            Options opt = new Options();
-            opt.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(path, opt);
-            int imageHeight = opt.outHeight;
-            int imageWidth = opt.outWidth;
-            Display display = getWindowManager().getDefaultDisplay();
-            Point point = new Point();
-            display.getRealSize(point);
-            int screenHeight = point.y;
-            int screenWidth = point.x;
-            int scale = 1;
-            int scaleWidth = imageWidth / screenWidth;
-            int scaleHeight = imageHeight / screenHeight;
-            if (scaleWidth >= scaleHeight && scaleWidth > 1) {
-                scale = scaleWidth;
-            } else if (scaleWidth < scaleHeight && scaleHeight > 1) {
-                scale = scaleHeight;
-            }
-            opt.inSampleSize = scale;
-            opt.inJustDecodeBounds = false;
-            Bitmap bm = BitmapFactory.decodeFile(path, opt);
-            return bm;
-        }
-        return null;
-    }
-
     public void ImgOnClick(int pos) {
         String path = picList.get(pos);
-        Bitmap bm = getBM(path);
-        if (bm != null) {
-            LayoutInflater inflater = getLayoutInflater();
-            View layout = inflater.inflate(R.layout.img_item,
-                    (ViewGroup) findViewById(R.id.dialog_img));
-            ImageView imageview = layout
-                    .findViewById(R.id.imageView);
-            imageview.setImageBitmap(bm);
-            AlertDialog.Builder dialog_img = new AlertDialog.Builder(
-                    ImgUploadActivity.this).setView(layout)
-                    .setPositiveButton("确定", null);
-            dialog_img.show();
-        }
+        showImage(path);
     }
 
     public void ImgOnLongClick(final int pos) {
@@ -354,4 +276,62 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
         builder.show();
     }
 
+    public void uploadImage() {
+        mypDialog = new ProgressDialog(ImgUploadActivity.this);
+        // 实例化
+        mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        // 设置进度条风格，风格为圆形，旋转的
+        mypDialog.setTitle("上传图片中...");
+        // 设置ProgressDialog 标题
+        mypDialog.setIndeterminate(false);
+        // 设置ProgressDialog 的进度条是否不明确
+        mypDialog.setCancelable(false);
+        // 设置ProgressDialog 是否可以按退回按键取消
+        mypDialog.show();
+        // 让ProgressDialog显示
+        img_type = sp_img_type.getSelectedItem().toString();
+        if (adapter_img.getImgList().size() > 0) {
+            picList = adapter_img.getImgList();
+            for (String onePic : picList) {
+                picPath = onePic;
+                if (picPath != null) {
+                    try {
+                        Thread.sleep(300);
+                        attemptImgUpload();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Snackbar.make(uploadButton, "上传的文件路径出错",
+                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                }
+            }
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                }
+            }, 1500); // 延时1s执行
+        } else if (adapter_img.getImgList().size() == 0) {
+            mypDialog.dismiss();
+            Snackbar.make(rv_add_img, "至少选择一张图片",
+                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+    }
+
+    public void showImage(String path) {
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.img_item,
+                (ViewGroup) findViewById(R.id.dialog_img));
+        ImageView imageview = layout
+                .findViewById(R.id.imageView);
+        AlertDialog.Builder dialog_img = new AlertDialog.Builder(
+                ImgUploadActivity.this).setView(layout)
+                .setPositiveButton("确定", null);
+        dialog_img.show();
+        Glide.with(_context).load(path)
+                .placeholder(R.drawable.logo)
+                .error(R.drawable.error)
+                .into(imageview);
+    }
 }

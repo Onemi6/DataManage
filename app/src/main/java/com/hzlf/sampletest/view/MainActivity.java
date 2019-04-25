@@ -1,6 +1,5 @@
 package com.hzlf.sampletest.view;
 
-import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -25,8 +24,6 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -59,7 +56,6 @@ import com.hzlf.sampletest.others.MyApplication;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -77,10 +73,8 @@ public class MainActivity extends AppCompatActivity
     private List<MainInfo> mainInfoList = new ArrayList<>(), allList = new ArrayList<>();
     private MainInfoAdapter adapter_mainInfo;
     private ListView listview;
+    private FloatingActionButton data_add;
     private SharedPreferences sharedPreferences;
-    /*定义一个list，用于存储需要申请的权限*/
-    private ArrayList<String> permissionList = new ArrayList<>();
-    private static final int MY_PERMISSIONS_REQUEST = 3000;
     private ProgressDialog pd;
 
     @Override
@@ -90,11 +84,15 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         _context = this;
         CrashHandler.getInstance().init(_context);
-        sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
 
+        if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT) != 0) {
+            finish();
+            return;
+        }
+
+        sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
         Toolbar toolbar = findViewById(R.id.toolbar_main);
-        //btn_getmoredata = findViewById(R.id.btn_getmoredata);
-        FloatingActionButton data_add = findViewById(R.id.data_add);
+        data_add = findViewById(R.id.data_add);
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         //获取头布局文件
@@ -130,96 +128,7 @@ public class MainActivity extends AppCompatActivity
             listview.setAdapter(adapter_mainInfo);
             initMainInfo();
             attemptUpdate();
-            getPermission();
-            FileDir();
-            listview.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view,
-                                        int position, long id) {
-                    // TODO 自动生成的方法存根
-                    MainInfo maininfo = mainInfoList.get(position);
-                    ((MyApplication) getApplication()).setNumber(maininfo.getNumber());
-                    Intent intent_details = new Intent();
-                    intent_details.setClass(MainActivity.this,
-                            DetailsActivity.class);
-                    // finish();// 结束当前活动
-                    startActivity(intent_details);
-                }
-            });
-            listview.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view,
-                                               final int position, long id) {
-                    // TODO 自动生成的方法存根
-                    // 通过AlertDialog.Builder这个类来实例化我们的一个AlertDialog的对象
-                    AlertDialog.Builder builder = new AlertDialog.Builder(
-                            MainActivity.this);
-                    // 设置Title的图标
-                    builder.setIcon(R.drawable.logo);
-                    // 设置Title的内容
-                    // builder.setTitle("弹出警告框");
-                    // 设置Content来显示一个信息
-                    builder.setMessage("确定删除？");
-                    // 设置一个PositiveButton
-                    builder.setPositiveButton("确定",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                    try {
-                                        MainInfo item = (MainInfo) listview
-                                                .getItemAtPosition(position);
-                                        dbmanage.deteleinfo(item.getNumber());
-                                        mainInfoList.remove(position);
-                                        adapter_mainInfo.notifyDataSetChanged();
-                                        Snackbar.make(listview, "删除成功",
-                                                Snackbar.LENGTH_LONG).setAction("Action", null)
-                                                .show();
-                                    } catch (Exception e) {
-                                        // TODO 自动生成的 catch 块
-                                        e.printStackTrace();
-                                        Snackbar.make(listview, "删除失败",
-                                                Snackbar.LENGTH_LONG).setAction("Action", null)
-                                                .show();
-                                    }
-                                }
-                            });
-                    // 设置一个NegativeButton
-                    builder.setNegativeButton("取消",
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog,
-                                                    int which) {
-                                }
-                            });
-                    // 显示出该对话框
-                    builder.show();
-                    return true;
-                }
-            });
-            /*btn_getmoredata.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (allList.size() >= 10) {
-                        List<MainInfo> getlist = allList.subList(num * 10, (num + 1) * 10);
-                        mainInfoList.addAll(getlist);
-                        num++;
-                        btn_getmoredata.setVisibility(View.VISIBLE);
-                    } else {
-                        mainInfoList.addAll(allList);
-                    }
-                }
-            });*/
-            data_add.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent_apply = new Intent();
-                    intent_apply.setClass(_context, CodeActivity.class);
-                    // finish();// 结束当前活动
-                    startActivity(intent_apply);
-                }
-            });
+            viewAction();
         }
     }
 
@@ -249,27 +158,82 @@ public class MainActivity extends AppCompatActivity
         //adapter_mainInfo.notifyDataSetChanged();
     }
 
-    public void FileDir() {
-        boolean sdCardExist = android.os.Environment.getExternalStorageState().equals(android.os
-                .Environment.MEDIA_MOUNTED);
-        String DOC_PATH, MODEL_PATH, CRASH_PATH;
-        if (sdCardExist) {
-            DOC_PATH = Environment.getExternalStorageDirectory() + "/DataManage/doc/";
-            MODEL_PATH = Environment.getExternalStorageDirectory() + "/DataManage/model/";
-            CRASH_PATH = Environment.getExternalStorageDirectory() + "/DataManage/crash/";
-        } else {
-            DOC_PATH = MODEL_PATH = CRASH_PATH = this.getCacheDir().toString() + "/";
-        }
-        File doc = new File(DOC_PATH), model = new File(MODEL_PATH), crash = new File(CRASH_PATH);
-        if (!doc.exists()) {
-            doc.mkdirs();
-        }
-        if (!model.exists()) {
-            model.mkdirs();
-        }
-        if (!crash.exists()) {
-            crash.mkdirs();
-        }
+    private void viewAction() {
+        listview.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                // TODO 自动生成的方法存根
+                MainInfo maininfo = mainInfoList.get(position);
+                ((MyApplication) getApplication()).setNumber(maininfo.getNumber());
+                Intent intent_details = new Intent();
+                intent_details.setClass(MainActivity.this,
+                        DetailsActivity.class);
+                // finish();// 结束当前活动
+                startActivity(intent_details);
+            }
+        });
+        listview.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                           final int position, long id) {
+                // TODO 自动生成的方法存根
+                // 通过AlertDialog.Builder这个类来实例化我们的一个AlertDialog的对象
+                AlertDialog.Builder builder = new AlertDialog.Builder(
+                        MainActivity.this);
+                // 设置Title的图标
+                builder.setIcon(R.drawable.logo);
+                // 设置Title的内容
+                // builder.setTitle("弹出警告框");
+                // 设置Content来显示一个信息
+                builder.setMessage("确定删除？");
+                // 设置一个PositiveButton
+                builder.setPositiveButton("确定",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                try {
+                                    MainInfo item = (MainInfo) listview
+                                            .getItemAtPosition(position);
+                                    dbmanage.deteleinfo(item.getNumber());
+                                    mainInfoList.remove(position);
+                                    adapter_mainInfo.notifyDataSetChanged();
+                                    Snackbar.make(listview, "删除成功",
+                                            Snackbar.LENGTH_LONG).setAction("Action", null)
+                                            .show();
+                                } catch (Exception e) {
+                                    // TODO 自动生成的 catch 块
+                                    e.printStackTrace();
+                                    Snackbar.make(listview, "删除失败",
+                                            Snackbar.LENGTH_LONG).setAction("Action", null)
+                                            .show();
+                                }
+                            }
+                        });
+                // 设置一个NegativeButton
+                builder.setNegativeButton("取消",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                            }
+                        });
+                // 显示出该对话框
+                builder.show();
+                return true;
+            }
+        });
+        data_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent_apply = new Intent();
+                intent_apply.setClass(_context, CodeActivity.class);
+                // finish();// 结束当前活动
+                startActivity(intent_apply);
+            }
+        });
     }
 
     @Override
@@ -335,7 +299,6 @@ public class MainActivity extends AppCompatActivity
                 ShareAppCode();
                 break;
             case R.id.nav_send:
-                //startActivity(new Intent(this, testActivity.class));
                 Snackbar.make(listview, "暂无此功能",
                         Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 break;
@@ -420,6 +383,10 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
+                File apkFile = getExternalFilesDir("DownLoad/datamanage.apk");
+                if (apkFile.exists()) {
+                    apkFile.delete();
+                }
                 downloadApp();
             }
         });
@@ -534,44 +501,5 @@ public class MainActivity extends AppCompatActivity
             }
         }
 
-    }
-
-    public void getPermission() {
-        permissionList.add(Manifest.permission.REQUEST_INSTALL_PACKAGES);
-        permissionList.add(Manifest.permission.INTERNET);
-        permissionList.add(Manifest.permission.ACCESS_NETWORK_STATE);
-        permissionList.add(Manifest.permission.ACCESS_WIFI_STATE);
-        permissionList.add(Manifest.permission.VIBRATE);
-        permissionList.add(Manifest.permission.CAMERA);
-        permissionList.add(Manifest.permission.SYSTEM_ALERT_WINDOW);
-        permissionList.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-        permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        permissionList.add(Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS);
-        permissionList.add(Manifest.permission.READ_PHONE_STATE);
-        permissionList.add(Manifest.permission.READ_LOGS);
-        checkAndRequestPermissions(permissionList);
-    }
-
-    private void checkAndRequestPermissions(ArrayList<String> permissionList) {
-        ArrayList<String> list = new ArrayList<>(permissionList);
-        Iterator<String> it = list.iterator();
-        while (it.hasNext()) {
-            String permission = it.next();/*检查权限是否已经申请*/
-            int hasPermission = ContextCompat.checkSelfPermission(this, permission);
-            if (hasPermission == PackageManager.PERMISSION_GRANTED) it.remove();
-        }
-        /**
-         *补充说明：ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission
-         * .RECORD_AUDIO);
-         *对于原生Android，如果用户选择了“不再提示”，那么shouldShowRequestPermissionRationale就会为true。
-         *此时，用户可以弹出一个对话框，向用户解释为什么需要这项权限。
-         *对于一些深度定制的系统，如果用户选择了“不再提示”，那么shouldShowRequestPermissionRationale永远为false
-         */
-        if (list.size() == 0) {
-            return;
-        }
-        String[] permissions = list.toArray(new String[0]);
-        //正式请求权限
-        ActivityCompat.requestPermissions(this, permissions, MY_PERMISSIONS_REQUEST);
     }
 }

@@ -41,7 +41,7 @@ public class CodeActivity extends Activity {
     private DBManage dbmanage = new DBManage(this);
     private List<String> numberList = new ArrayList<>();
     private ArrayAdapter<String> adapter;
-    private String num, token;
+    private String num;
     private Button btn_apply;
     private EditText input_number;
     private ListView list_number;
@@ -89,6 +89,7 @@ public class CodeActivity extends Activity {
     }
 
     public void attemptCode() {
+        String token;
         input_number.getText().clear();
         eLab_API request = HttpUtils.GsonApi();
         if (((MyApplication) getApplication()).getToken() == null) {

@@ -1,10 +1,11 @@
 -- Merging decision tree log ---
 manifest
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-89:12
-INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-89:12
-INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-89:12
-INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-89:12
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-86:12
+INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-86:12
+INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-86:12
+INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-86:12
 MERGED from [com.android.support:multidex:1.0.3] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\multidex-1.0.3.aar\b7cc6aaf10eb9c03d8151b93711dfe8b\AndroidManifest.xml:17:1-22:12
+MERGED from [com.dou361.dialogui:jjdxm-dialogui:1.0.3] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\jjdxm-dialogui-1.0.3.aar\b4d8767f27d65fe88405946961c41af1\AndroidManifest.xml:2:1-12:12
 MERGED from [com.android.support:design:28.0.0] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\design-28.0.0.aar\72dfb8b1f008d388616ffc6c0d79d30c\AndroidManifest.xml:17:1-24:12
 MERGED from [com.github.lovetuzitong:MultiImageSelector:1.2] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\MultiImageSelector-1.2.aar\f2c6fee42d038a60c23f1dba332ed85e\AndroidManifest.xml:2:1-20:12
 MERGED from [com.android.support:appcompat-v7:28.0.0] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\appcompat-v7-28.0.0.aar\be6b45538dc6d50569e3eaef4df7b262\AndroidManifest.xml:17:1-22:12
@@ -42,15 +43,15 @@ MERGED from [com.android.support:interpolator:28.0.0] C:\Users\yy\.gradle\caches
 MERGED from [android.arch.lifecycle:livedata:1.1.1] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\livedata-1.1.1.aar\14208023e99979e9154b16f7899bc438\AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.lifecycle:livedata-core:1.1.1] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\livedata-core-1.1.1.aar\4d9d5f153d109ae83c97cc5ba9210b9c\AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.core:runtime:1.1.1] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\runtime-1.1.1.aar\7c2c2accb41f2e27b84b8fe45a0ddee2\AndroidManifest.xml:17:1-22:12
-INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-89:12
-INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-89:12
-INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-89:12
+INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-86:12
+INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-86:12
+INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:2:1-86:12
 	package
 		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:4:5-34
 		INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml
 		INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml
 	android:versionName
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:6:5-30
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:6:5-31
 		INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml
 		INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml
 	xmlns:tools
@@ -130,7 +131,7 @@ MERGED from [com.journeyapps:zxing-android-embedded:3.6.0] C:\Users\yy\.gradle\c
 	android:name
 		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:24:19-67
 application
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:26:5-87:19
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:26:5-84:19
 MERGED from [com.android.support:design:28.0.0] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\design-28.0.0.aar\72dfb8b1f008d388616ffc6c0d79d30c\AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:design:28.0.0] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\design-28.0.0.aar\72dfb8b1f008d388616ffc6c0d79d30c\AndroidManifest.xml:22:5-20
 MERGED from [com.github.lovetuzitong:MultiImageSelector:1.2] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\MultiImageSelector-1.2.aar\f2c6fee42d038a60c23f1dba332ed85e\AndroidManifest.xml:14:5-18:19
@@ -215,50 +216,46 @@ ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:60:9-62:5
 		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:62:13-48
 	android:name
 		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:61:13-47
-activity#com.hzlf.sampletest.view.testActivity
+activity#com.hzlf.sampletest.view.ScanActivity
 ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:63:9-65:51
 	android:launchMode
 		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:65:13-48
 	android:name
 		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:64:13-46
-activity#com.hzlf.sampletest.view.ScanActivity
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:66:9-68:51
-	android:launchMode
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:68:13-48
-	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:67:13-46
 activity#me.nereo.multi_image_selector.MultiImageSelectorActivity
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:70:9-73:51
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:67:9-70:51
 MERGED from [com.github.lovetuzitong:MultiImageSelector:1.2] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\MultiImageSelector-1.2.aar\f2c6fee42d038a60c23f1dba332ed85e\AndroidManifest.xml:15:9-17:62
 MERGED from [com.github.lovetuzitong:MultiImageSelector:1.2] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\MultiImageSelector-1.2.aar\f2c6fee42d038a60c23f1dba332ed85e\AndroidManifest.xml:15:9-17:62
 	android:launchMode
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:73:13-48
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:70:13-48
 	android:configChanges
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:72:13-59
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:69:13-59
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:71:13-84
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:68:13-84
 provider#android.support.v4.content.FileProvider
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:76:9-85:20
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:73:9-82:20
 	android:grantUriPermissions
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:80:13-47
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:77:13-47
 	android:authorities
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:78:13-67
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:75:13-67
 	android:exported
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:79:13-37
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:76:13-37
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:77:13-67
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:74:13-67
 meta-data#android.support.FILE_PROVIDER_PATHS
-ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:82:13-84:54
+ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:79:13-81:54
 	android:resource
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:84:17-51
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:81:17-51
 	android:name
-		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:83:17-67
+		ADDED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml:80:17-67
 uses-sdk
 INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml
 INJECTED from E:\code\Android\DataManage\app\src\main\AndroidManifest.xml
 MERGED from [com.android.support:multidex:1.0.3] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\multidex-1.0.3.aar\b7cc6aaf10eb9c03d8151b93711dfe8b\AndroidManifest.xml:20:5-43
 MERGED from [com.android.support:multidex:1.0.3] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\multidex-1.0.3.aar\b7cc6aaf10eb9c03d8151b93711dfe8b\AndroidManifest.xml:20:5-43
+MERGED from [com.dou361.dialogui:jjdxm-dialogui:1.0.3] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\jjdxm-dialogui-1.0.3.aar\b4d8767f27d65fe88405946961c41af1\AndroidManifest.xml:8:5-10:41
+MERGED from [com.dou361.dialogui:jjdxm-dialogui:1.0.3] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\jjdxm-dialogui-1.0.3.aar\b4d8767f27d65fe88405946961c41af1\AndroidManifest.xml:8:5-10:41
 MERGED from [com.android.support:design:28.0.0] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\design-28.0.0.aar\72dfb8b1f008d388616ffc6c0d79d30c\AndroidManifest.xml:20:5-44
 MERGED from [com.android.support:design:28.0.0] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\design-28.0.0.aar\72dfb8b1f008d388616ffc6c0d79d30c\AndroidManifest.xml:20:5-44
 MERGED from [com.github.lovetuzitong:MultiImageSelector:1.2] C:\Users\yy\.gradle\caches\transforms-1\files-1.1\MultiImageSelector-1.2.aar\f2c6fee42d038a60c23f1dba332ed85e\AndroidManifest.xml:7:5-9:41

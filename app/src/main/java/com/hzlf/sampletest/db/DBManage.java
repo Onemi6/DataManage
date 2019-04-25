@@ -470,13 +470,14 @@ public class DBManage {
     public Cursor findInfo_main(String no) {
         db = dbHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery(
-                "select no,chouyangdanbianhao,chouyangriqi from Details_Info where no=?",
+                "select no,chouyangdanbianhao,chouyangriqi from Details_Info where no=? order by " +
+                        "chouyangriqi desc,chouyangdanbianhao desc",
                 new String[]{String.valueOf(no)});
         return cursor;
     }
 
     public List<MainInfo> findList_Info_main(String no) {
-        ArrayList<MainInfo> list_main_info = new ArrayList<MainInfo>();
+        ArrayList<MainInfo> list_main_info = new ArrayList<>();
         Cursor cursor = findInfo_main(no);
         while (cursor.moveToNext()) {
             MainInfo maininfo = new MainInfo("未上传", cursor.getString(cursor

@@ -275,6 +275,7 @@
     <color name="background_material_dark">@color/material_grey_850</color>
     <color name="background_material_light">@color/material_grey_50</color>
     <color name="bg_color">#EDEDED</color>
+    <color name="bg_white">#ffffff</color>
     <color name="black">#000</color>
     <color name="blue">#055EDD</color>
     <color name="bright_foreground_disabled_material_dark">#80ffffff</color>
@@ -283,6 +284,7 @@
     <color name="bright_foreground_inverse_material_light">@color/bright_foreground_material_dark</color>
     <color name="bright_foreground_material_dark">@android:color/white</color>
     <color name="bright_foreground_material_light">@android:color/black</color>
+    <color name="btn_alert">#222222</color>
     <color name="button_material_dark">#ff5a595b</color>
     <color name="button_material_light">#ffd6d7d7</color>
     <color name="cardview_dark_background">#FF424242</color>
@@ -290,7 +292,12 @@
     <color name="cardview_shadow_end_color">#03000000</color>
     <color name="cardview_shadow_start_color">#37000000</color>
     <color name="colorPrimary">#58567D</color>
+    <color name="color_text_black">#4c4c4c</color>
+    <color name="color_tie_bg">#efeff4</color>
+    <color name="color_tie_normal">#ffffff</color>
+    <color name="color_tie_select">#efeff4</color>
     <color name="contents_text">#ff000000</color>
+    <color name="datepick_surance_blue">#3598da</color>
     <color name="design_bottom_navigation_shadow_color">#14000000</color>
     <color name="design_default_color_primary">#3F51B5</color>
     <color name="design_default_color_primary_dark">#303F9F</color>
@@ -302,6 +309,8 @@
     <color name="design_fab_stroke_top_inner_color">#1AFFFFFF</color>
     <color name="design_fab_stroke_top_outer_color">#2EFFFFFF</color>
     <color name="design_snackbar_background_color">#323232</color>
+    <color name="dialogui_btn_normal">#ffffff</color>
+    <color name="dialogui_btn_pressed">#eeeeee</color>
     <color name="dim_foreground_disabled_material_dark">#80bebebe</color>
     <color name="dim_foreground_disabled_material_light">#80323232</color>
     <color name="dim_foreground_material_dark">#ffbebebe</color>
@@ -322,6 +331,8 @@
     <color name="history_check_not_selected">#FFF</color>
     <color name="history_check_not_selected2">#00000000</color>
     <color name="history_check_selected">#FF8000</color>
+    <color name="ios_btntext_blue">#007aff</color>
+    <color name="line_dd">#dddddd</color>
     <color name="material_blue_grey_800">#ff37474f</color>
     <color name="material_blue_grey_900">#ff263238</color>
     <color name="material_blue_grey_950">#ff21272b</color>
@@ -381,6 +392,14 @@
     <color name="switch_thumb_disabled_material_light">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_dark">#ffbdbdbd</color>
     <color name="switch_thumb_normal_material_light">#fff1f1f1</color>
+    <color name="text_black">#333333</color>
+    <color name="text_black_light">#666666</color>
+    <color name="text_gray">#999999</color>
+    <color name="text_gray_light">#B3B3B3</color>
+    <color name="text_input_44">#444444</color>
+    <color name="text_item_33">#333333</color>
+    <color name="text_msg_33">#333333</color>
+    <color name="text_title_11">#111111</color>
     <color name="tooltip_background_dark">#e6616161</color>
     <color name="tooltip_background_light">#e6FFFFFF</color>
     <color name="transparent">#00000000</color>
@@ -2230,6 +2249,20 @@
     <dimen name="design_tab_text_size">14sp</dimen>
     <dimen name="design_tab_text_size_2line">12sp</dimen>
     <dimen name="design_textinput_caption_translate_y">5dp</dimen>
+    <dimen name="dialogui_btn_txt_size">14sp</dimen>
+    <dimen name="dialogui_height_mid">48dp</dimen>
+    <dimen name="dialogui_input_txt_size">14sp</dimen>
+    <dimen name="dialogui_item_txt_size">14sp</dimen>
+    <dimen name="dialogui_l_round_corner_radius">10dp</dimen>
+    <dimen name="dialogui_line_with">1dp</dimen>
+    <dimen name="dialogui_margin_mid">16dp</dimen>
+    <dimen name="dialogui_margin_small">8dp</dimen>
+    <dimen name="dialogui_margin_smid">14dp</dimen>
+    <dimen name="dialogui_max_with">360dp</dimen>
+    <dimen name="dialogui_msg_txt_size">14sp</dimen>
+    <dimen name="dialogui_round_corner_radius">5dp</dimen>
+    <dimen name="dialogui_title_txt_size">17sp</dimen>
+    <dimen name="dialogui_toast_margin">64dp</dimen>
     <item format="float" name="disabled_alpha_material_dark" type="dimen">0.30</item>
     <item format="float" name="disabled_alpha_material_light" type="dimen">0.26</item>
     <dimen name="fab_margin">16dp</dimen>
@@ -4903,6 +4936,43 @@
         <item name="android:windowBackground">@android:color/transparent</item><!--背景透明-->
         <item name="android:windowIsFloating">true</item><!--是否浮现在activity之上-->
         <item name="android:windowContentOverlay">@null</item>
+    </style>
+    <style name="dialogui_bottom_style" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/dialogui_enter</item>
+        //进入时的动画
+        <item name="@android:windowExitAnimation">@anim/dialogui_exit</item>
+        //退出时的动画
+    </style>
+    <style name="dialogui_center_style" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/dialogui_enter_center</item>
+    </style>
+    <style name="dialogui_datepick_FontStyleNormalLightBlackMiddle" parent="@android:style/TextAppearance">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#ff333333</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+    <style name="dialogui_datepick_dialog_untran" parent="dialogui_datepick_tran">
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+    <style name="dialogui_datepick_fontstyle_normal_blackmiddle" parent="@android:style/TextAppearance">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="dialogui_datepick_fontstyle_normal_bluemiddle" parent="@android:style/TextAppearance">
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/datepick_surance_blue</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+    <style name="dialogui_datepick_tran" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:backgroundDimAmount">0.4</item>
     </style>
     <style name="zxing_CaptureTheme" parent="android:Theme.Holo.NoActionBar.Fullscreen">
   </style>

@@ -23,40 +23,35 @@ public class MainInfoAdapter extends ArrayAdapter<MainInfo> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        MainInfo maininfo = getItem(position);
+        MainInfo mainInfo = getItem(position);
         View view;
         ViewHolder viewHolder;
         if (convertView == null) {
             view = LayoutInflater.from(getContext()).inflate(resourceId, null);
             viewHolder = new ViewHolder();
-
-            viewHolder.maininfo_status = (TextView) view
-                    .findViewById(R.id.maininfo_status);
-
-            viewHolder.maininfo_no = (TextView) view
-                    .findViewById(R.id.maininfo_no);
-            viewHolder.maininfo_number = (TextView) view
-                    .findViewById(R.id.maininfo_number);
-            viewHolder.maininfo_addtime = (TextView) view
-                    .findViewById(R.id.maininfo_addtime);
+            viewHolder.mainInfo_num = view.findViewById(R.id.mainInfo_num);
+            viewHolder.mainInfo_status = view.findViewById(R.id.maininfo_status);
+            viewHolder.mainInfo_no = view.findViewById(R.id.maininfo_no);
+            viewHolder.mainInfo_number = view.findViewById(R.id.maininfo_number);
+            viewHolder.mainInfo_addTime = view.findViewById(R.id.maininfo_addtime);
             view.setTag(viewHolder);
-
         } else {
             view = convertView;
             viewHolder = (ViewHolder) view.getTag();
         }
-        viewHolder.maininfo_status.setText(maininfo.getStatus());
-        viewHolder.maininfo_no.setText(maininfo.getNo());
-        viewHolder.maininfo_number.setText(maininfo.getNumber());
-        viewHolder.maininfo_addtime.setText(maininfo.getAddtime());
-
+        viewHolder.mainInfo_num.setText("" + (position + 1));
+        viewHolder.mainInfo_status.setText(mainInfo.getStatus());
+        viewHolder.mainInfo_no.setText(mainInfo.getNo());
+        viewHolder.mainInfo_number.setText(mainInfo.getNumber());
+        viewHolder.mainInfo_addTime.setText(mainInfo.getAddtime());
         return view;
     }
 
     class ViewHolder {
-        TextView maininfo_status;
-        TextView maininfo_no;
-        TextView maininfo_number;
-        TextView maininfo_addtime;
+        TextView mainInfo_num;
+        TextView mainInfo_status;
+        TextView mainInfo_no;
+        TextView mainInfo_number;
+        TextView mainInfo_addTime;
     }
 }

@@ -53,6 +53,8 @@ dependencies {
     implementation 'com.tencent.bugly:crashreport:2.8.6.0'
     //其中latest.release指代最新Bugly SDK版本号，也可以指定明确的版本号，例如2.2.0
     implementation 'com.tencent.bugly:nativecrashreport:3.6.0.1'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.dou361.dialogui:jjdxm-dialogui:1.0.3'
 
     implementation files('libs/poi-3.8-beta4-20110826.jar')
     implementation files('libs/poi-scratchpad-3.8-beta4-20110826.jar')

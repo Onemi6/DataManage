@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="com.dou361.dialogui:jjdxm-dialogui-1.0.3">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jjdxm-dialogui-1.0.3.aar/b4d8767f27d65fe88405946961c41af1/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/jjdxm-dialogui-1.0.3.aar/b4d8767f27d65fe88405946961c41af1/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.dou361.dialogui/jjdxm-dialogui/1.0.3/7f3bad0d8a5724a51c251c66e2167c7dea4e1e0d/jjdxm-dialogui-1.0.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
