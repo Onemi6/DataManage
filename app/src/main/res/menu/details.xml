@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.DetailsActivity">
+
+    <item
+        android:id="@+id/action_upload_data"
+        android:orderInCategory="100"
+        android:title="@string/upload_data"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_upload_img"
+        android:orderInCategory="100"
+        android:title="@string/upload_img"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_makeRpt1"
+        android:orderInCategory="100"
+        android:title="@string/makeRpt1"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_makeRpt2"
+        android:orderInCategory="100"
+        android:title="@string/makeRpt2"
+        app:showAsAction="never" />
+
+</menu>

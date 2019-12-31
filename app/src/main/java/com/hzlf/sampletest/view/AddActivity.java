@@ -164,7 +164,7 @@ public class AddActivity extends AppCompatActivity {
         try {
             // MODE_PRIVATE 覆盖内容
             // MODE_APPEND 追加内容
-            out = openFileOutput("data.txt", Context.MODE_PRIVATE);
+                out = openFileOutput("data.txt", Context.MODE_PRIVATE);
             writer = new BufferedWriter(new OutputStreamWriter(out));
             writer.write(str);
         } catch (IOException e) {

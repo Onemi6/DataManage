@@ -1237,12 +1237,16 @@ id action_container
 id action_context_bar
 id action_divider
 id action_image
+id action_makeRpt1
+id action_makeRpt2
 id action_menu_divider
 id action_menu_presenter
 id action_mode_bar
 id action_mode_bar_stub
 id action_mode_close_button
 id action_text
+id action_upload_data
+id action_upload_img
 id actions
 id activity_chooser_view_content
 id add
@@ -1276,7 +1280,6 @@ id btn_clear2
 id btn_clear3
 id btn_commit
 id btn_denglu
-id btn_makeRpt
 id btn_next1
 id btn_next2
 id btn_queren
@@ -1288,8 +1291,6 @@ id btn_tongbu_emp
 id btn_update1
 id btn_update2
 id btn_update3
-id btn_upload_data
-id btn_upload_img
 id buttonPanel
 id cancel_action
 id category_btn
@@ -1849,6 +1850,7 @@ layout select_dialog_singlechoice_material
 layout support_simple_spinner_dropdown_item
 layout zxing_barcode_scanner
 layout zxing_capture
+menu details
 menu main_drawer
 raw beep
 raw realm_properties
@@ -1902,8 +1904,6 @@ string bottom_sheet_behavior
 string btn_denglu
 string btn_tongbu_apply
 string btn_tongbu_emp
-string btn_upload_data
-string btn_upload_img
 string changeaccount
 string character_counter_content_description
 string character_counter_pattern
@@ -1920,7 +1920,8 @@ string info_place
 string info_producer
 string info_sample
 string info_unit
-string makeRpt
+string makeRpt1
+string makeRpt2
 string mima
 string mis_action_button_string
 string mis_action_done
@@ -1965,6 +1966,8 @@ string update
 string update_btn
 string update_content
 string update_title
+string upload_data
+string upload_img
 string user_name
 string version_update
 string xinzeng

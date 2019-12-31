@@ -25,6 +25,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -57,6 +58,7 @@ import com.hzlf.sampletest.model.Upload;
 import com.hzlf.sampletest.others.DatePickerDialog;
 import com.hzlf.sampletest.others.ImgAdapter;
 import com.hzlf.sampletest.others.MyApplication;
+import com.hzlf.sampletest.util.ClickUtil;
 
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.usermodel.Picture;
@@ -90,20 +92,19 @@ import retrofit2.Response;
 
 public class DetailsActivity extends AppCompatActivity implements OnClickListener {
     private DBManage dbmanage = new DBManage(this);
-    private Button btn_update1, btn_update2, btn_update3, btn_makeRpt,
-            btn_upload_data;
+    private Button btn_update1, btn_update2, btn_update3;
     private Context _context;
+    private Toolbar toolbar;
     private Info_add info_add;
-    private String number, filename, rptFilepath, modelFilepath, token;
+    private String number, filename, modelFilepath, rptFilepath1, rptFilepath2, token;
     private EditText et_0, et_1_1, et_1_2, et_1_3, et_1_5, et_1_6, et_1_7, et_1_8, et_1_9,
             et_1_10, et_1_11, et_2_5, et_2_6, et_2_7, et_2_9, et_2_10, et_2_11, et_2_12, et_2_13,
             et_2_14, et_2_15, et_2_16, et_2_17, et_2_18, et_2_19, et_2_20, et_2_21, et_3_1, et_3_5,
             et_3_7, et_3_8, et_3_9, et_3_11, et_3_12, et_3_13, et_3_14, et_3_16, et_3_17, et_3_22,
             et_3_23, et_3_24, et_3_25, et_3_26, et_3_27, et_3_28, et_3_29, et_3_30;
     private Spinner spinner1_4, spinner2_1, spinner2_2, spinner2_3, spinner2_4, spinner2_8,
-            spinner3_2, spinner3_3,
-            spinner3_4, spinner3_6, spinner3_10, spinner3_15, spinner3_18, spinner3_19,
-            spinner3_20, spinner3_21;
+            spinner3_2, spinner3_3, spinner3_4, spinner3_6, spinner3_10, spinner3_15,
+            spinner3_18, spinner3_19, spinner3_20, spinner3_21;
     private String[][] data2_2 = new String[][]{{"原辅料库", "生产线", "半成品库", "成品库(待检区)", "成品库(已检区)"},
             {"农贸市场", "菜市场", "批发市场", "商场", "超市", "网购", "小杂食店", "其他"}, {"餐馆(特大型餐馆)",
             "餐馆(大型餐馆)", "餐馆(中型餐馆)", "餐馆(小型餐馆)", "食堂(机关食堂)", "食堂(学校/托幼食堂)", "食堂(企事业单位食堂)",
@@ -121,42 +122,6 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         setContentView(R.layout.activity_details);
         initView();
         initData();
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.btn_update1:
-                update1();
-                break;
-            case R.id.btn_update2:
-                update2();
-                break;
-            case R.id.btn_update3:
-                update3();
-                break;
-            case R.id.btn_makeRpt:
-                getSignModel();
-                break;
-            case R.id.btn_upload_data:
-                upload_data();
-                break;
-            case R.id.btn_upload_img:
-                upload_img();
-                break;
-            default:
-                break;
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public void initView() {
@@ -189,7 +154,7 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
                         .into(imageview);
             }
         });
-        Toolbar toolbar = findViewById(R.id.toolbar_details);
+        toolbar = findViewById(R.id.toolbar_details);
         toolbar.setTitle("详细信息");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
         //设置toolbar
@@ -356,16 +321,11 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         btn_update1 = findViewById(R.id.btn_update1);
         btn_update2 = findViewById(R.id.btn_update2);
         btn_update3 = findViewById(R.id.btn_update3);
-        btn_makeRpt = findViewById(R.id.btn_makeRpt);
-        btn_upload_data = findViewById(R.id.btn_upload_data);
-        Button btn_upload_img = findViewById(R.id.btn_upload_img);
+
 
         btn_update1.setOnClickListener(this);
         btn_update2.setOnClickListener(this);
         btn_update3.setOnClickListener(this);
-        btn_makeRpt.setOnClickListener(this);
-        btn_upload_data.setOnClickListener(this);
-        btn_upload_img.setOnClickListener(this);
     }
 
     public void initData() {
@@ -589,10 +549,70 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         et_3_29.setEnabled(false);
         et_3_30.setEnabled(false);
         filename = info_add.getInfo_add1().getValue1() + ".doc";
-        rptFilepath = Environment.getExternalStorageDirectory() + "/DataManage/doc/" +
-                filename;
-        modelFilepath = Environment.getExternalStorageDirectory() + "/DataManage/model/" +
-                filename;
+        modelFilepath = Environment.getExternalStorageDirectory() + "/DataManage/model/" + filename;
+        rptFilepath1 = Environment.getExternalStorageDirectory() + "/DataManage/doc/" + filename;
+        rptFilepath2 = Environment.getExternalStorageDirectory() + "/DataManage/doc2/" + filename;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_update1:
+                update1();
+                break;
+            case R.id.btn_update2:
+                update2();
+                break;
+            case R.id.btn_update3:
+                update3();
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.details, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.action_upload_data:
+                if (ClickUtil.isFastClick()) {
+                    upload_data();
+                } else {
+                    Snackbar.make(toolbar, "点击太快了，请稍后再试",
+                            Snackbar.LENGTH_LONG).setAction("Action", null)
+                            .show();
+                }
+                break;
+            case R.id.action_upload_img:
+                if (ClickUtil.isFastClick()) {
+                    upload_img();
+                } else {
+                    Snackbar.make(toolbar, "提交太快了，请稍后再试",
+                            Snackbar.LENGTH_LONG).setAction("Action", null)
+                            .show();
+                }
+                break;
+            case R.id.action_makeRpt1:
+                getSignModel(1);
+                break;
+            case R.id.action_makeRpt2:
+                getSignModel(2);
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void update1() {
@@ -799,263 +819,24 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         }
     }
 
-    public void getSignModel() {
-        dialog_make = DialogUIUtils.showLoading(_context, "生成报告中...", false,
-                true, false,
-                false);
-        dialog_make.show();
-        File file = copyFile("model.doc", modelFilepath);
-        if (file != null) {
-            attemptTemplate(file);
-        } else {
-            Snackbar.make(btn_makeRpt, "copy model is error!",
-                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
-        }
-    }
-
-    public void makeRpt() {
-        if (btn_update1.getText().toString().equals("修改") && btn_update2.getText()
-                .toString().equals("修改") &&
-                btn_update3.getText().toString().equals("修改")) {
-            doScan();
-            DialogUIUtils.dismiss(dialog_make);
-            //try {
-            //Thread.sleep(500);
-            AlertDialog.Builder builder = new AlertDialog.Builder(_context);
-            // 设置Title的图标
-            builder.setIcon(R.drawable.ic_launcher);
-            // 设置Title的内容
-            builder.setTitle("提示");
-            // 设置Content来显示一个信息
-            builder.setMessage("报告已生成");
-            // 设置一个PositiveButton
-            builder.setPositiveButton("打印",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog,
-                                            int which) {
-                            //dialog.dismiss();
-                            doPrintWord();
-                        }
-                    });
-            // 设置一个NegativeButton
-            builder.setNegativeButton("预览",
-                    new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog,
-                                            int which) {
-                            //dialog.dismiss();
-                            doOpenWord();
-                        }
-                    });
-            // 显示出该对话框
-            builder.show();
-                /*} catch (Exception e) {
-                    e.printStackTrace();
-                }*/
-        } else {
-            Snackbar.make(btn_makeRpt, "部分修改未确认",
-                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
-        }
-
-    }
-
     public void upload_data() {
         if (NetworkUtil.isNetworkAvailable(_context)) {
-            ProgressDialog mypDialog = new ProgressDialog(DetailsActivity.this);/* 实例化*/
-            mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);/* 设置进度条风格，风格为圆形，旋转的*/
-            mypDialog.setTitle("上传数据中");/* 设置ProgressDialog 标题*/
-            mypDialog.setIndeterminate(false);/* 设置ProgressDialog 的进度条是否不明确*/
-            mypDialog.setCancelable(false);/* 设置ProgressDialog 是否可以按退回按键取消*/
-            mypDialog.show();/* 让ProgressDialog显示*/
+            /*ProgressDialog mypDialog = new ProgressDialog(DetailsActivity.this);*//* 实例化*//*
+            mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);*//* 设置进度条风格，风格为圆形，旋转的*//*
+            mypDialog.setTitle("上传数据中");*//* 设置ProgressDialog 标题*//*
+            mypDialog.setIndeterminate(false);*//* 设置ProgressDialog 的进度条是否不明确*//*
+            mypDialog.setCancelable(false);*//* 设置ProgressDialog 是否可以按退回按键取消*//*
+            mypDialog.show();*//* 让ProgressDialog显示*/
             attemptApply();
-            mypDialog.dismiss();
+            //mypDialog.dismiss();
         } else {
-            Snackbar.make(btn_upload_data, "当前网络不可用,请稍后再上传",
+            Snackbar.make(toolbar, "当前网络不可用,请稍后再上传",
                     Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
-    }
-
-    public void upload_img() {
-        Intent intent_upload_img = new Intent();
-        intent_upload_img.setClass(DetailsActivity.this, ImgUploadActivity.class);
-        /*finish();// 结束当前活动*/
-        startActivity(intent_upload_img);
-    }
-
-    private void doScan() {
-        Map<String, Object> map = new HashMap<String, Object>();
-        // 3委托单位地址 5任务属性
-        map.put("$CJDBH$", info_add.getInfo_add1().getValue1());
-        map.put("$RWLY$", info_add.getInfo_add1().getValue2());
-        map.put("$RWLB$", info_add.getInfo_add1().getValue4());
-        map.put("$DWMC1$", info_add.getInfo_add1().getValue6());
-        map.put("$DZ1$", info_add.getInfo_add1().getValue7());
-        map.put("$LXR1$", info_add.getInfo_add1().getValue8());
-        map.put("$DH1$", info_add.getInfo_add1().getValue9());
-        map.put("$CZ1$", info_add.getInfo_add1().getValue10());
-        map.put("$YB1$", info_add.getInfo_add1().getValue11());
-        // 1所在地
-        map.put("$CYDD$", info_add.getInfo_add2().getValue2());
-        map.put("$QYLX$", info_add.getInfo_add2().getValue3());
-        map.put("$CYHJ$", info_add.getInfo_add2().getValue4());
-        map.put("$DWMC2$", info_add.getInfo_add2().getValue5());
-        map.put("$DWDZ2$", info_add.getInfo_add2().getValue6());
-        map.put("$YYZZ$", info_add.getInfo_add2().getValue7());
-        map.put("$QYXKZ$", info_add.getInfo_add2().getValue8() + info_add.getInfo_add2()
-                .getValue9());
-        map.put("$FRDB$", info_add.getInfo_add2().getValue10());
-        map.put("$NXSE$", info_add.getInfo_add2().getValue11());
-        map.put("$LXR2$", info_add.getInfo_add2().getValue12());
-        map.put("$DH2$", info_add.getInfo_add2().getValue13());
-        map.put("$CZ2$", info_add.getInfo_add2().getValue14());
-        map.put("$YB2$", info_add.getInfo_add2().getValue15());
-        map.put("$SCZMC$", info_add.getInfo_add2().getValue16());
-        map.put("$SCZDZ$", info_add.getInfo_add2().getValue17());
-        map.put("$SCZLXR$", info_add.getInfo_add2().getValue18());
-        map.put("$DH3$", info_add.getInfo_add2().getValue19());
-        map.put("$JZRQ$", info_add.getInfo_add2().getValue20());
-        map.put("$JSDZ$", info_add.getInfo_add2().getValue21());
-        //9样品条码 16原产地 17抽样日期 27抽样人
-        map.put("$YPMC$", info_add.getInfo_add3().getValue1());
-        map.put("$YPLX$", info_add.getInfo_add3().getValue2());
-        map.put("$YPLY$", info_add.getInfo_add3().getValue3());
-        map.put("$YPSX$", info_add.getInfo_add3().getValue4());
-        map.put("$SB$", info_add.getInfo_add3().getValue5());
-        map.put("$BZFL$", info_add.getInfo_add3().getValue6());
-        map.put("$GGXH$", info_add.getInfo_add3().getValue7());
-        map.put("$ZLDJ$", info_add.getInfo_add3().getValue8());
-        map.put("$RQLX$", info_add.getInfo_add3().getValue10());
-        map.put("$SCRQ$", info_add.getInfo_add3().getValue11());
-        map.put("$BZQ$", info_add.getInfo_add3().getValue12());
-        map.put("$CPPH$", info_add.getInfo_add3().getValue13());
-        map.put("$DJ$", info_add.getInfo_add3().getValue14());
-        map.put("$SFCK$", info_add.getInfo_add3().getValue15());
-        map.put("$CYFS$", info_add.getInfo_add3().getValue18());
-        map.put("$YPXT$", info_add.getInfo_add3().getValue19());
-        map.put("$YPBZ$", info_add.getInfo_add3().getValue20());
-        map.put("$CCTJ$", info_add.getInfo_add3().getValue21());
-        map.put("$ZXBZ$", info_add.getInfo_add3().getValue22());
-        if (info_add.getInfo_add3().getValue23() == null) {
-            map.put("$CYJS$", info_add.getInfo_add3().getValue24());
-            map.put("$BYSL$", info_add.getInfo_add3().getValue25());
-            map.put("$CYSL$", info_add.getInfo_add3().getValue26());
-        } else {
-            map.put("$CYJS$", info_add.getInfo_add3().getValue24() + info_add.getInfo_add3()
-                    .getValue23());
-            map.put("$BYSL$", info_add.getInfo_add3().getValue25() + info_add.getInfo_add3()
-                    .getValue23());
-            map.put("$CYSL$", info_add.getInfo_add3().getValue26() + info_add.getInfo_add3()
-                    .getValue23());
-        }
-        map.put("$YPXKZ$", info_add.getInfo_add3().getValue28());
-        map.put("$BZ$", info_add.getInfo_add3().getValue29());
-        map.put("$DYRQ$", info_add.getInfo_add3().getValue17());
-
-        /* android无法插入图片*/
-        //writeDoc("model1.doc", rptFilepath, map);
-        writeDoc(modelFilepath, rptFilepath, map);
-        /* 查看 doOpenWord();*/
-    }
-
-    //demoFile 模板文件 newFile 生成文件 map 要填充的数据
-    public void writeDoc(String modelPath, String outFilePath, Map<String, Object> map) {
-        if (new File(outFilePath).exists()) {
-            new File(outFilePath).delete();
-        }
-        try {
-            InputStream in = new FileInputStream(modelPath);
-            //InputStream in = getClass().getResourceAsStream("/assets/" + demopath);
-            HWPFDocument hdt = new HWPFDocument(in);
-            Range range = hdt.getRange();/* 替换文本内容*/
-            for (Map.Entry<String, Object> entry : map.entrySet())
-                if ((entry.getValue()) instanceof String) {
-                    // 替换文本
-                    range.replaceText(entry.getKey(), entry.getValue().toString());
-                }
-            /*//获取doc中的书签
-            Bookmarks bookmarks = hdt.getBookmarks();
-            Log.v("书签数量：", "" + bookmarks.getBookmarksCount());*/
-
-            //获取doc中的图片数
-            List<Picture> pics = hdt.getPicturesTable().getAllPictures();
-            System.out.printf("word中的pic数量:" + pics.size() + "\n");
-
-            OutputStream os = new FileOutputStream(outFilePath);
-            /* ByteArrayOutputStream ostream = new
-            ByteArrayOutputStream(); FileOutputStream out = new FileOutputStream(newFile, true);*/
-            hdt.write(os);
-            /* 1.通过Picture的writeImageContent方法 写文件 2.获取Picture的byte 自己写*/
-            copyPic2Disk(pics, os);
-            os.close();
-            in.close();
-            /* 输出字节流 out.write(ostream.toByteArray()); out.close(); ostream.close();*/
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    //调用手机中安装的可打开word的软件
-    private void doOpenWord() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent();
-                intent.setAction("android.intent.action.VIEW");
-                intent.addCategory("android.intent.category.DEFAULT");
-                String fileMimeType = "application/msword";
-                intent.setDataAndType(Uri.fromFile(new File(rptFilepath)), fileMimeType);
-                /*intent.setDataAndType(Uri.fromFile(new File("/mnt/sdcard/Rpt/doc/" +
-                                filename)),
-                        fileMimeType);*/
-                try {
-                    DetailsActivity.this.startActivity(intent);
-                } catch (ActivityNotFoundException e) {
-                    /* 检测到系统尚未安装OliveOffice的apk程序*/
-                    Snackbar.make(btn_makeRpt, "未找到可用软件",
-                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                }
-            }
-        }, 1500);
-        /* 延时1.5s执行*/
-    }
-
-    private void doPrintWord() {
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (appIsInstalled(_context, "com.dynamixsoftware.printershare")) {
-                    Intent intent = new Intent();
-                    ComponentName comp = new ComponentName("com.dynamixsoftware" +
-                            ".printershare", "com" +
-                            ".dynamixsoftware.printershare.ActivityPrintDocuments");
-                    intent.setComponent(comp);
-                    intent.setAction("android.intent.action.VIEW");
-                    intent.setType("application/doc");
-                    intent.setData(Uri.fromFile(new File(rptFilepath)));
-                    /*intent.setData(Uri.fromFile(new File(Environment
-                            .getExternalStorageDirectory() +
-                            "/doc/" + filename)));*/
-                    dbmanage.updateNumber(number, 1, 1, 0);
-                    startActivity(intent);
-                } else {
-                    Snackbar.make(btn_makeRpt, "未找到PrinterShare软件",
-                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                    /* 安装apk*/
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    File file = getAssetFileToCacheDir(_context, "PrinterShare.apk");
-                    intent.setDataAndType(Uri.fromFile(file), "application/vnd" +
-                            ".android.package-archive");
-                    DetailsActivity.this.startActivity(intent);
-                }
-            }
-        }, 2000); /* 延时2s执行*/
     }
 
     public void attemptApply() {
-        final BuildBean dialog_apply = DialogUIUtils.showLoading(_context, "生成报告中...", false,
+        final BuildBean dialog_apply = DialogUIUtils.showLoading(_context, "上传数据中...", false,
                 true, false,
                 false);
         dialog_apply.show();
@@ -1139,6 +920,7 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         //eLab_API request = HttpUtils.GsonApi();
         RequestBody body = RequestBody.create(MediaType.parse("application/json; " +
                 "charset=utf-8"), obj);
+        Log.v("obj", obj);
         eLab_API request = HttpUtils.GsonApi();
         if (((MyApplication) getApplication()).getToken() == null) {
             token = "Bearer " + sharedPreferences.getString("token", "");
@@ -1162,20 +944,21 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
                             dbmanage.updateId(response.body().getId(), number);
                             dbmanage.updateNumber(number, 1, 1, 1);
                             //mypDialog.dismiss();
-                            Snackbar.make(btn_upload_data, "上传" + number + response.body()
+                            Snackbar.make(toolbar, "上传" + number + response.body()
                                             .getMessage(),
                                     Snackbar.LENGTH_LONG).setAction("Action", null).show();
                         } else {
-                            Snackbar.make(btn_upload_data, "该" + response.body().getMessage(),
+                            Snackbar.make(toolbar, "该" + response.body().getMessage(),
                                     Snackbar.LENGTH_LONG).setAction("Action", null).show();
                         }
                     } else {
                         Log.v("Apply请求成功!", "response.code is null");
-                        Snackbar.make(btn_upload_data, "上传出现错误response.code is null",
+                        Snackbar.make(toolbar, "上传出现错误response.code is null",
                                 Snackbar.LENGTH_LONG).setAction("Action", null).show();
                     }
                 } else if (response.code() == 500) {
-                    Snackbar.make(btn_upload_data, "数据已经上传",
+                    Log.v("response", response.message());
+                    Snackbar.make(toolbar, "数据已经上传",
                             Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
                 DialogUIUtils.dismiss(dialog_apply);
@@ -1185,10 +968,54 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
             public void onFailure(Call<Upload> call, Throwable t) {
                 Log.v("Apply请求失败!", t.getMessage());
                 DialogUIUtils.dismiss(dialog_apply);
-                Snackbar.make(btn_upload_data, "Apply请求失败!",
+                Snackbar.make(toolbar, "Apply请求失败!",
                         Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         });
+    }
+
+    public void upload_img() {
+        Intent intent_upload_img = new Intent();
+        intent_upload_img.setClass(DetailsActivity.this, ImgUploadActivity.class);
+        /*finish();// 结束当前活动*/
+        startActivity(intent_upload_img);
+    }
+
+    public void getSignModel(int type) {
+        dialog_make = DialogUIUtils.showLoading(_context, "生成报告中...", false,
+                true, false,
+                false);
+        dialog_make.show();
+        File file = copyFile("model.doc", modelFilepath);
+        if (file != null) {
+            if(type ==1) {
+                attemptTemplate(file);
+            }
+            else if(type ==2){
+                makeRpt(rptFilepath2);
+            }
+        } else {
+            Snackbar.make(toolbar, "模板生成错误!",
+                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+    }
+
+    public File copyFile(String oldPath$Name, String newPath$Name) {
+        try {
+            InputStream is = _context.getAssets().open(oldPath$Name);
+            File file = new File(newPath$Name);
+            file.createNewFile();
+            FileOutputStream fos = new FileOutputStream(file);
+            byte[] temp = new byte[1024];
+            int i;
+            while ((i = is.read(temp)) > 0) fos.write(temp, 0, i);
+            fos.close();
+            is.close();
+            return file;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void attemptTemplate(File file) {
@@ -1238,7 +1065,7 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
                                 outStream.write(response.body().bytes());
                                 // 最后关闭文件输出流
                                 outStream.close();
-                                makeRpt();
+                                makeRpt(rptFilepath1);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                                 Log.v("ResponseBody", "FileNotFoundException");
@@ -1253,7 +1080,7 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
                                         (), Template.class);
                                 if (template != null && template.getStatus().equals("error")) {
                                     DialogUIUtils.dismiss(dialog_make);
-                                    Snackbar.make(btn_makeRpt, template.getMessage(),
+                                    Snackbar.make(toolbar, template.getMessage(),
                                             Snackbar.LENGTH_LONG).setAction("Action", null)
                                             .show();
                                 }
@@ -1264,7 +1091,7 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
                     } else {
                         Log.v("" + response.code(), response.message());
                         DialogUIUtils.dismiss(dialog_make);
-                        Snackbar.make(btn_makeRpt, response.message(),
+                        Snackbar.make(toolbar, response.message(),
                                 Snackbar.LENGTH_LONG).setAction("Action", null)
                                 .show();
                     }
@@ -1274,16 +1101,233 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                     Log.v("Template请求失败!", t.getMessage());
                     DialogUIUtils.dismiss(dialog_make);
-                    Snackbar.make(btn_makeRpt, "生成报告失败(获取模板失败)",
+                    Snackbar.make(toolbar, "生成报告失败(获取模板失败)",
                             Snackbar.LENGTH_LONG).setAction("Action", null)
                             .show();
                 }
             });
         } else {
             DialogUIUtils.dismiss(dialog_make);
-            Snackbar.make(btn_makeRpt, "抽样人格式错误",
+            Snackbar.make(toolbar, "抽样人格式错误",
                     Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
+    }
+
+    public void makeRpt(final String rptFilepath) {
+        if (btn_update1.getText().toString().equals("修改") && btn_update2.getText()
+                .toString().equals("修改") &&
+                btn_update3.getText().toString().equals("修改")) {
+            doScan(rptFilepath);
+            DialogUIUtils.dismiss(dialog_make);
+            //try {
+            //Thread.sleep(500);
+            AlertDialog.Builder builder = new AlertDialog.Builder(_context);
+            // 设置Title的图标
+            builder.setIcon(R.drawable.ic_launcher);
+            // 设置Title的内容
+            builder.setTitle("提示");
+            // 设置Content来显示一个信息
+            builder.setMessage("报告已生成");
+            // 设置一个PositiveButton
+            builder.setPositiveButton("打印",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog,
+                                            int which) {
+                            //dialog.dismiss();
+                            doPrintWord(rptFilepath);
+                        }
+                    });
+            // 设置一个NegativeButton
+            builder.setNegativeButton("预览",
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog,
+                                            int which) {
+                            //dialog.dismiss();
+                            doOpenWord(rptFilepath);
+                        }
+                    });
+            // 显示出该对话框
+            builder.show();
+                /*} catch (Exception e) {
+                    e.printStackTrace();
+                }*/
+        } else {
+            Snackbar.make(toolbar, "部分修改未确认",
+                    Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+
+    }
+
+    private void doScan(String rptFilepath) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        // 3委托单位地址 5任务属性
+        map.put("$CJDBH$", info_add.getInfo_add1().getValue1());
+        map.put("$RWLY$", info_add.getInfo_add1().getValue2());
+        map.put("$RWLB$", info_add.getInfo_add1().getValue4());
+        map.put("$DWMC1$", info_add.getInfo_add1().getValue6());
+        map.put("$DZ1$", info_add.getInfo_add1().getValue7());
+        map.put("$LXR1$", info_add.getInfo_add1().getValue8());
+        map.put("$DH1$", info_add.getInfo_add1().getValue9());
+        map.put("$CZ1$", info_add.getInfo_add1().getValue10());
+        map.put("$YB1$", info_add.getInfo_add1().getValue11());
+        // 1所在地
+        map.put("$CYDD$", info_add.getInfo_add2().getValue2());
+        map.put("$QYLX$", info_add.getInfo_add2().getValue3());
+        map.put("$CYHJ$", info_add.getInfo_add2().getValue4());
+        map.put("$DWMC2$", info_add.getInfo_add2().getValue5());
+        map.put("$DWDZ2$", info_add.getInfo_add2().getValue6());
+        map.put("$YYZZ$", info_add.getInfo_add2().getValue7());
+        map.put("$QYXKZ$", info_add.getInfo_add2().getValue8() + info_add.getInfo_add2()
+                .getValue9());
+        map.put("$FRDB$", info_add.getInfo_add2().getValue10());
+        map.put("$NXSE$", info_add.getInfo_add2().getValue11());
+        map.put("$LXR2$", info_add.getInfo_add2().getValue12());
+        map.put("$DH2$", info_add.getInfo_add2().getValue13());
+        map.put("$CZ2$", info_add.getInfo_add2().getValue14());
+        map.put("$YB2$", info_add.getInfo_add2().getValue15());
+        map.put("$SCZMC$", info_add.getInfo_add2().getValue16());
+        map.put("$SCZDZ$", info_add.getInfo_add2().getValue17());
+        map.put("$SCZLXR$", info_add.getInfo_add2().getValue18());
+        map.put("$DH3$", info_add.getInfo_add2().getValue19());
+        map.put("$JZRQ$", info_add.getInfo_add2().getValue20());
+        map.put("$JSDZ$", info_add.getInfo_add2().getValue21());
+        //9样品条码 16原产地 17抽样日期 27抽样人
+        map.put("$YPMC$", info_add.getInfo_add3().getValue1());
+        map.put("$YPLX$", info_add.getInfo_add3().getValue2());
+        map.put("$YPLY$", info_add.getInfo_add3().getValue3());
+        map.put("$YPSX$", info_add.getInfo_add3().getValue4());
+        map.put("$SB$", info_add.getInfo_add3().getValue5());
+        map.put("$BZFL$", info_add.getInfo_add3().getValue6());
+        map.put("$GGXH$", info_add.getInfo_add3().getValue7());
+        map.put("$ZLDJ$", info_add.getInfo_add3().getValue8());
+        map.put("$RQLX$", info_add.getInfo_add3().getValue10());
+        map.put("$SCRQ$", info_add.getInfo_add3().getValue11());
+        map.put("$BZQ$", info_add.getInfo_add3().getValue12());
+        map.put("$CPPH$", info_add.getInfo_add3().getValue13());
+        map.put("$DJ$", info_add.getInfo_add3().getValue14());
+        map.put("$SFCK$", info_add.getInfo_add3().getValue15());
+        map.put("$CYFS$", info_add.getInfo_add3().getValue18());
+        map.put("$YPXT$", info_add.getInfo_add3().getValue19());
+        map.put("$YPBZ$", info_add.getInfo_add3().getValue20());
+        map.put("$CCTJ$", info_add.getInfo_add3().getValue21());
+        map.put("$ZXBZ$", info_add.getInfo_add3().getValue22());
+        if (info_add.getInfo_add3().getValue23() == null) {
+            map.put("$CYJS$", info_add.getInfo_add3().getValue24());
+            map.put("$BYSL$", info_add.getInfo_add3().getValue25());
+            map.put("$CYSL$", info_add.getInfo_add3().getValue26());
+        } else {
+            map.put("$CYJS$", info_add.getInfo_add3().getValue24() + info_add.getInfo_add3()
+                    .getValue23());
+            map.put("$BYSL$", info_add.getInfo_add3().getValue25() + info_add.getInfo_add3()
+                    .getValue23());
+            map.put("$CYSL$", info_add.getInfo_add3().getValue26() + info_add.getInfo_add3()
+                    .getValue23());
+        }
+        map.put("$YPXKZ$", info_add.getInfo_add3().getValue28());
+        map.put("$BZ$", info_add.getInfo_add3().getValue29());
+        map.put("$DYRQ$", info_add.getInfo_add3().getValue17());
+
+        /* android无法插入图片*/
+        writeDoc(modelFilepath, rptFilepath, map);
+        /* 查看 doOpenWord();*/
+    }
+
+    //demoFile 模板文件 newFile 生成文件 map 要填充的数据
+    public void writeDoc(String modelPath, String outFilePath, Map<String, Object> map) {
+        if (new File(outFilePath).exists()) {
+            new File(outFilePath).delete();
+        }
+        try {
+            InputStream in = new FileInputStream(modelPath);
+            //InputStream in = getClass().getResourceAsStream("/assets/" + demopath);
+            HWPFDocument hdt = new HWPFDocument(in);
+            Range range = hdt.getRange();/* 替换文本内容*/
+            for (Map.Entry<String, Object> entry : map.entrySet())
+                if ((entry.getValue()) instanceof String) {
+                    // 替换文本
+                    range.replaceText(entry.getKey(), entry.getValue().toString());
+                }
+            /*//获取doc中的书签
+            Bookmarks bookmarks = hdt.getBookmarks();
+            Log.v("书签数量：", "" + bookmarks.getBookmarksCount());*/
+
+            //获取doc中的图片数
+            List<Picture> pics = hdt.getPicturesTable().getAllPictures();
+            System.out.printf("word中的pic数量:" + pics.size() + "\n");
+
+            OutputStream os = new FileOutputStream(outFilePath);
+            /* ByteArrayOutputStream ostream = new
+            ByteArrayOutputStream(); FileOutputStream out = new FileOutputStream(newFile, true);*/
+            hdt.write(os);
+            /* 1.通过Picture的writeImageContent方法 写文件 2.获取Picture的byte 自己写*/
+            copyPic2Disk(pics, os);
+            os.close();
+            in.close();
+            /* 输出字节流 out.write(ostream.toByteArray()); out.close(); ostream.close();*/
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    //调用手机中安装的可打开word的软件
+    private void doOpenWord(final String rptFilepath) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent();
+                intent.setAction("android.intent.action.VIEW");
+                intent.addCategory("android.intent.category.DEFAULT");
+                String fileMimeType = "application/msword";
+                intent.setDataAndType(Uri.fromFile(new File(rptFilepath)), fileMimeType);
+                /*intent.setDataAndType(Uri.fromFile(new File("/mnt/sdcard/Rpt/doc/" +
+                                filename)),
+                        fileMimeType);*/
+                try {
+                    DetailsActivity.this.startActivity(intent);
+                } catch (ActivityNotFoundException e) {
+                    /* 检测到系统尚未安装OliveOffice的apk程序*/
+                    Snackbar.make(toolbar, "未找到可用软件",
+                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                }
+            }
+        }, 1500);
+        /* 延时1.5s执行*/
+    }
+
+    private void doPrintWord(final String rptFilepath) {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (appIsInstalled(_context, "com.dynamixsoftware.printershare")) {
+                    Intent intent = new Intent();
+                    ComponentName comp = new ComponentName("com.dynamixsoftware" +
+                            ".printershare", "com" +
+                            ".dynamixsoftware.printershare.ActivityPrintDocuments");
+                    intent.setComponent(comp);
+                    intent.setAction("android.intent.action.VIEW");
+                    intent.setType("application/doc");
+                    intent.setData(Uri.fromFile(new File(rptFilepath)));
+                    /*intent.setData(Uri.fromFile(new File(Environment
+                            .getExternalStorageDirectory() +
+                            "/doc/" + filename)));*/
+                    dbmanage.updateNumber(number, 1, 1, 0);
+                    startActivity(intent);
+                } else {
+                    Snackbar.make(toolbar, "未找到PrinterShare软件",
+                            Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    /* 安装apk*/
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    File file = getAssetFileToCacheDir(_context, "PrinterShare.apk");
+                    intent.setDataAndType(Uri.fromFile(file), "application/vnd" +
+                            ".android.package-archive");
+                    DetailsActivity.this.startActivity(intent);
+                }
+            }
+        }, 2000); /* 延时2s执行*/
     }
 
     // 通过Picture 自己类中的读写方法 <p> pics path
@@ -1352,24 +1396,6 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
         return dir;
     }
 
-    public File copyFile(String oldPath$Name, String newPath$Name) {
-        try {
-            InputStream is = _context.getAssets().open(oldPath$Name);
-            File file = new File(newPath$Name);
-            file.createNewFile();
-            FileOutputStream fos = new FileOutputStream(file);
-            byte[] temp = new byte[1024];
-            int i;
-            while ((i = is.read(temp)) > 0) fos.write(temp, 0, i);
-            fos.close();
-            is.close();
-            return file;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     public void FormatData() throws NoSuchMethodException, InvocationTargetException,
             IllegalAccessException {
         Info_add1 info_add1 = info_add.getInfo_add1();
@@ -1388,8 +1414,7 @@ public class DetailsActivity extends AppCompatActivity implements OnClickListene
             // 获取属性类型
             //type = f.getGenericType().toString();
             // 将属性的首字母大写
-            name = name.replaceFirst(name.substring(0, 1), name.substring(0, 1)
-                    .toUpperCase());
+            //name = name.replaceFirst(name.substring(0, 1), name.substring(0, 1).toUpperCase());
             Method getMethod = info_add1.getClass().getMethod("get" + name);
             //Log.v("getMethod", getMethod.getName().toString());
             value = getMethod.invoke(info_add1);

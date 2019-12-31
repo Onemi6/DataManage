@@ -312,17 +312,21 @@ public class LoginActivity extends AppCompatActivity {
     public void FileDir() {
         boolean sdCardExist = android.os.Environment.getExternalStorageState().equals(android.os
                 .Environment.MEDIA_MOUNTED);
-        String DOC_PATH, MODEL_PATH, CRASH_PATH;
+        String DOC_PATH, DOC2_PATH, MODEL_PATH, CRASH_PATH;
         if (sdCardExist) {
             DOC_PATH = Environment.getExternalStorageDirectory() + "/DataManage/doc/";
+            DOC2_PATH = Environment.getExternalStorageDirectory() + "/DataManage/doc2/";
             MODEL_PATH = Environment.getExternalStorageDirectory() + "/DataManage/model/";
             CRASH_PATH = Environment.getExternalStorageDirectory() + "/DataManage/crash/";
         } else {
-            DOC_PATH = MODEL_PATH = CRASH_PATH = this.getCacheDir().toString() + "/";
+            DOC_PATH = DOC2_PATH = MODEL_PATH = CRASH_PATH = this.getCacheDir().toString() + "/";
         }
-        File doc = new File(DOC_PATH), model = new File(MODEL_PATH), crash = new File(CRASH_PATH);
+        File doc = new File(DOC_PATH),doc2 = new File(DOC2_PATH), model = new File(MODEL_PATH), crash = new File(CRASH_PATH);
         if (!doc.exists()) {
             doc.mkdirs();
+        }
+        if (!doc2.exists()) {
+            doc2.mkdirs();
         }
         if (!model.exists()) {
             model.mkdirs();

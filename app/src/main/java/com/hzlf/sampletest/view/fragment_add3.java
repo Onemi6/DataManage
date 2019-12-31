@@ -551,7 +551,7 @@ public class fragment_add3 extends Fragment {
                 radio_15.check(R.id.radio_chukou_fou);
             }
             et_16.setText(info.getInfo_add3().getValue16());
-            tv_17.setText(info.getInfo_add3().getValue17());
+            //tv_17.setText(info.getInfo_add3().getValue17());
             SpinnerAdapter adapter6 = sp_18.getAdapter();
             for (int i = 0; i < adapter6.getCount(); i++) {
                 if (info.getInfo_add3().getValue18()

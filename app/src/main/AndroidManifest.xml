@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hzlf.sampletest"
     android:versionCode="1"
-    android:versionName="1.81">
+    android:versionName="1.83">
 
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /><!-- 安装权限 -->
     <uses-permission android:name="android.permission.INTERNET" /><!-- 网络 -->

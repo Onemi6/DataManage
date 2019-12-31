@@ -315,8 +315,6 @@ public class AboutActivity extends AppCompatActivity {
                                     dbmanage.addInfo(no, info_add1, info_add2, info_add3);
                                     if (dbmanage.checkNumber(apply.getSAMPLING_NO()) == 0) {
                                         dbmanage.addSampleNumber(apply.getSAMPLING_NO());
-                                        //dbmanage.updateNumber(apply.getSAMPLING_NO(), 1, 1, 1);
-                                        //dbmanage.updateSign(apply.getSAMPLING_NO(), 0);
                                     }
                                     dbmanage.updateNumber(apply.getSAMPLING_NO(), 1, 1, 1);
                                     if (i == response.body().size()) {

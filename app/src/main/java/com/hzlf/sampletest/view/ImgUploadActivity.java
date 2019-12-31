@@ -29,6 +29,8 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.dou361.dialogui.DialogUIUtils;
+import com.dou361.dialogui.bean.BuildBean;
 import com.hzlf.sampletest.R;
 import com.hzlf.sampletest.db.DBManage;
 import com.hzlf.sampletest.http.HttpUtils;
@@ -37,6 +39,8 @@ import com.hzlf.sampletest.http.eLab_API;
 import com.hzlf.sampletest.model.UploadImg;
 import com.hzlf.sampletest.others.ImgAdapter;
 import com.hzlf.sampletest.others.MyApplication;
+import com.zxy.tiny.Tiny;
+import com.zxy.tiny.callback.FileCallback;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -62,10 +66,10 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
     private RecyclerView rv_add_img;
     private ImgAdapter adapter_img;
     private Context _context;
-    private int fail_num = 0;
-    private String img_type = null, number = null, picPath;
+    private int fail_num = 0, picNum;
+    private String img_type = null, number = null;
     private SharedPreferences sharedPreferences;
-    private ProgressDialog mypDialog;
+    private BuildBean dialog_ImgUpload;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -159,12 +163,9 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
     @Override
     protected void onPause() {
         super.onPause();
-        if (mypDialog != null) {
-            mypDialog.dismiss();
-        }
     }
 
-    public void attemptImgUpload() {
+    public void attemptImgUpload(String path) {
         if (NetworkUtil.isNetworkAvailable(_context)) {
             eLab_API request = HttpUtils.GsonApi();
             String token;
@@ -178,9 +179,9 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
             params.put("id", number);
             params.put("type", img_type);
 
-            File file = new File(picPath);
+            File file = new File(path);
             RequestBody requestFile = RequestBody.create(MediaType.parse("image/png"), file);
-            MultipartBody.Part body = MultipartBody.Part.createFormData("file", picPath,
+            MultipartBody.Part body = MultipartBody.Part.createFormData("file", path,
                     requestFile);
             Call<UploadImg> call = request.ApplyImgUpload(token, params, body);
             call.enqueue(new Callback<UploadImg>() {
@@ -192,6 +193,7 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
                         intent_login.setClass(ImgUploadActivity.this,
                                 LoginActivity.class);
                         intent_login.putExtra("login_type", 1);
+                        DialogUIUtils.dismiss(dialog_ImgUpload);
                         startActivity(intent_login);
                     } else if (response.code() == 200) {
                         if (response.body() != null) {
@@ -206,15 +208,17 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
                         } else {
                             Log.v("ImgUpload请求成功!", "response.body is null");
                         }
+                        dialog_ImgUpload = DialogUIUtils.showLoading(_context, "已上传 " +
+                                status.size() + "/" + picNum, false, true, false, false);
+                        dialog_ImgUpload.show();
                         if (status.size() >= picList.size()) {
-                            mypDialog.dismiss();
+                            DialogUIUtils.dismiss(dialog_ImgUpload);
                             Snackbar.make(uploadButton, "共上传" + picList.size() + "张图片,其中失败" +
                                             fail_num + "张",
                                     Snackbar.LENGTH_LONG).setAction("Action", null).show();
                             for (int i = 0; i < picList.size(); i++) {
                                 if (status.get(i).equals("1")) {
-                                    dbmanage.addImagePath(number,
-                                            picList.get(i));
+                                    dbmanage.addImagePath(number, picList.get(i));
                                 }
                             }
                         }
@@ -277,27 +281,15 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
     }
 
     public void uploadImage() {
-        mypDialog = new ProgressDialog(ImgUploadActivity.this);
-        // 实例化
-        mypDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        // 设置进度条风格，风格为圆形，旋转的
-        mypDialog.setTitle("上传图片中...");
-        // 设置ProgressDialog 标题
-        mypDialog.setIndeterminate(false);
-        // 设置ProgressDialog 的进度条是否不明确
-        mypDialog.setCancelable(false);
-        // 设置ProgressDialog 是否可以按退回按键取消
-        mypDialog.show();
-        // 让ProgressDialog显示
         img_type = sp_img_type.getSelectedItem().toString();
         if (adapter_img.getImgList().size() > 0) {
             picList = adapter_img.getImgList();
+            picNum = picList.size();
             for (String onePic : picList) {
-                picPath = onePic;
-                if (picPath != null) {
+                if (onePic != null) {
                     try {
                         Thread.sleep(300);
-                        attemptImgUpload();
+                        pic_compress(onePic);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -313,7 +305,6 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
                 }
             }, 1500); // 延时1s执行
         } else if (adapter_img.getImgList().size() == 0) {
-            mypDialog.dismiss();
             Snackbar.make(rv_add_img, "至少选择一张图片",
                     Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
@@ -333,5 +324,23 @@ public class ImgUploadActivity extends Activity implements OnClickListener {
                 .placeholder(R.drawable.logo)
                 .error(R.drawable.error)
                 .into(imageview);
+    }
+
+    public void pic_compress(String filePath) {
+        /*1、quality-压缩质量，默认为76
+        2、isKeepSampling-是否保持原数据源图片的宽高
+        3、fileSize-压缩后文件大小
+        4、outfile-压缩后文件存储路径
+        如果不配置，Tiny内部会根据默认压缩质量进行压缩，压缩后文件默认存储在：
+        ExternalStorage/Android/data/${packageName}/tiny/目录下*/
+        Tiny.FileCompressOptions options = new Tiny.FileCompressOptions();
+        Tiny.getInstance().source(filePath).asFile().withOptions(options).compress(new FileCallback() {
+            @Override
+            public void callback(boolean isSuccess, String outfile) {
+                //return the compressed file path
+                //Log.v("压缩图片", outfile);
+                attemptImgUpload(outfile);
+            }
+        });
     }
 }
